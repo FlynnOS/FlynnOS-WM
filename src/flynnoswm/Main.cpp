@@ -1,0 +1,53 @@
+/**
+ * Copyright 2013 Vicente Benavent and other contributors
+ * FlynnOSwm is based heavily on Eggwm. (http://code.google.com/p/eggwm/) revision 50 by José Expósito, copyright 2010-2011
+ *
+ * This file is part of the FlynnOSwm project, you can redistribute it
+ * and/or modify it under the terms of the GNU GPL v3.
+ *
+ * @authors José Expósito, Vicente Benavent
+ *
+ */
+#include "src/flynnoswm/FlynnOSwm.h"
+
+/**
+ * @~spanish
+ * Función de inicio de FlynnOSwm.
+ * @param argc Número de argumentos recibidos por consola.
+ * @param argv Lista de argumentos.
+ *
+ * @~english
+ * Start function for FlynnOSwm.
+ * @param argc Number of arguments received by console.
+ * @param argv Argument list.
+ */
+int main(int argc, char** argv)
+{
+    FlynnOSwm flynnOSwm(argc, argv);
+    return flynnOSwm.exec();
+}
+
+/*
+ * Para debuggear:
+ *
+ * $ Xephyr :1 -ac -screen 900x700 &
+ * En "Proyectos -> Entorno de construcción -> DISPLAY" poner ":1" o lanzar con
+ * la opción "-display :1".
+ *
+ * Para ver el árbol de ventanas:
+ * $ xwininfo -display :1 -tree -root
+ *
+ * Ver propiedades de una ventana:
+ * $ xwininfo -display :1
+ *
+ * Se le puede añadir una composición muy simple con xcompmg:
+ * $ xcompmgr -cf -d :1
+ *
+ * Para debugear el estándar EWMH/NetWM:
+ * La herramienta wmctrl nos proporciona diversa información:
+ * $ man wmctrl
+ * Para ver las propiedades que va estableciendo el WM sobre la root window:
+ * $ xprop -root -display :1
+ *
+ * NOTA -> Mirar QStyle para ver como crear un estilo para los widgets
+ */
