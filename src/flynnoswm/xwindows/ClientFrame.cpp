@@ -49,6 +49,7 @@ ClientFrame::ClientFrame(bool showIcon, bool showMaxButton, QWidget* parent)
     this->rightBottomBorder = new QLabel(this);
 
     this->minimizeButton    = new QPushButton(this);
+    this->minimizeVisibleButton = new QPushButton(this);
     this->maximizeButton    = new QPushButton(this);
     this->exitButton        = new QPushButton(this);
     this->icon              = new QLabel(this);
@@ -103,6 +104,7 @@ ClientFrame::ClientFrame(bool showIcon, bool showMaxButton, QWidget* parent)
     this->leftTopBorder->setObjectName("leftTopBorder");
     this->leftBottomBorder->setObjectName("leftBottomBorder");
     this->minimizeButton->setObjectName("minimizeButton");
+    this->minimizeVisibleButton->setObjectName("minimizeVisibleButton");
     this->maximizeButton->setObjectName("maximizeButton");
     this->exitButton->setObjectName("exitButton");
     this->icon->setObjectName("icon");
@@ -125,12 +127,14 @@ ClientFrame::ClientFrame(bool showIcon, bool showMaxButton, QWidget* parent)
     this->title->resize(this->title->width(), cfg->getTitlebarWidth()
             + cfg->getTopBorderWidth());
     this->minimizeButton->resize(this->minimizeButton->iconSize());
+    this->minimizeVisibleButton->resize(this->minimizeVisibleButton->iconSize());
     this->maximizeButton->resize(this->maximizeButton->iconSize());
     this->exitButton->resize(this->exitButton->iconSize());
     this->icon->resize(cfg->getIconSize(), cfg->getIconSize());
 
     // Establecemos la alineación de los elementos de la barra de título
     this->setVerticalAling(this->minimizeButton, cfg->getMinimizeButtonAling());
+    this->setVerticalAling(this->minimizeVisibleButton, cfg->getMinimizeVisibleButtonAling());
     this->setVerticalAling(this->maximizeButton, cfg->getMaximizeButtonAling());
     this->setVerticalAling(this->exitButton, cfg->getExitButtonAling());
     this->setVerticalAling(this->title, Config::TOP);
@@ -145,6 +149,7 @@ ClientFrame::~ClientFrame() {
     delete this->leftBorder;
     delete this->rightBorder;
     delete this->minimizeButton;
+    delete this->minimizeVisibleButton;
     delete this->maximizeButton;
     delete this->exitButton;
     delete this->icon;
@@ -261,12 +266,14 @@ void ClientFrame::reorganizeFrame() {
     QHash<int, QWidget*> left, center, right;
 
     QPair<Config::Aling, int> minimize = cfg->getMinimizeButtonPos();
+    QPair<Config::Aling, int> minimize_visible = cfg->getMinimizeVisibleButtonPos();
     QPair<Config::Aling, int> maximize = cfg->getMaximizeButtonPos();
     QPair<Config::Aling, int> exit     = cfg->getExitButtonPos();
     QPair<Config::Aling, int> title    = cfg->getTitlePos();
     QPair<Config::Aling, int> icon     = cfg->getIconPos();
 
     this->placeInHash(minimize, this->minimizeButton, &left, &center, &right);
+    this->placeInHash(minimize_visible, this->minimizeVisibleButton, &left, &center, &right);
     if(this->maximizeButton->isVisible())
         this->placeInHash(maximize,this->maximizeButton,&left,&center,&right);
     this->placeInHash(exit, this->exitButton, &left, &center, &right);
@@ -339,7 +346,8 @@ void ClientFrame::placeItemsInTitlebar(QHash<int, QWidget*>* left,
 
     // Colocamos los elementos del área izquierda
     int leftMargin = cfg->getLeftBorderWidth() + 2;
-    for (i=left->begin(); i!=left->end(); i++) {
+    for (i=left->begin(); i!=left->end(); i++)
+    {
         QWidget* w = i.value();
         w->move(leftMargin, w->y());
         leftMargin += w->width();

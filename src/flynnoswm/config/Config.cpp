@@ -46,12 +46,14 @@ const char* Config::RIGHT_BORDER_WIDTH    = "theme/right_border_width";
 const char* Config::ICON_SIZE             = "theme/icon_size";
 
 const char* Config::MINIMIZE_BUTTON_POS   = "theme/minimize_button_pos";
+const char* Config::MINIMIZE_VISIBLE_BUTTON_POS   = "theme/minimize_visible_button_pos";
 const char* Config::MAXIMIZE_BUTTON_POS   = "theme/maximize_button_pos";
 const char* Config::EXIT_BUTTON_POS       = "theme/exit_button_pos";
 const char* Config::ICON_POS              = "theme/icon_pos";
 const char* Config::TITLE_POS             = "theme/title_pos";
 
 const char* Config::MINIMIZE_BUTTON_ALING = "theme/minimize_button_aling";
+const char* Config::MINIMIZE_VISIBLE_BUTTON_ALING = "theme/minimize_visible_button_aling";
 const char* Config::MAXIMIZE_BUTTON_ALING = "theme/maximize_button_aling";
 const char* Config::EXIT_BUTTON_ALING     = "theme/exit_button_aling";
 
@@ -65,11 +67,13 @@ int                       Config::leftBorderWidth;
 int                       Config::rightBorderWidth;
 int                       Config::iconSize;
 QPair<Config::Aling, int> Config::minimizeButtonPos;
+QPair<Config::Aling, int> Config::minimizeVisibleButtonPos;
 QPair<Config::Aling, int> Config::maximizeButtonPos;
 QPair<Config::Aling, int> Config::exitButtonPos;
 QPair<Config::Aling, int> Config::iconPos;
 QPair<Config::Aling, int> Config::titlePos;
 Config::Aling             Config::minimizeButtonAling;
+Config::Aling             Config::minimizeVisibleButtonAling;
 Config::Aling             Config::maximizeButtonAling;
 Config::Aling             Config::exitButtonAling;
 QString                   Config::style;
@@ -110,6 +114,8 @@ void Config::loadConfig() {
     QSettings flynnoswmSettings(QDir::homePath() + CONFIG_FILE_PATH,
             QSettings::NativeFormat);
 
+    qDebug() << QDir::homePath() + CONFIG_FILE_PATH;
+
     //--------------------------------------------------------------------------
 
     // Abrimos el archivo de configuración del tema
@@ -129,12 +135,14 @@ void Config::loadConfig() {
     iconSize            = themeSettings.value(ICON_SIZE, 16).toInt();
 
     minimizeButtonPos   = getItemPos(themeSettings, MINIMIZE_BUTTON_POS);
+    minimizeVisibleButtonPos   = getItemPos(themeSettings, MINIMIZE_VISIBLE_BUTTON_POS);
     maximizeButtonPos   = getItemPos(themeSettings, MAXIMIZE_BUTTON_POS);
     exitButtonPos       = getItemPos(themeSettings, EXIT_BUTTON_POS);
     iconPos             = getItemPos(themeSettings, ICON_POS);
     titlePos            = getItemPos(themeSettings, TITLE_POS);
 
     minimizeButtonAling = getIconAling(themeSettings, MINIMIZE_BUTTON_ALING);
+    minimizeVisibleButtonAling = getIconAling(themeSettings, MINIMIZE_VISIBLE_BUTTON_ALING);
     maximizeButtonAling = getIconAling(themeSettings, MAXIMIZE_BUTTON_ALING);
     exitButtonAling     = getIconAling(themeSettings, EXIT_BUTTON_ALING);
 
@@ -182,7 +190,8 @@ bool Config::copyDir(QDir src, QDir dest) const {
 }
 
 QPair<Config::Aling, int> Config::getItemPos(const QSettings& themeSettings,
-        const QString& key) {
+        const QString& key)
+{
     QPair<Aling, int> pair;
     QString prop = themeSettings.value(key, "").toString();
 
@@ -248,6 +257,10 @@ QPair<Config::Aling, int> Config::getMinimizeButtonPos() const {
     return this->minimizeButtonPos;
 }
 
+QPair<Config::Aling, int> Config::getMinimizeVisibleButtonPos() const {
+    return this->minimizeVisibleButtonPos;
+}
+
 QPair<Config::Aling, int> Config::getMaximizeButtonPos() const {
     return this->maximizeButtonPos;
 }
@@ -264,8 +277,13 @@ QPair<Config::Aling, int> Config::getTitlePos() const {
     return this->titlePos;
 }
 
-Config::Aling Config::getMinimizeButtonAling() const {
+Config::Aling Config::getMinimizeVisibleButtonAling() const {
     return this->minimizeButtonAling;
+}
+
+
+Config::Aling Config::getMinimizeButtonAling() const {
+    return this->minimizeVisibleButtonAling;
 }
 
 Config::Aling Config::getMaximizeButtonAling() const {

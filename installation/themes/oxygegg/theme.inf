@@ -20,7 +20,8 @@ icon_size=12
 ; Position of the window buttons, the window icon and the window title.
 ; Options: [left/right/center]:[Index 1..n]
 minimize_button_pos=left:1
-maximize_button_pos=left:2
+minimize_visible_button_pos=left:2
+maximize_button_pos=left:3
 exit_button_pos=right:1
 icon_pos=center:1
 title_pos=center:2
@@ -28,5 +29,6 @@ title_pos=center:2
 ; Vertical align of icons
 ; Options: [top/bottom/center]
 minimize_button_aling=center
+minimize_visible_button_aling=center
 maximize_button_aling=center
 exit_button_aling=center

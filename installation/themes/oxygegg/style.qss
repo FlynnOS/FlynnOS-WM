@@ -73,6 +73,16 @@
     image: url(%theme_path%/images/minimize_button_over.png);
 }
 
+#minimizeVisibleButton {
+    border: none;
+    image: url(%theme_path%/images/minimize_button.png);
+}
+
+#minimizeVisibleButton:hover {
+    border: none;
+    image: url(%theme_path%/images/minimize_button_over.png);
+}
+
 #maximizeButton {
     border: none;
     image: url(%theme_path%/images/maximize_button.png);

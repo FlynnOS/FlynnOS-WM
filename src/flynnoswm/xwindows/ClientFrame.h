@@ -128,6 +128,9 @@ class ClientFrame : public QWidget {
         // Botón "minimizar".
         QPushButton* minimizeButton;
 
+        // Botón "minimizar visibe".
+        QPushButton* minimizeVisibleButton;
+
         // Botón "maximizar".
         QPushButton* maximizeButton;
 

@@ -66,12 +66,14 @@ class Config {
         static const char* ICON_SIZE;
 
         static const char* MINIMIZE_BUTTON_POS;
+        static const char* MINIMIZE_VISIBLE_BUTTON_POS;
         static const char* MAXIMIZE_BUTTON_POS;
         static const char* EXIT_BUTTON_POS;
         static const char* ICON_POS;
         static const char* TITLE_POS;
 
         static const char* MINIMIZE_BUTTON_ALING;
+        static const char* MINIMIZE_VISIBLE_BUTTON_ALING;
         static const char* MAXIMIZE_BUTTON_ALING;
         static const char* EXIT_BUTTON_ALING;
 
@@ -88,12 +90,14 @@ class Config {
         static int iconSize;
 
         static QPair<Aling, int> minimizeButtonPos;
+        static QPair<Aling, int> minimizeVisibleButtonPos;
         static QPair<Aling, int> maximizeButtonPos;
         static QPair<Aling, int> exitButtonPos;
         static QPair<Aling, int> iconPos;
         static QPair<Aling, int> titlePos;
 
         static Aling minimizeButtonAling;
+        static Aling minimizeVisibleButtonAling;
         static Aling maximizeButtonAling;
         static Aling exitButtonAling;
 
@@ -287,6 +291,21 @@ class Config {
 
         /**
          * @~spanish
+         * Devuelve la posición del botón de minimizar visible.
+         * @return Par con la posición, siendo el primer elemento del par el
+         *         área de la barra de título donde se encuentra y el segundo su
+         *         posición respecto al resto de elementos.
+         *
+         * @~english
+         * Returns the position of the minimize visible button.
+         * @return Pair with the position, the first element of the pair is the
+         *         area in the title bar and the second is its position relative
+         *         to other elements.
+         */
+        QPair<Aling, int> getMinimizeVisibleButtonPos() const;
+
+        /**
+         * @~spanish
          * Devuelve la posición del botón de maximizar.
          * @return Par con la posición, siendo el primer elemento del par el
          *         área de la barra de título donde se encuentra y el segundo su
@@ -351,6 +370,17 @@ class Config {
          * @return The vertical align.
          */
         Aling getMinimizeButtonAling() const;
+
+        /**
+         * @~spanish
+         * Devuelve la alineación vertical del icono minimizar.
+         * @return La alineación vertical.
+         *
+         * @~english
+         * Returns the vertical align of the minimize visible button.
+         * @return The vertical align.
+         */
+        Aling getMinimizeVisibleButtonAling() const;
 
         /**
          * @~spanish
