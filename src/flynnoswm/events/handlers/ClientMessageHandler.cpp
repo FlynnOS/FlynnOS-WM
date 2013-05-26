@@ -23,7 +23,8 @@ ClientMessageHandler::ClientMessageHandler(XWindowList* wl)
 // **********                    PUBLIC METHODS                    ********** //
 // ************************************************************************** //
 
-bool ClientMessageHandler::processEvent(XEvent* event) {
+bool ClientMessageHandler::processEvent(XEvent* event)
+{
     Window windowID = event->xclient.window;
     qDebug() << "[+] ClientMessage event 0x" << hex << windowID;
     AtomList* al = AtomList::getInstance();
@@ -32,7 +33,8 @@ bool ClientMessageHandler::processEvent(XEvent* event) {
             QX11Info::display(), event->xclient.message_type);
 
     // Si la ventana es un cliente
-    if(this->wl->existClient(windowID)) {
+    if(this->wl->existClient(windowID))
+    {
         qDebug() << "\tLa ventana es un cliente";
         XWindow* xwindow = this->wl->getXWindowByClientID(windowID);
 
@@ -42,7 +44,8 @@ bool ClientMessageHandler::processEvent(XEvent* event) {
 
         if(event->xclient.message_type == al->getAtom("WM_CHANGE_STATE")
                         && event->xclient.format == 32
-                        && event->xclient.data.l[0] == IconicState) {
+                        && event->xclient.data.l[0] == IconicState)
+        {
                     qDebug() << "\tSe solicita minimizar el cliente";
                     xwindow->setState(IconicState);
                     return true;
@@ -52,25 +55,25 @@ bool ClientMessageHandler::processEvent(XEvent* event) {
 
         // EWMH
 
-        } else if(event->xclient.message_type
-                == al->getAtom("_NET_ACTIVE_WINDOW")) {
+        }
+        else if(event->xclient.message_type == al->getAtom("_NET_ACTIVE_WINDOW"))
+        {
             EWMHRoot ewmh;
             ewmh.receivedActiveWindow(this->wl, xwindow);
 
-        } else if(event->xclient.message_type
-                == al->getAtom("_NET_CLOSE_WINDOW")) {
+        }
+        else if(event->xclient.message_type == al->getAtom("_NET_CLOSE_WINDOW"))
+        {
             EWMHRoot ewmh;
             ewmh.receivedCloseWindow(xwindow);
         }
 
-        // TODO Se debería recibir _NET_WM_USER_TIME para poder hacer activas
-        //      las ventanas al clickar en cualquier parte, no solo en el marco,
-        //      pero no se recibe :(
-
         return false;
 
     // Si la ventana es un marco
-    } else if(wl->existFrame(windowID)) {
+    }
+    else if(wl->existFrame(windowID))
+    {
         qDebug() << "\tLa ventana es un marco";
 
         // XdndLeave
@@ -80,7 +83,9 @@ bool ClientMessageHandler::processEvent(XEvent* event) {
         return false;
 
     // Si no es ni un marco ni un cliente
-    } else {
+    }
+    else
+    {
         qDebug() << "\tLa ventana no es ni un cliente ni un marco";
 
         // _NET_SHOWING_DESKTOP

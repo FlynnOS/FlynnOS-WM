@@ -75,6 +75,16 @@ FlynnOSwm::FlynnOSwm(int argc, char** argv) : QApplication(argc, argv)
     button2->show();
     connect(button2, SIGNAL(clicked()),this, SLOT(launchTerminal()));
 
+    this->taskBar = new TaskBar();
+
+
+}
+
+FlynnOSwm::~FlynnOSwm()
+{
+    delete this->wmCheckWindow;
+    delete this->windowList;
+    delete this->taskBar;
 }
 
 void FlynnOSwm::closeWindowManager()
@@ -87,13 +97,6 @@ void FlynnOSwm::launchTerminal()
 {
     std::system("terminator &");
 }
-
-FlynnOSwm::~FlynnOSwm()
-{
-    delete this->wmCheckWindow;
-    delete this->windowList;
-}
-
 
 // ************************************************************************** //
 // **********                    PRIVATE METHODS                   ********** //

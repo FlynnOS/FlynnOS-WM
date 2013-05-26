@@ -17,6 +17,7 @@
 //#include "src/flynnoswm/xwindows/XWindowList.h"
 #include "src/flynnoswm/standards/WMCheckWindow.h"
 #include "src/flynnoswm/events/factory/EventFactory.h"
+#include "src/flynnoswm/xwindows/TaskBar.h"
 
 /**
  * @~spanish
@@ -61,6 +62,15 @@ class FlynnOSwm : public QApplication {
          * Event factory.
          */
         EventFactory* eventFactory;
+
+        /**
+         * @~spanish
+         * La barra de tareas
+         *
+         * @~english
+         * The task bar
+         */
+        TaskBar *taskBar;
 
         //----------------------------------------------------------------------
 
