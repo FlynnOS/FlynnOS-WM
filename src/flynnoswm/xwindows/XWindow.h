@@ -380,6 +380,16 @@ class XWindow : public QObject {
          */
         void updateTitle();
 
+        /**
+         * @~spanish
+         * Obtinie el marco el título indicado para ayudar al usuario a
+         * identificar las ventanas.
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        QString getTitle();
+
     public slots:
 
         /**
@@ -423,6 +433,16 @@ class XWindow : public QObject {
          * TO TRANSLATE
          */
         void closedFrame();
+
+        /**
+         * @~spanish
+         * Señal que se lanza cuando el usuario hace click en el botón de
+         * minimizar visible.
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        void minimizedVisibleFrame();
 };
 
 #endif // XWINDOW_H

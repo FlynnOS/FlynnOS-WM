@@ -15,7 +15,7 @@ build/
 
 # Built windows .exe and linux binaries
 # NOTE: PROJECT is a your project's name, analog of PROJECT.exe in Linux
-flynnoswm
+bin/
 
 # Windows-specific files
 Thumbs.db

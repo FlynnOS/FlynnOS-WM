@@ -10,6 +10,7 @@
  *
  */
 #include "XWindow.h"
+#include "src/flynnoswm/xwindows/MinimizeFloat.h"
 
 // ************************************************************************** //
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
@@ -95,6 +96,8 @@ void XWindow::addFrame()
                 this, SLOT(resizedFrame(int, int)));
         connect(this->frame, SIGNAL(minimizedFrame()),
                 this, SLOT(minimizedFrame()));
+        connect(this->frame, SIGNAL(minimizedVisibleFrame()),
+                this, SLOT(minimizedVisibleFrame()));
         connect(this->frame, SIGNAL(maximizedFrame()),
                 this, SLOT(maximizedFrame()));
         connect(this->frame, SIGNAL(closedFrame()), this, SLOT(closedFrame()));
@@ -133,6 +136,25 @@ bool XWindow::needFrame() const
 // **********                      GET/SET/IS                      ********** //
 // ************************************************************************** //
 
+QString XWindow::getTitle()
+{
+    return frame->getTitle();
+}
+/*void ClientFrame::setMinimized(bool iconify)
+{
+    if (iconify)
+    {
+        emit minimizedFrame();
+    }
+    else
+    {
+        /*XMapRaised(QX11Info::display(), winId());
+        XMapRaised(QX11Info::display(), c_win);
+        set_state(1);
+        state = "NormalState";
+        qDebug() << "Frame raised:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;*/
+    /*}
+}*/
 void XWindow::setState(int state) {
     // WithdrawnState -> NormalState o IconicState
     if((this->state == WithdrawnState && state == NormalState)
@@ -392,6 +414,11 @@ bool XWindow::resizedFrame(int width, int height) {
 void XWindow::minimizedFrame()
 {
     this->setState(IconicState);
+}
+
+void XWindow::minimizedVisibleFrame()
+{
+    MinimizeFloat *minimizeFloat = new MinimizeFloat(this);
 }
 
 void XWindow::maximizedFrame()

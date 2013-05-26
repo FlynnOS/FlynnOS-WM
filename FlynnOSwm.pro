@@ -1,5 +1,5 @@
 TEMPLATE     = app
-TARGET       = flynnoswm
+TARGET       = bin/flynnoswm
 QT          += core gui
 OBJECTS_DIR += build
 MOC_DIR     += build
@@ -8,11 +8,11 @@ LIBS        += -lX11
 
 
 target.path  = /usr/bin
+target.files = bin/flynnoswm
 targetuser.path  = /usr/local/bin
-targetuser.files = flynnoswm
+targetuser.files = bin/flynnoswm
 config.path  = /usr/share/flynnoswm
 config.files = installation/*
 INSTALLS += target targetuser config
-
 
 include(src/flynnoswm/flynnoswm.pri)

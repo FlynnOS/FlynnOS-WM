@@ -125,6 +125,7 @@ class ClientFrame : public QWidget {
         QLabel* rightTopBorder;
         QLabel* rightBottomBorder;
 
+public:
         // Botón "minimizar".
         QPushButton* minimizeButton;
 
@@ -379,6 +380,16 @@ class ClientFrame : public QWidget {
 
         /**
          * @~spanish
+         * Obtinie el marco el título indicado para ayudar al usuario a
+         * identificar las ventanas.
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        QString getTitle();
+
+        /**
+         * @~spanish
          * Establece el pixmap que se usará como icono.
          * @param pixmap El pixmap a utilizar.
          *
@@ -432,6 +443,16 @@ class ClientFrame : public QWidget {
          * TO TRANSLATE
          */
         void closedFrame();
+
+        /**
+         * @~spanish
+         * Señal que se lanza cuando el usuario hace click en el botón de
+         * minimizar visible.
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        void minimizedVisibleFrame();
 
 };
 

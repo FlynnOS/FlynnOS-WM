@@ -116,6 +116,8 @@ ClientFrame::ClientFrame(bool showIcon, bool showMaxButton, QWidget* parent)
     // Lanzamos señales cuando se pulsa un botón
     connect(this->minimizeButton, SIGNAL(clicked()), this,
             SIGNAL(minimizedFrame()));
+    connect(this->minimizeVisibleButton, SIGNAL(clicked()), this,
+            SIGNAL(minimizedVisibleFrame()));
     connect(this->maximizeButton, SIGNAL(clicked()), this,
             SIGNAL(maximizedFrame()));
     connect(this->exitButton, SIGNAL(clicked()),this, SIGNAL(closedFrame()));
@@ -548,7 +550,17 @@ void ClientFrame::setTitle(const QString& title) {
         this->reorganizeFrame();
 }
 
+QString ClientFrame::getTitle()
+{
+    return this->title->text();
+}
+
 void ClientFrame::setIconPixmap(const QPixmap& pixmap) {
     if(!pixmap.isNull())
         this->icon->setPixmap(pixmap);
 }
+
+// ************************************************************************** //
+// **********                    SIGNAL SLOTS                      ********** //
+// ************************************************************************** //
+
