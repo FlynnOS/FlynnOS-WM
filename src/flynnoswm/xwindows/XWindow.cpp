@@ -25,7 +25,7 @@ XWindow::XWindow(const Window& clientID)
     this->state    = WithdrawnState;
 
     this->client->setBorderWidth(0);
-    maximized_once_ = false;
+    maximized_ = false;
 }
 
 XWindow::~XWindow()
@@ -86,9 +86,9 @@ void XWindow::addFrame()
                 | StructureNotifyMask | SubstructureNotifyMask
                 | PropertyChangeMask);
 
-        XSelectInput(QX11Info::display(), this->clientID, EnterWindowMask|FocusChangeMask|PropertyChangeMask|StructureNotifyMask);
 
         //XGrabButton(QX11Info::display(), AnyButton, AnyModifier,  this->clientID, False, ButtonPressMask|ButtonReleaseMask, GrabModeAsync, GrabModeSync, None, None);
+        XSelectInput(QX11Info::display(), this->clientID, EnterWindowMask|FocusChangeMask|PropertyChangeMask|StructureNotifyMask);
 
 
         // Conectamos signals y slots
@@ -105,6 +105,16 @@ void XWindow::addFrame()
         // Añadimos el cliente al save-set para que si el WM se cierra
         // inesperadamente no desaparezcan los clientes
         XAddToSaveSet(QX11Info::display(), this->clientID);
+    }
+}
+
+void XWindow::addDock()
+{
+    //for windows that don't have frame, we need this to recieve their events!
+    if ((this->needFrame()) == false)
+    {
+        XSelectInput(QX11Info::display(), getClientID(), EnterWindowMask|FocusChangeMask|PropertyChangeMask|StructureNotifyMask);
+
     }
 }
 
@@ -140,21 +150,7 @@ QString XWindow::getTitle()
 {
     return frame->getTitle();
 }
-/*void ClientFrame::setMinimized(bool iconify)
-{
-    if (iconify)
-    {
-        emit minimizedFrame();
-    }
-    else
-    {
-        /*XMapRaised(QX11Info::display(), winId());
-        XMapRaised(QX11Info::display(), c_win);
-        set_state(1);
-        state = "NormalState";
-        qDebug() << "Frame raised:" << winId() << "Name:" << wm_name << "Client:" << c_win << "State:" << state;*/
-    /*}
-}*/
+
 void XWindow::setState(int state) {
     // WithdrawnState -> NormalState o IconicState
     if((this->state == WithdrawnState && state == NormalState)
@@ -294,7 +290,8 @@ Atom XWindow::getWindowType() const {
     return this->client->getWindowType();
 }
 
-bool XWindow::isTopWindow() const {
+bool XWindow::isTopWindow() const
+{
     AtomList* al = AtomList::getInstance();
     Atom type = this->client->getWindowType();
     return type == al->getAtom("_NET_WM_WINDOW_TYPE_DOCK")
@@ -302,7 +299,8 @@ bool XWindow::isTopWindow() const {
 }
 
 
-bool XWindow::isBottomWindow() const {
+bool XWindow::isBottomWindow() const
+{
     AtomList* al = AtomList::getInstance();
     Atom type = this->client->getWindowType();
     return type == al->getAtom("_NET_WM_WINDOW_TYPE_DESKTOP");
@@ -310,7 +308,8 @@ bool XWindow::isBottomWindow() const {
 
 //------------------------------------------------------------------------------
 
-int XWindow::getX() {
+int XWindow::getX()
+{
     if (this->haveFrame())
     {
         return this->frame->getX();
@@ -321,7 +320,8 @@ int XWindow::getX() {
     }
 }
 
-int XWindow::getY() {
+int XWindow::getY()
+{
     if (this->haveFrame())
     {
         return this->frame->getY();
@@ -332,16 +332,20 @@ int XWindow::getY() {
     }
 }
 
-void XWindow::setX(int x) {
+void XWindow::setX(int x)
+{
     this->haveFrame() ? this->frame->setX(x) : this->client->setX(x);
 }
 
-void XWindow::setY(int y) {
+void XWindow::setY(int y)
+{
     this->haveFrame() ? this->frame->setY(y) : this->client->setY(y);
 }
 
-void XWindow::setWidth(unsigned int width) {
-    if(this->haveFrame()) {
+void XWindow::setWidth(unsigned int width)
+{
+    if(this->haveFrame())
+    {
         Config* cfg = Config::getInstance();
         this->client->setWidth(width - cfg->getLeftBorderWidth()
                 - cfg->getRightBorderWidth());
@@ -350,12 +354,15 @@ void XWindow::setWidth(unsigned int width) {
         // cualquier tamaño
         this->frame->setWidth(this->client->getWidth()
                 + cfg->getLeftBorderWidth() + cfg->getRightBorderWidth());
-    } else {
+    }
+    else
+    {
         this->client->setWidth(width);
     }
 }
 
-void XWindow::setHeight(unsigned int height) {
+void XWindow::setHeight(unsigned int height)
+{
     if(this->haveFrame()) {
         Config* cfg = Config::getInstance();
         this->client->setHeight(height - cfg->getTitlebarWidth()
@@ -370,12 +377,70 @@ void XWindow::setHeight(unsigned int height) {
     }
 }
 
-unsigned int XWindow::getWidth() const {
+unsigned int XWindow::getWidth() const
+{
     return this->haveFrame() ? this->frame->getWidth():this->client->getWidth();
 }
 
-unsigned int XWindow::getHeight() const {
+unsigned int XWindow::getHeight() const
+{
     return this->haveFrame()?this->frame->getHeight():this->client->getHeight();
+}
+
+void XWindow::maximizeFrame()
+{
+
+    Atom actual;
+    int format = 32;
+    int request_size = 4 * sizeof(long);
+    int X, Y, W, H;
+
+    //we start the sizes in case we fail to get the workarea
+    X = 0;
+    Y = 0;
+    W = QApplication::desktop()->width();
+    H = QApplication::desktop()->height();
+    unsigned long count, remaining;
+    unsigned char *xywh;
+
+    //We get te workarea, for the dock borders
+    AtomList* al = AtomList::getInstance();
+    if (XGetWindowProperty(QX11Info::display(), QX11Info::appRootWindow(QX11Info::appScreen()), al->getAtom("_NET_WORKAREA"), 0, request_size, False, XA_CARDINAL, &actual, &format, &count, &remaining, &xywh) || !xywh)
+    {
+        qDebug() << "Get workarea failed";
+    }
+    else
+    {
+        X = *(int*)&xywh[0];
+        Y = *(int*)&xywh[sizeof(long)];
+        W = *(int*)&xywh[sizeof(long) * 2];
+        H = *(int*)&xywh[sizeof(long) * 3];
+        //release memory
+        XFree(xywh);
+    }
+
+    //ya estaba maximizada? si no, guardamos las posiciones de la ventana
+    if (maximized_ == false)
+    {
+        this->old_x_ = this->getX();
+        this->old_y_ = this->getY();
+        this->old_width_ = this->getWidth();
+        this->old_height_ = this->getHeight();
+    }
+    maximized_ = true;
+
+    this->setX(0+X);
+    this->setY(0+Y);
+    this->setWidth(W);
+    this->setHeight(H);
+}
+
+void XWindow::updateMaximizedWindow()
+{
+    if (maximized_ == true)
+    {
+        this->maximizeFrame();
+    }
 }
 
 
@@ -383,29 +448,40 @@ unsigned int XWindow::getHeight() const {
 // **********                     PUBLIC SLOTS                     ********** //
 // ************************************************************************** //
 
-bool XWindow::resizedFrame(int width, int height) {
-    if(width != 0) {
+bool XWindow::resizedFrame(int width, int height)
+{
+    if(width != 0)
+    {
         int newWidth = this->frame->getWidth() + width;
         int minWidht = this->client->getMinWidth();
         int maxWidth = this->client->getMaxWidth();
 
-        if(newWidth >= minWidht && newWidth <= maxWidth) {
+        if(newWidth >= minWidht && newWidth <= maxWidth)
+        {
             this->setWidth(newWidth);
             return true;
-        } else
+        }
+        else
+        {
             return false;
+        }
     }
 
-    if(height != 0) {
+    if(height != 0)
+    {
         int newHeight = this->frame->getHeight() + height;
         int minHeight = this->client->getMinHeight();
         int maxHeight = this->client->getMaxHeight();
 
-        if(newHeight >= minHeight && newHeight <= maxHeight) {
+        if(newHeight >= minHeight && newHeight <= maxHeight)
+        {
             this->setHeight(newHeight);
             return true;
-        } else
+        }
+        else
+        {
             return false;
+        }
     }
 
     return false;
@@ -426,32 +502,23 @@ void XWindow::maximizedFrame()
     // TODO Mirar si hay paneles y de más
 
     //Tolerance for maximize on width and height, since a window sometimes can be not perfectly maximized, eg terminal (line sizes)
-    int maximize_tolerance = 32;
+    if(this->client->getMaxWidth() >= QApplication::desktop()->width() && this->client->getMaxHeight()>=QApplication::desktop()->height() && maximized_ == false)
+    {
 
-    if(this->client->getMaxWidth() >= QApplication::desktop()->width() && this->client->getMaxHeight()>=QApplication::desktop()->height()
-       && (this->getX() != 0 || this->getY() != 0 || this->getWidth() <= QApplication::desktop()->width()-15 || this->getHeight() <= QApplication::desktop()->height() -15)){
-
-        this->old_x_ = this->getX();
-        this->old_y_ = this->getY();
-        this->old_width_ = this->getWidth();
-        this->old_height_ = this->getHeight();
-        maximized_once_ = true;
-
-        this->setX(0);
-        this->setY(0);
-        this->setWidth(QApplication::desktop()->width());
-        this->setHeight(QApplication::desktop()->height());
+        this->maximizeFrame();
     }
-    else if (maximized_once_ == true) //Ya esta maximizado, eso significa que tenemos que regresar al tamaño anterior
+    else if (maximized_ == true) //Ya esta maximizado, eso significa que tenemos que regresar al tamaño anterior
     {
         this->setX(this->old_x_);
         this->setY( this->old_y_);
         this->setWidth(this->old_width_);
         this->setHeight(this->old_height_);
+        maximized_ = false;
     }
 }
 
-void XWindow::closedFrame() {
+void XWindow::closedFrame()
+{
     this->client->killClient();
 }
 

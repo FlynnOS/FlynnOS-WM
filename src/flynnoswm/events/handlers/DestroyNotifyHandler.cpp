@@ -23,12 +23,14 @@ DestroyNotifyHandler::DestroyNotifyHandler(XWindowList* wl)
 // **********                    PUBLIC METHODS                    ********** //
 // ************************************************************************** //
 
-bool DestroyNotifyHandler::processEvent(XEvent* event) {
+bool DestroyNotifyHandler::processEvent(XEvent* event)
+{
     Window windowID = event->xdestroywindow.window;
     qDebug() << "[+] DestroyNotify event 0x" << hex << windowID;
 
     // Si la ventana es un cliente
-    if(this->wl->existClient(windowID)) {
+    if(this->wl->existClient(windowID))
+    {
         qDebug() << "\tLa ventana es un cliente";
         XWindow* xwindow = this->wl->getXWindowByClientID(windowID);
 
@@ -38,15 +40,24 @@ bool DestroyNotifyHandler::processEvent(XEvent* event) {
         qDebug() << "\tEliminando la ventana de la lista del EWMH";
         this->wl->removeFromManagedWindow(xwindow);
 
+        //Queremos borrar un cliente, vemos si es dock para actualizar el NET_WORKAREA de los docks
+        if (xwindow->needFrame())
+        {
+            this->wl->updateWorkarea();
+        }
+
         // Si la ventana no tiene marco la destruimos tal cual
-        if(!xwindow->haveFrame()) {
+        if(!xwindow->haveFrame())
+        {
             qDebug() << "\tLa ventana no tiene marco";
 
             qDebug() << "\tLiberando memoria";
             delete xwindow;
 
         // Si la ventana si tiene marco lo destruimos
-        } else {
+        }
+        else
+        {
             qDebug() << "\tLa ventana tiene marco, destruyéndolo";
             xwindow->removeFrame();
 
@@ -57,11 +68,14 @@ bool DestroyNotifyHandler::processEvent(XEvent* event) {
         return true;
 
     // Si la ventana es un marco
-    } else if(wl->existFrame(windowID)) {
+    }
+    else if(wl->existFrame(windowID))
+    {
         qDebug() << "\tLa ventana es un marco";
         XWindow* xwindow = this->wl->getXWindowByFrameID(windowID);
 
-        if(event->xdestroywindow.event == event->xdestroywindow.window) {
+        if(event->xdestroywindow.event == event->xdestroywindow.window)
+        {
             qDebug() << "\tevent != window";
             return true;
         }
@@ -75,7 +89,9 @@ bool DestroyNotifyHandler::processEvent(XEvent* event) {
         return true;
 
     // Si no es ni un marco ni un cliente
-    } else {
+    }
+    else
+    {
         qDebug() << "\tLa ventana no es ni un cliente ni un marco";
         return false;
     }

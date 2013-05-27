@@ -33,7 +33,8 @@ bool MapRequestHandler::processEvent(XEvent* event) {
         XWindow* xwindow = this->wl->getXWindowByClientID(windowID);
 
         // Si el cliente bypassea el WM
-        if(xwindow->bypassWM()) {
+        if(xwindow->bypassWM())
+        {
             qDebug() << "\tEl cliente bypassea el WM";
             return false;
 
@@ -54,8 +55,12 @@ bool MapRequestHandler::processEvent(XEvent* event) {
                     qDebug() << "\tAñadiendo el marco (0x" << hex
                              << xwindow->getFrameID() << ") a la lista";
                     wl->addFrame(xwindow->getFrameID(), xwindow);
-                } else
+                }
+                else
+                {
+                    xwindow->addDock();
                     qDebug() << "\tEl cliente no necesita marco";
+                }
 
                 qDebug() << "\tMapeando la ventana";
                 xwindow->setState(NormalState);
@@ -65,6 +70,7 @@ bool MapRequestHandler::processEvent(XEvent* event) {
 
                 qDebug() << "\tActualizando la ventana activa";
                 this->wl->setActiveWindow(this->wl->getTopWindow());
+
             }
 
             return true;

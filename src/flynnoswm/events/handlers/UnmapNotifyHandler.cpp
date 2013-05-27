@@ -23,12 +23,14 @@ UnmapNotifyHandler::UnmapNotifyHandler(XWindowList* wl)
 // **********                    PUBLIC METHODS                    ********** //
 // ************************************************************************** //
 
-bool UnmapNotifyHandler::processEvent(XEvent* event) {
+bool UnmapNotifyHandler::processEvent(XEvent* event)
+{
     Window windowID = event->xunmap.window;
     qDebug() << "[+] UnmapNotify event 0x" << hex << windowID;
 
     // Si la ventana es un cliente
-    if(this->wl->existClient(windowID)) {
+    if(this->wl->existClient(windowID))
+    {
         qDebug() << "\tLa ventana es un cliente";
         XWindow* xwindow = wl->getXWindowByClientID(windowID);
 
@@ -37,7 +39,9 @@ bool UnmapNotifyHandler::processEvent(XEvent* event) {
             qDebug() << "\tEl cliente se minimiza";
 
         // Si el cliente se desmapea porque pasa de NormalState a WithdrawnState
-        } else {
+        }
+        else
+        {
             qDebug() << "\tEl cliente pasa de NormalState a WithdrawnState";
             xwindow->setState(WithdrawnState);
 
@@ -52,7 +56,9 @@ bool UnmapNotifyHandler::processEvent(XEvent* event) {
         return false;
 
     // Si la ventana no es un cliente
-    } else {
+    }
+    else
+    {
         qDebug() << "\tLa ventana no es un cliente";
         return false;
     }

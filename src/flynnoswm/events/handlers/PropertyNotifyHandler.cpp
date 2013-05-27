@@ -29,7 +29,7 @@ bool PropertyNotifyHandler::processEvent(XEvent* event)
 {
     AtomList* al = AtomList::getInstance();
     Window windowID = event->xproperty.window;
-    qDebug() << "[+] Property notify event 0x" << hex << windowID;
+    qDebug() << "[+] Property notify event 0x" << hex << windowID << " Atom name: " << XGetAtomName(QX11Info::display(),event->xproperty.atom);
 
     // Si la ventana es un marco
     if(this->wl->existClient(windowID))
@@ -49,6 +49,10 @@ bool PropertyNotifyHandler::processEvent(XEvent* event)
 
             qDebug() << "\tActualizando la ventana activa";
             this->wl->setActiveWindow(xwindow);
+        }
+        else if(event->xclient.message_type == al->getAtom("_NET_WM_STRUT_PARTIAL") || event->xclient.message_type == al->getAtom("_NET_WM_STRUT")) //Como esta definido en el estandard, cuando se hace request con este mensaje es porque quiere focus
+        {
+            wl->updateWorkarea();
         }
         else
         {

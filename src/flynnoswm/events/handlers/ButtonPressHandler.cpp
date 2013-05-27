@@ -42,11 +42,11 @@ bool ButtonPressHandler::processEvent(XEvent* event)
         qDebug() << "\tActualizando la ventana activa";
         this->wl->setActiveWindow(xwindow);
 
+
         return false;
     }
     else if (this->wl->existClient(windowID))
     {
-        //XUngrabButton(QX11Info::display(), AnyButton, AnyModifier, windowID);
         return false;
     }
     else // Si la ventana no es un marco

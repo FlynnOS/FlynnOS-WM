@@ -134,6 +134,16 @@ class XWindowList {
 
         /**
          * @~spanish
+         * Actualizamos el area de trabajo, _NET_WORKSPACE, revisando todas las ventanas y
+         * leyendo NET_WM_STRUT_PARTIAL para ver cuanto espacio necesita el dock
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        void updateWorkarea();
+
+        /**
+         * @~spanish
          * Indica si el cliente identificado por la clave establecida está en la
          * lista.
          * @param clientID ID del cliente a buscar.

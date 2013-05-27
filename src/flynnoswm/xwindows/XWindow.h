@@ -49,7 +49,7 @@ class XWindow : public QObject {
         int old_width_;
         int old_height_;
 
-        bool maximized_once_; //if we have maximized atleast once this is set to true, it can happen that a window start maximized, this could be a huge problem
+        bool maximized_; //if we have maximized atleast once this is set to true, it can happen that a window start maximized, this could be a huge problem
 
 
 
@@ -138,6 +138,14 @@ class XWindow : public QObject {
         bool bypassWM() const;
 
         //----------------------------------------------------------------------
+        /**
+         * @~spanish
+         * Añade el valor del dock al tamaño de escritorio para no maximizar ventanas ahi
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        void addDock();
 
         /**
          * @~spanish
@@ -180,6 +188,24 @@ class XWindow : public QObject {
          * TO TRANSLATE
          */
         bool needFrame() const;
+
+        /**
+         * @~spanish
+         * Maximiza la ventana tomando en cuenta _NET_WORKSPACE
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        void maximizeFrame();
+
+        /**
+         * @~spanish
+         * Actualiza el espacio de la ventana maximizada cuando _NET_WORKSPACE cambia
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        void updateMaximizedWindow();
 
         //----------------------------------------------------------------------
 

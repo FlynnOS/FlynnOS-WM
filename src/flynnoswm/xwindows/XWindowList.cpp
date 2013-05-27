@@ -145,6 +145,73 @@ void XWindowList::restackManagedWindow(const XWindow* xwindow) {
     ewmhRoot.sendStackingClientList(this->stackingList);
 }
 
+void XWindowList::updateWorkarea()
+{
+    AtomList* al = AtomList::getInstance();
+    //Variables need by XGetWindowProperty
+    Atom rt;
+    int rf;
+    unsigned long nir, bar;
+    long workarea[16], *data;
+    int ewmh_strut[4];
+    unsigned char *p;
+
+    //we start the variables
+    for(int j = 0; j < 4; j++)
+        ewmh_strut[j] = 0;
+
+    const XWindow* window_loop;
+    foreach( window_loop, clientHash->values() )
+    {
+        if(XGetWindowProperty(QX11Info::display(), window_loop->getClientID(), al->getAtom("_NET_WM_STRUT_PARTIAL"), 0, 4, False, XA_CARDINAL, &rt, &rf, &nir, &bar, (unsigned char **) &p) != Success || nir < 4)
+        {
+            if(XGetWindowProperty(QX11Info::display(), window_loop->getClientID(), al->getAtom("_NET_WM_STRUT"), 0, 4, False, XA_CARDINAL, &rt, &rf, &nir, &bar, (unsigned char **) &p) != Success || nir < 4)
+            {
+                continue;
+            }
+        }
+
+        data = (long *) p;
+        if(data[0])
+        ewmh_strut[0] += data[0];// - (screens_leftmost() + screens[clients[i]->screen].x);
+        if(data[1])
+        ewmh_strut[1] += data[1];// - (screens_rightmost() - (screens[clients[i]->screen].x + screens[clients[i]->screen].width));
+        if(data[2])
+        ewmh_strut[2] += data[2];// - (screens_topmost() + screens[clients[i]->screen].y);
+        if(data[3])
+        ewmh_strut[3] += data[3];// - (screens_bottom() - (screens[clients[i]->screen].y + screens[clients[i]->screen].height));
+        XFree((void *) p);
+    }
+
+    //qDebug() << ewmh_strut[0] << " " << ewmh_strut[1] << " " << ewmh_strut[2] << " " << ewmh_strut[3] << " ";
+
+    workarea[0] = /*screens[scr].x*/ 0 + ewmh_strut[0];
+    workarea[1] = /*screens[scr].x*/ 0 + ewmh_strut[2];
+    workarea[2] = (QApplication::desktop()->width() - 0 /*screens[scr].x*/)  - (ewmh_strut[0] + ewmh_strut[1]);
+    workarea[3] = (QApplication::desktop()->height() - 0 /*screens[scr].y*/) - (ewmh_strut[2] + ewmh_strut[3]);
+    workarea[4] = workarea[0]; // why 4 times? ask gnome developpers, this is the only way nautilus will listen to it
+    workarea[5] = workarea[1];
+    workarea[6] = workarea[2];
+    workarea[7] = workarea[3];
+    workarea[8] = workarea[0];
+    workarea[9] = workarea[1];
+    workarea[10] = workarea[2];
+    workarea[11] = workarea[3];
+    workarea[12] = workarea[0];
+    workarea[13] = workarea[1];
+    workarea[14] = workarea[2];
+    workarea[15] = workarea[3];
+    XChangeProperty(QX11Info::display(), QX11Info::appRootWindow(QX11Info::appScreen()), al->getAtom("_NET_WORKAREA"), XA_CARDINAL, 32, PropModeReplace, (unsigned char *) &workarea, sizeof(workarea) / sizeof(long));
+    //qDebug() << "Workarea: " << workarea[0] << " " << workarea[1] << " " << workarea[2] << " " << workarea[3] << " ";
+
+    //we change the size of all maximized windows
+    foreach( window_loop, clientHash->values() )
+    {
+        XWindow* xwindow = (XWindow*)window_loop;
+        xwindow->updateMaximizedWindow();
+    }
+}
+
 void XWindowList::setActiveWindow(const XWindow* activeWindow)
 {
     this->activeWindow = (XWindow*)activeWindow;
@@ -153,9 +220,12 @@ void XWindowList::setActiveWindow(const XWindow* activeWindow)
     //      sitio ;)
 
     EWMHRoot ewmhRoot;
-    if(this->activeWindow == NULL) {
+    if(this->activeWindow == NULL)
+    {
         ewmhRoot.sendActiveWindow(None);
-    } else {
+    }
+    else
+    {
         ewmhRoot.sendActiveWindow(this->activeWindow->getClientID());
         this->activeWindow->setFocus();
     }
