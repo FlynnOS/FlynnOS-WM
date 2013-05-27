@@ -10,6 +10,7 @@
  *
  */
 #include "TaskBar.h"
+#include "src/flynnoswm/atoms/AtomList.h"
 
 // ************************************************************************** //
 // **********             STATIC METHODS AND VARIABLES             ********** //
@@ -24,6 +25,7 @@ TaskBar::TaskBar(QWidget* parent)
         : QWidget(parent)
 {
     Config* cfg = Config::getInstance();
+    AtomList* al = AtomList::getInstance();
 
     // Inicializamos los atributos
     this->titlebar          = new QLabel(this);
@@ -50,9 +52,21 @@ TaskBar::TaskBar(QWidget* parent)
     this->setWidth(QApplication::desktop()->width());
     this->setHeight(18);
     this->setY(QApplication::desktop()->height()-this->getHeight());
+
+
+    //Le decimos al manejador de ventanas que somos un dock
+    Atom dock = al->getAtom("_NET_WM_WINDOW_TYPE_DOCK");
+    XChangeProperty(QX11Info::display(), winId(),  al->getAtom("_NET_WM_WINDOW_TYPE"),  al->getAtom("ATOM"), 32,  PropModeReplace, (unsigned char *)&dock,1);
+
+    //Le decimos al manejador de ventanas el tamaño del dock
+    unsigned long strut[12] = {0};
+    strut[3] = this->getHeight();
+    XChangeProperty(QX11Info::display(), winId(), al->getAtom("_NET_WM_STRUT_PARTIAL"), al->getAtom("CARDINAL"), 32, PropModeReplace, (unsigned char *)&strut, 12);
+
+    //mostramos la ventana
     this->show();
 
-    //We connect the signals and start the timer
+    //We connect the signals and start the timer for the clock
     connect(this->timer, SIGNAL(timeout()), this, SLOT(update()));
     this->timer->start(1000);
 

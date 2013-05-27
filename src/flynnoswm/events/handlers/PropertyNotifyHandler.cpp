@@ -52,7 +52,12 @@ bool PropertyNotifyHandler::processEvent(XEvent* event)
         }
         else if(event->xclient.message_type == al->getAtom("_NET_WM_STRUT_PARTIAL") || event->xclient.message_type == al->getAtom("_NET_WM_STRUT")) //Como esta definido en el estandard, cuando se hace request con este mensaje es porque quiere focus
         {
-            wl->updateWorkarea();
+            this->wl->updateWorkarea();
+        }
+        else if (event->xclient.message_type == al->getAtom("_NET_WM_WINDOW_TYPE")) //we have changed the window type maybe it is a dock!
+        {
+            XWindow* xwindow = this->wl->getXWindowByClientID(windowID);
+            this->wl->restackManagedWindow(xwindow);
         }
         else
         {

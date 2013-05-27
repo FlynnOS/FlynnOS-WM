@@ -37,7 +37,6 @@ bool ClientMessageHandler::processEvent(XEvent* event)
     {
         qDebug() << "\tLa ventana es un cliente";
         XWindow* xwindow = this->wl->getXWindowByClientID(windowID);
-
         //----------------------------------------------------------------------
 
         // ICCCM
@@ -49,7 +48,6 @@ bool ClientMessageHandler::processEvent(XEvent* event)
                     qDebug() << "\tSe solicita minimizar el cliente";
                     xwindow->setState(IconicState);
                     return true;
-
 
         //----------------------------------------------------------------------
 

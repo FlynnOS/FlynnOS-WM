@@ -173,13 +173,33 @@ void XWindowList::updateWorkarea()
 
         data = (long *) p;
         if(data[0])
-        ewmh_strut[0] += data[0];// - (screens_leftmost() + screens[clients[i]->screen].x);
+        {
+            if (ewmh_strut[0] < data[0])
+            {
+                ewmh_strut[0] = data[0];// - (screens_leftmost() + screens[clients[i]->screen].x);
+            }
+        }
         if(data[1])
-        ewmh_strut[1] += data[1];// - (screens_rightmost() - (screens[clients[i]->screen].x + screens[clients[i]->screen].width));
+        {
+            if (ewmh_strut[1] < data[1])
+            {
+                ewmh_strut[1] = data[1];// - (screens_rightmost() - (screens[clients[i]->screen].x + screens[clients[i]->screen].width));
+            }
+        }
         if(data[2])
-        ewmh_strut[2] += data[2];// - (screens_topmost() + screens[clients[i]->screen].y);
+        {
+            if (ewmh_strut[2] < data[2])
+            {
+                ewmh_strut[2] = data[2];// - (screens_topmost() + screens[clients[i]->screen].y);
+            }
+        }
         if(data[3])
-        ewmh_strut[3] += data[3];// - (screens_bottom() - (screens[clients[i]->screen].y + screens[clients[i]->screen].height));
+        {
+            if (ewmh_strut[3] < data[3])
+            {
+                ewmh_strut[3] = data[3];// - (screens_bottom() - (screens[clients[i]->screen].y + screens[clients[i]->screen].height));
+            }
+        }
         XFree((void *) p);
     }
 
