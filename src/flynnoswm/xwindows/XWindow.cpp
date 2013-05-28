@@ -423,6 +423,8 @@ void XWindow::maximizeFrame()
         this->old_y_ = this->getY();
         this->old_width_ = this->getWidth();
         this->old_height_ = this->getHeight();
+
+        //qDebug() << "Size: " << this->getX() << " " <<  this->getY() << " " << this->getWidth() << " " << this->getHeight();
     }
 
     maximized_ = true;
@@ -507,8 +509,10 @@ void XWindow::maximizedFrame()
     {
         this->setX(this->old_x_);
         this->setY( this->old_y_);
-        this->setWidth(this->old_width_);
-        this->setHeight(this->old_height_);
+        //the minus values are the borders added
+        this->setWidth(this->old_width_-6);
+        this->setHeight(this->old_height_-13);
+        //qDebug() << "Size: " << this->getX() << " " <<  this->getY() << " " << this->getWidth() << " " << this->getHeight();
         frame->setMaximized(false);
         maximized_ = false;
     }
