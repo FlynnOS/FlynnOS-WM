@@ -24,7 +24,8 @@
  * @~english
  * TO TRANSLATE
  */
-class ClientFrame : public QWidget {
+class ClientFrame : public QWidget
+{
 
     Q_OBJECT
 
@@ -390,6 +391,17 @@ public:
 
         /**
          * @~spanish
+         * Le dice al frame que la ventana esta maximizada, cambia los cursores
+         * de los bordes a la ventana si no se puede o se puede cambiar el tamaño
+         * @param true si esta maximizada, false si no esta maximizada
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        void setMaximized(bool _maximized);
+
+        /**
+         * @~spanish
          * Establece el pixmap que se usará como icono.
          * @param pixmap El pixmap a utilizar.
          *
@@ -453,6 +465,17 @@ public:
          * TO TRANSLATE
          */
         void minimizedVisibleFrame();
+
+        /**
+         * @~spanish
+         * Se comunica con XWindow e informa si la ventana esta
+         * maximizada o no.
+         * @return true si la ventana esta maximizada, false si la ventana no esta maximizada
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        bool isMaximized();
 
 };
 

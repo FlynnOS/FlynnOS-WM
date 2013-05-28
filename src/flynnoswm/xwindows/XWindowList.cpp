@@ -163,6 +163,7 @@ void XWindowList::updateWorkarea()
     const XWindow* window_loop;
     foreach( window_loop, clientHash->values() )
     {
+        //we get the properties of the dock, if any
         if(XGetWindowProperty(QX11Info::display(), window_loop->getClientID(), al->getAtom("_NET_WM_STRUT_PARTIAL"), 0, 4, False, XA_CARDINAL, &rt, &rf, &nir, &bar, (unsigned char **) &p) != Success || nir < 4)
         {
             if(XGetWindowProperty(QX11Info::display(), window_loop->getClientID(), al->getAtom("_NET_WM_STRUT"), 0, 4, False, XA_CARDINAL, &rt, &rf, &nir, &bar, (unsigned char **) &p) != Success || nir < 4)

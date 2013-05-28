@@ -27,7 +27,8 @@ const int ClientFrame::RIGHT_BORDER  = (1<<4);
 // ************************************************************************** //
 
 ClientFrame::ClientFrame(bool showIcon, bool showMaxButton, QWidget* parent)
-        : QWidget(parent) {
+        : QWidget(parent)
+{
     Config* cfg = Config::getInstance();
 
     // Inicializamos los atributos
@@ -126,8 +127,7 @@ ClientFrame::ClientFrame(bool showIcon, bool showMaxButton, QWidget* parent)
     this->setStyleSheet(cfg->getStyle());
 
     // Ajustamos el tamaño de los distintos elementos
-    this->title->resize(this->title->width(), cfg->getTitlebarWidth()
-            + cfg->getTopBorderWidth());
+    this->title->resize(this->title->width(), cfg->getTitlebarWidth() + cfg->getTopBorderWidth());
     this->minimizeButton->resize(this->minimizeButton->iconSize());
     this->minimizeVisibleButton->resize(this->minimizeVisibleButton->iconSize());
     this->maximizeButton->resize(this->maximizeButton->iconSize());
@@ -403,7 +403,14 @@ bool ClientFrame::isClicked(QPoint clickPosition, const QLabel* label) const {
 // **********                   PROTECTED METHODS                  ********** //
 // ************************************************************************** //
 
-void ClientFrame::mousePressEvent(QMouseEvent* event) {
+void ClientFrame::mousePressEvent(QMouseEvent* event)
+{
+    //we shouldn't move or resize the window when its maximized
+    if (emit this->isMaximized())
+    {
+        return;
+    }
+
     this->clickPosition =  event->pos();
 
     // Barra de título
@@ -460,7 +467,14 @@ void ClientFrame::mousePressEvent(QMouseEvent* event) {
     }
 }
 
-void ClientFrame::mouseMoveEvent(QMouseEvent* event) {
+void ClientFrame::mouseMoveEvent(QMouseEvent* event)
+{
+    //we shouldn't move the window when its maximized
+    if (emit this->isMaximized())
+    {
+        return;
+    }
+
     // Si se quiere desplazar la ventana
     if(this->mouseMask & MOVE)
         this->move(event->globalPos() - this->clickPosition);
@@ -488,14 +502,54 @@ void ClientFrame::mouseMoveEvent(QMouseEvent* event) {
                 - this->width(), 0);
 }
 
-void ClientFrame::mouseReleaseEvent(QMouseEvent* /*event*/) {
+void ClientFrame::mouseReleaseEvent(QMouseEvent* /*event*/)
+{
     this->mouseMask = 0;
 }
-
 
 // ************************************************************************** //
 // **********                      GET/SET/IS                      ********** //
 // ************************************************************************** //
+
+void ClientFrame::setMaximized(bool _maximized)
+{
+    if (_maximized == false)
+    {
+        // Ponemos los cursores para los bordes
+        this->topBorder->setCursor(Qt::SizeVerCursor);
+        this->bottomBorder->setCursor(Qt::SizeVerCursor);
+        this->leftBorder->setCursor(Qt::SizeHorCursor);
+        this->rightBorder->setCursor(Qt::SizeHorCursor);
+
+        this->topLeftBorder->setCursor(Qt::SizeFDiagCursor);
+        this->leftTopBorder->setCursor(Qt::SizeFDiagCursor);
+        this->bottomRightBorder->setCursor(Qt::SizeFDiagCursor);
+        this->rightBottomBorder->setCursor(Qt::SizeFDiagCursor);
+
+        this->topRightBorder->setCursor(Qt::SizeBDiagCursor);
+        this->rightTopBorder->setCursor(Qt::SizeBDiagCursor);
+        this->leftBottomBorder->setCursor(Qt::SizeBDiagCursor);
+        this->bottomLeftBorder->setCursor(Qt::SizeBDiagCursor);
+    }
+    else
+    {
+        // Ponemos los cursores para los bordes
+        this->topBorder->setCursor(Qt::ArrowCursor);
+        this->bottomBorder->setCursor(Qt::ArrowCursor);
+        this->leftBorder->setCursor(Qt::ArrowCursor);
+        this->rightBorder->setCursor(Qt::ArrowCursor);
+
+        this->topLeftBorder->setCursor(Qt::ArrowCursor);
+        this->leftTopBorder->setCursor(Qt::ArrowCursor);
+        this->bottomRightBorder->setCursor(Qt::ArrowCursor);
+        this->rightBottomBorder->setCursor(Qt::ArrowCursor);
+
+        this->topRightBorder->setCursor(Qt::ArrowCursor);
+        this->rightTopBorder->setCursor(Qt::ArrowCursor);
+        this->leftBottomBorder->setCursor(Qt::ArrowCursor);
+        this->bottomLeftBorder->setCursor(Qt::ArrowCursor);
+    }
+}
 
 void ClientFrame::setVisible(bool visible) {
     QWidget::setVisible(visible);

@@ -420,6 +420,16 @@ class XWindow : public QObject {
 
         /**
          * @~spanish
+         * Slot que regresa si la ventana esta maximizada
+         * @return true si la ventana esta maximizada, false si no.
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        bool isMaximized();
+
+        /**
+         * @~spanish
          * Slot que se llama cuando el usuario redimensiona el marco. Se debe
          * redimensionar también el cliente. Se podrá redimensionar siempre que
          * el nuevo tamaño se ajuste a los mínimos y máximos solicitados por el

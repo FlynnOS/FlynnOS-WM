@@ -92,15 +92,12 @@ void XWindow::addFrame()
 
 
         // Conectamos signals y slots
-        connect(this->frame, SIGNAL(resizedFrame(int, int)),
-                this, SLOT(resizedFrame(int, int)));
-        connect(this->frame, SIGNAL(minimizedFrame()),
-                this, SLOT(minimizedFrame()));
-        connect(this->frame, SIGNAL(minimizedVisibleFrame()),
-                this, SLOT(minimizedVisibleFrame()));
-        connect(this->frame, SIGNAL(maximizedFrame()),
-                this, SLOT(maximizedFrame()));
+        connect(this->frame, SIGNAL(resizedFrame(int, int)), this, SLOT(resizedFrame(int, int)));
+        connect(this->frame, SIGNAL(minimizedFrame()), this, SLOT(minimizedFrame()));
+        connect(this->frame, SIGNAL(minimizedVisibleFrame()), this, SLOT(minimizedVisibleFrame()));
+        connect(this->frame, SIGNAL(maximizedFrame()), this, SLOT(maximizedFrame()));
         connect(this->frame, SIGNAL(closedFrame()), this, SLOT(closedFrame()));
+        connect(this->frame, SIGNAL(isMaximized()), this, SLOT(isMaximized()));
 
         // Añadimos el cliente al save-set para que si el WM se cierra
         // inesperadamente no desaparezcan los clientes
@@ -427,8 +424,9 @@ void XWindow::maximizeFrame()
         this->old_width_ = this->getWidth();
         this->old_height_ = this->getHeight();
     }
-    maximized_ = true;
 
+    maximized_ = true;
+    frame->setMaximized(true);
     this->setX(0+X);
     this->setY(0+Y);
     this->setWidth(W);
@@ -499,8 +497,6 @@ void XWindow::minimizedVisibleFrame()
 
 void XWindow::maximizedFrame()
 {
-    // TODO Mirar si hay paneles y de más
-
     //Tolerance for maximize on width and height, since a window sometimes can be not perfectly maximized, eg terminal (line sizes)
     if(this->client->getMaxWidth() >= QApplication::desktop()->width() && this->client->getMaxHeight()>=QApplication::desktop()->height() && maximized_ == false)
     {
@@ -513,6 +509,7 @@ void XWindow::maximizedFrame()
         this->setY( this->old_y_);
         this->setWidth(this->old_width_);
         this->setHeight(this->old_height_);
+        frame->setMaximized(false);
         maximized_ = false;
     }
 }
@@ -525,4 +522,9 @@ void XWindow::closedFrame()
 void XWindow::updateTitle()
 {
     this->frame->setTitle(this->client->getTitle());
+}
+
+bool XWindow::isMaximized()
+{
+    return maximized_;
 }
