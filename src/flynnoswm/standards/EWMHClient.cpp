@@ -138,12 +138,29 @@ QPixmap EWMHClient::getIconPixmap() const {
         return NULL;
 
     // Icono
-    if(this->getProperty(al->getAtom("_NET_WM_ICON"), XA_CARDINAL, &propRet,
-            &numItems, 2, iconWidth*iconHeight)) {
-        QImage aux(propRet, iconWidth, iconHeight, QImage::Format_ARGB32);
-        icon = QPixmap::fromImage(aux);
-        XFree(propRet);
+    int i;
+    ulong n;
+    ulong* data;
+    //obtenemos el icono
+    XGetWindowProperty(QX11Info::display(),clientID,al->getAtom("_NET_WM_ICON"),0,LONG_MAX,False,AnyPropertyType,&n,&i,&n,&n,(uchar**)&data);
+    if(data)
+    {
+        //creamos la imagen y compiamso los datos
+        QImage image( data[0], data[1], QImage::Format_ARGB32);
+        //la imagen esta desfasada, la movemos para que quede bien
+        for(int i=0; i<image.byteCount()/4; ++i)
+        {
+            ((uint*)image.bits())[i] = data[i+2];
+        }
+
+        //creamos el pixmap
+        icon = QPixmap::fromImage(image);
+        XFree(data);
         return icon;
-    } else
+    }
+    else
+    {
+        XFree(data);
         return NULL;
+    }
 }
