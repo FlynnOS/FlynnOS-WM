@@ -14,15 +14,16 @@
 
 #include "src/flynnoswm/util/Include.h"
 #include "src/flynnoswm/config/Config.h"
+#include "src/flynnoswm/xwindows/XWindow.h"
 #include <QTimer>
 #include <QTime>
 
 /**
  * @~spanish
- * Es la barra de tareas que maneja las ventanas, el reloj y los iconos del tray
+ * Singleton, Es la barra de tareas que maneja las ventanas, el reloj y los iconos del tray
  *
  * @~english
-* This is the taskbar that handles windows, the clock and the tray icons
+ * Singleton, This is the taskbar that handles windows, the clock and the tray icons
  */
 class TaskBar : public QWidget {
 
@@ -41,10 +42,18 @@ class TaskBar : public QWidget {
         //This timer sets the loop to update the clock text
         QTimer *timer;
 
-    protected:
+        QMap<XWindow*, QPushButton*> task_bar_list_;
 
-    public:
+        /**
+         * @~spanish
+         * Única instancia de la clase.
+         *
+         * @~english
+         * Single instance of the class.
+         */
+        static TaskBar* instance;
 
+        // Ocultamos las constructoras
         /**
          * @~spanish
          * Crea una barra de tareas
@@ -63,6 +72,54 @@ class TaskBar : public QWidget {
          * TO TRANSLATE
          */
         virtual ~TaskBar();
+
+        const TaskBar& operator = (const TaskBar& al){return al;}
+
+    protected:
+
+    public:
+
+        /**
+         * @~spanish
+         * Único método para obtener una instancia de la clase.
+         * @return La única instancia de la clase.
+         *
+         * @~english
+         * Only method to get an instance of the class.
+         * @return The single instance of the class.
+         */
+        static TaskBar* getInstance();
+
+        /**
+         * @~spanish
+         * Agregamos una vetana a la barra de tareas
+         * @param La ventana para agregar
+         *
+         * @~english
+         * We adda  window to the bar
+         * @param The window to add to the bar
+         */
+        void AddTask(XWindow* window_bar_);
+
+        /**
+         * @~spanish
+         * Quitamos una vetana a la barra de tareas
+         * @param La ventana para agregar
+         *
+         * @~english
+         * We remove the window from the bar
+         * @param The window to add to the bar
+         */
+        void RemoveTask(XWindow* window_bar_);
+
+        /**
+         * @~spanish
+         * Actualizamos la lista y sus tamaños
+         *
+         * @~english
+         * We update the lista and sizes
+         */
+        void UpdateTitles();
 
         //----------------------------------------------------------------------
 

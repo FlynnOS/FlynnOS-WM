@@ -372,6 +372,17 @@ class Client {
          */
         Atom getWindowType() const;
 
+        /**
+         * @~spanish
+         * Devuelve una lista con los estados del cliente
+         * @return Lista de estados.
+         *
+         * @~english
+         * Returns a list with windows state
+         * @return The window type list
+         */
+        QList<Atom> getWindowState() const;
+
 };
 
 #endif // CLIENT_H

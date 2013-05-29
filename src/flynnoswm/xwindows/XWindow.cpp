@@ -11,11 +11,13 @@
  */
 #include "XWindow.h"
 #include "src/flynnoswm/xwindows/MinimizeFloat.h"
+#include "src/flynnoswm/xwindows/TaskBar.h"
+#include "src/flynnoswm/standards/ICCCM.h"
+
 
 // ************************************************************************** //
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
-
 XWindow::XWindow(const Window& clientID)
 {
     this->client   = new Client(clientID);
@@ -26,14 +28,18 @@ XWindow::XWindow(const Window& clientID)
 
     this->client->setBorderWidth(0);
     maximized_ = false;
+    in_taskbar_ = true;
 }
 
 XWindow::~XWindow()
 {
+
     delete this->client;
 
     if(this->haveFrame())
         delete this->frame;
+
+    TaskBar::getInstance()->RemoveTask(this);
 }
 
 
@@ -56,8 +62,18 @@ void XWindow::addFrame()
     {
         Config* cfg = Config::getInstance();
 
+        //revisamos si ponemos boton de maximizar
+        bool maximize = false;
+        if (client->getMaxWidth() == ICCCM::DEFAULT_MAX_SIZE && client->getMaxHeight() == ICCCM::DEFAULT_MAX_SIZE)
+        {
+            maximize = true;
+        }
+
         // Creamos el marco con la posición y tamaño necesarios
-        this->frame = new ClientFrame(cfg->isIconVisible(), true);
+        setTaskBar();
+        this->frame = new ClientFrame(cfg->isIconVisible(), maximize, in_taskbar_);
+
+
         this->setX(this->client->getX());
         this->setY(this->client->getY());
         this->setWidth(this->client->getWidth() + cfg->getLeftBorderWidth()
@@ -145,9 +161,79 @@ bool XWindow::needFrame() const
 
 QString XWindow::getTitle()
 {
-    return frame->getTitle();
+    if (this->haveFrame())
+    {
+        return frame->getTitle();
+    }
+    else
+    {
+        return QString("");
+    }
 }
 
+// this is for _NET_WM_STATE
+QList<Atom> XWindow::getClientState()
+{
+    return client->getWindowState();
+}
+
+
+
+void XWindow::setTaskBar()
+{
+    AtomList* al = AtomList::getInstance();
+    Atom clientType = this->client->getWindowType();
+    {
+        if (clientType == al->getAtom("_NET_WM_WINDOW_TYPE_DESKTOP")
+            || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_DOCK")
+            || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_SPLASH")
+            || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_TOOLBAR")
+            || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_MENU")
+            || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_DIALOG"))
+        {
+            in_taskbar_ = false;
+        }
+
+    }
+
+    if (in_taskbar_ && getTitle() != "")
+    {
+        TaskBar::getInstance()->AddTask(this);
+    }
+    else
+    {
+        TaskBar::getInstance()->RemoveTask(this);
+    };
+
+}
+
+void XWindow::setClientState()
+{
+    AtomList* al = AtomList::getInstance();
+    //we get the states and then process them
+    QList<Atom> states = getClientState();
+    QString title = getTitle();
+    //qDebug() << "STate size: " << states.size() << " Title: " << title;
+
+    //we set the states to normal mode
+    in_taskbar_ = true;
+    for (int i = 0; i < states.size(); i++)
+    {
+        if (states.at(i)== al->getAtom("_NET_WM_STATE_SKIP_TASKBAR"))
+        {
+            in_taskbar_ = false;
+            setTaskBar();
+        }
+        else
+        {
+            in_taskbar_ = true;
+            setTaskBar();
+        }
+
+    }
+}
+
+//this is for _NET_WM_WINDOW_TYPE
 void XWindow::setState(int state) {
     // WithdrawnState -> NormalState o IconicState
     if((this->state == WithdrawnState && state == NormalState)
@@ -255,6 +341,8 @@ void XWindow::setState(int state) {
         this->client->changeWmState(state);
         this->state = state;
     }
+
+    setTaskBar();
 }
 
 int XWindow::getState() const {
@@ -510,8 +598,8 @@ void XWindow::maximizedFrame()
         this->setX(this->old_x_);
         this->setY( this->old_y_);
         //the minus values are the borders added
-        this->setWidth(this->old_width_-6);
-        this->setHeight(this->old_height_-13);
+        this->setWidth(this->old_width_);
+        this->setHeight(this->old_height_);
         //qDebug() << "Size: " << this->getX() << " " <<  this->getY() << " " << this->getWidth() << " " << this->getHeight();
         frame->setMaximized(false);
         maximized_ = false;
@@ -526,6 +614,7 @@ void XWindow::closedFrame()
 void XWindow::updateTitle()
 {
     this->frame->setTitle(this->client->getTitle());
+    this->setTaskBar();
 }
 
 bool XWindow::isMaximized()

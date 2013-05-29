@@ -16,6 +16,14 @@
 // **********             STATIC METHODS AND VARIABLES             ********** //
 // ************************************************************************** //
 
+TaskBar* TaskBar::instance = NULL;
+
+TaskBar* TaskBar::getInstance() {
+    if(TaskBar::instance == NULL)
+        TaskBar::instance = new TaskBar();
+    return TaskBar::instance;
+}
+
 
 // ************************************************************************** //
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
@@ -74,8 +82,64 @@ TaskBar::TaskBar(QWidget* parent)
     this->update();
 }
 
+void TaskBar::AddTask(XWindow* window_bar_)
+{
+    QMap<XWindow*, QPushButton*>::Iterator i = this->task_bar_list_.find(window_bar_);
+    if (i != this->task_bar_list_.end())
+    {
+        i.value()->setText(i.key()->getTitle());
+    }
+    else
+    {
+        QPushButton* added_ = new QPushButton(this);
+        added_->setObjectName("title");
+        added_->setText(window_bar_->getTitle());
+        added_->show();
+        this->task_bar_list_.insert(window_bar_, added_);
+    }
+
+    UpdateTitles();
+}
+
+void TaskBar::RemoveTask(XWindow* window_bar_)
+{
+    QMap<XWindow*, QPushButton*>::Iterator i = this->task_bar_list_.find(window_bar_);
+    if (i == this->task_bar_list_.end())
+    {
+        return;
+    }
+    i.value()->deleteLater();
+    this->task_bar_list_.remove(window_bar_);
+    UpdateTitles();
+}
+
+void TaskBar::UpdateTitles()
+{
+    QMap<XWindow*, QPushButton*>::Iterator i;
+    i = this->task_bar_list_.begin();
+    int x = 0;
+    while(i != this->task_bar_list_.end())
+    {
+        int pixelWidth = i.value()->fontMetrics().width(i.value()->text()) + 10;
+        i.value()->resize(pixelWidth,18);
+        i.value()->move(x,0);
+        x += pixelWidth;
+        i++;
+    }
+}
+
+
 TaskBar::~TaskBar()
 {
+    QMap<XWindow*, QPushButton*>::Iterator i;
+    i = this->task_bar_list_.begin();
+    while(i != this->task_bar_list_.end())
+    {
+        delete i.value();
+        i++;
+    }
+    this->task_bar_list_.clear();
+
     delete this->titlebar;
     delete this->clock_text;
     delete this->timer;

@@ -35,6 +35,11 @@ bool CreateNotifyHandler::processEvent(XEvent* event) {
         qDebug() << "\tAñadiendo el cliente a la lista";
         this->wl->addClient(windowID, xwindow);
 
+        xwindow = this->wl->getXWindowByClientID(windowID);
+
+        //shall we add it to the taskbar
+        xwindow->setTaskBar();
+
         return false;
 
     // Si la ventana es un marco

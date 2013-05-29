@@ -82,7 +82,7 @@ QString EWMHClient::getVisibleTitle() const {
 //------------------------------------------------------------------------------
 
 Atom EWMHClient::getWindowType() const {
-    unsigned char* propRet;
+    unsigned char *propRet;
 
     if(this->getProperty(al->getAtom("_NET_WM_WINDOW_TYPE"), XA_ATOM,
             &propRet)) {
@@ -92,6 +92,24 @@ Atom EWMHClient::getWindowType() const {
         return ret;
     } else
         return al->getAtom("_NET_WM_WINDOW_TYPE_NORMAL");
+}
+
+QList<Atom> EWMHClient::getWindowState() const {
+    unsigned char* propRet;
+    unsigned long num_items = 0;
+    QList<Atom> atom_list;
+
+    if(this->getProperty(al->getAtom("_NET_WM_STATE"), XA_ATOM, &propRet))
+    {
+        Atom* types = (Atom*)propRet;
+        for (int i = 0; i < sizeof(types)/sizeof(Atom); i++)
+        {
+            atom_list.append(types[i]);
+        }
+        XFree(propRet);
+        return atom_list;
+    }
+    return atom_list;
 }
 
 //------------------------------------------------------------------------------

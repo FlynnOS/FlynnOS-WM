@@ -30,8 +30,7 @@ bool PropertyNotifyHandler::processEvent(XEvent* event)
     AtomList* al = AtomList::getInstance();
     Window windowID = event->xproperty.window;
     qDebug() << "[+] Property notify event 0x" << hex << windowID << " Atom name: " << XGetAtomName(QX11Info::display(),event->xproperty.atom);
-
-    // Si la ventana es un marco
+    // Si la ventana es un cliente
     if(this->wl->existClient(windowID))
     {
         if (event->xproperty.atom == XA_WM_NAME)
@@ -59,6 +58,9 @@ bool PropertyNotifyHandler::processEvent(XEvent* event)
             XWindow* xwindow = this->wl->getXWindowByClientID(windowID);
             this->wl->restackManagedWindow(xwindow);
         }
+        /*else if (event->xclient.message_type == al->getAtom("WM_NORMAL_HINTS")) //we got hints change request
+        {
+        }*/
         else
         {
             //qDebug() << "Atom name: " << XGetAtomName(QX11Info::display(),event->xproperty.atom);

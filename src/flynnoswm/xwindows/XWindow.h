@@ -51,6 +51,8 @@ class XWindow : public QObject {
 
         bool maximized_; //if we have maximized atleast once this is set to true, it can happen that a window start maximized, this could be a huge problem
 
+        bool in_taskbar_; //if true this window has to be added to the taskbar, if false not
+
 
 
         /**
@@ -279,6 +281,26 @@ class XWindow : public QObject {
          */
         void setFocus() const;
 
+        /**
+         * @~spanish
+         * Devuelve una lista con los estados del cliente
+         * @return Lista de estados.
+         *
+         * @~english
+         * Returns a list with windows state
+         * @return The window type list
+         */
+        QList<Atom> getClientState();
+
+        /**
+         * @~spanish
+         * Obtienes los estados del cliente y guarda los valores apropiados.
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        void setClientState();
+
         //----------------------------------------------------------------------
 
         /**
@@ -310,6 +332,15 @@ class XWindow : public QObject {
          * TO TRANSLATE
          */
         bool isBottomWindow() const;
+
+        /**
+         * @~spanish
+         * Revisamos si debo estar en el taskbar o no
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        void setTaskBar();
 
         //----------------------------------------------------------------------
 

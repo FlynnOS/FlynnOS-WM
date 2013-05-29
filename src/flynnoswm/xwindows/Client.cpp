@@ -171,8 +171,15 @@ void Client::changeWmState(int state) {
     this->icccm->changeWmState(state);
 }
 
+
 //------------------------------------------------------------------------------
 
 Atom Client::getWindowType() const {
     return this->ewmh->getWindowType();
 }
+
+QList<Atom> Client::getWindowState() const
+{
+    return this->ewmh->getWindowState();
+}
+

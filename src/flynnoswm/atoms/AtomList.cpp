@@ -38,6 +38,7 @@ AtomList::AtomList() {
 
         // ICCCM
         "WM_CHANGE_STATE",
+        "WM_NORMAL_HINTS",
 
         // EWMH - Root
         "_NET_SUPPORTED",

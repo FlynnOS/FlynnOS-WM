@@ -65,7 +65,11 @@ bool ClientMessageHandler::processEvent(XEvent* event)
             EWMHRoot ewmh;
             ewmh.receivedCloseWindow(xwindow);
         }
-
+        else if (event->xclient.message_type == al->getAtom("_NET_WM_STATE"))
+        {
+            XWindow* xwindow = this->wl->getXWindowByClientID(windowID);
+            xwindow->setClientState();
+        }
         return false;
 
     // Si la ventana es un marco
