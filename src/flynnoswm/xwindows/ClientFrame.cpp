@@ -26,7 +26,7 @@ const int ClientFrame::RIGHT_BORDER  = (1<<4);
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-ClientFrame::ClientFrame(bool showIcon, bool showMaxButton, QWidget* parent)
+ClientFrame::ClientFrame(bool showIcon, bool showMaxButton, bool showMinButton, QWidget* parent)
         : QWidget(parent)
 {
     Config* cfg = Config::getInstance();
@@ -113,6 +113,7 @@ ClientFrame::ClientFrame(bool showIcon, bool showMaxButton, QWidget* parent)
     // Mostramos o no los distintos elementos según corresponda
     this->icon->setVisible(showIcon);
     this->maximizeButton->setVisible(showMaxButton);
+    this->minimizeButton->setVisible(showMinButton);
 
     // Lanzamos señales cuando se pulsa un botón
     connect(this->minimizeButton, SIGNAL(clicked()), this,
@@ -274,10 +275,15 @@ void ClientFrame::reorganizeFrame() {
     QPair<Config::Aling, int> title    = cfg->getTitlePos();
     QPair<Config::Aling, int> icon     = cfg->getIconPos();
 
-    this->placeInHash(minimize, this->minimizeButton, &left, &center, &right);
+    if(this->minimizeButton->isVisible())
+    {
+        this->placeInHash(minimize, this->minimizeButton, &left, &center, &right);
+    }
     this->placeInHash(minimize_visible, this->minimizeVisibleButton, &left, &center, &right);
     if(this->maximizeButton->isVisible())
+    {
         this->placeInHash(maximize,this->maximizeButton,&left,&center,&right);
+    }
     this->placeInHash(exit, this->exitButton, &left, &center, &right);
     this->placeInHash(title, this->title, &left, &center, &right);
     if(this->icon->isVisible())

@@ -10,6 +10,7 @@
  *
  */
 #include "ButtonPressHandler.h"
+#include "src/flynnoswm/xwindows/TaskBar.h"
 
 // ************************************************************************** //
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
@@ -47,6 +48,7 @@ bool ButtonPressHandler::processEvent(XEvent* event)
     }
     else if (this->wl->existClient(windowID))
     {
+        qDebug() << "\tLa ventana es un cliente";
         return false;
     }
     else // Si la ventana no es un marco
@@ -57,6 +59,7 @@ bool ButtonPressHandler::processEvent(XEvent* event)
         {
             std::system("terminator &");
         }*/
+
         qDebug() << "\tLa ventana no es un marco";
         return false;
     }

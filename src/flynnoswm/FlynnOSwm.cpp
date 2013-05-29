@@ -75,7 +75,7 @@ FlynnOSwm::FlynnOSwm(int argc, char** argv) : QApplication(argc, argv)
     button2->show();
     connect(button2, SIGNAL(clicked()),this, SLOT(launchTerminal()));
 
-    TaskBar::getInstance();
+    TaskBar::getInstance()->wl = this->windowList;
 
 
 }

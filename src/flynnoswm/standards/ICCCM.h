@@ -46,32 +46,6 @@ class ICCCM {
 
         /**
          * @~spanish
-         * En caso de que el cliente no defina un tamaño mínimo se usará este.
-         *
-         * @~english
-         * TO TRANSLATE
-         *
-         * @~english
-         * TO TRANSLATE
-         */
-        static const unsigned int DEFAULT_MIN_SIZE;
-
-        /**
-         * @~spanish
-         * En caso de que el cliente no defina un tamaño máximo se usará este.
-         *
-         * @~english
-         * TO TRANSLATE
-         *
-         * @~english
-         * TO TRANSLATE
-         */
-        static const unsigned int DEFAULT_MAX_SIZE;
-
-        //----------------------------------------------------------------------
-
-        /**
-         * @~spanish
          * Transforma el XTextProperty indicado en un QString.
          * @param textProperty El XTextProperty.
          * @return El QString.
@@ -126,6 +100,32 @@ class ICCCM {
         void sendProtocol(const char* protocol) const;
 
     public:
+
+        //----------------------------------------------------------------------
+
+        /**
+         * @~spanish
+         * En caso de que el cliente no defina un tamaño mínimo se usará este.
+         *
+         * @~english
+         * TO TRANSLATE
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        static const unsigned int DEFAULT_MIN_SIZE;
+
+        /**
+         * @~spanish
+         * En caso de que el cliente no defina un tamaño máximo se usará este.
+         *
+         * @~english
+         * TO TRANSLATE
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        static const unsigned int DEFAULT_MAX_SIZE;
 
         /**
          * @~spanish

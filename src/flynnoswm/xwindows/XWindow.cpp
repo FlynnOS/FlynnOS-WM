@@ -203,7 +203,7 @@ void XWindow::setTaskBar()
     else
     {
         TaskBar::getInstance()->RemoveTask(this);
-    };
+    }
 
 }
 
@@ -212,8 +212,6 @@ void XWindow::setClientState()
     AtomList* al = AtomList::getInstance();
     //we get the states and then process them
     QList<Atom> states = getClientState();
-    QString title = getTitle();
-    //qDebug() << "STate size: " << states.size() << " Title: " << title;
 
     //we set the states to normal mode
     in_taskbar_ = true;
@@ -234,10 +232,11 @@ void XWindow::setClientState()
 }
 
 //this is for _NET_WM_WINDOW_TYPE
-void XWindow::setState(int state) {
+void XWindow::setState(int state)
+{
     // WithdrawnState -> NormalState o IconicState
-    if((this->state == WithdrawnState && state == NormalState)
-            || (this->state == WithdrawnState && state == IconicState)) {
+    if((this->state == WithdrawnState && state == NormalState) || (this->state == WithdrawnState && state == IconicState))
+    {
 
         // Mapeamos el marco y le añadimos algunas propiedades si corresponde
         if(this->haveFrame()) {
@@ -253,7 +252,8 @@ void XWindow::setState(int state) {
         if(!this->client->overridePositionHints()) {
             // TODO Tener en cuenta que los paneles ocupan un tamaño en el
             //      escritorio en el que no se deberían situar ventanas.
-            switch (this->client->getInitialPosition()) {
+            switch (this->client->getInitialPosition())
+            {
             case NorthWestGravity:
                 this->setX(0);
                 this->setY(0);
@@ -305,8 +305,9 @@ void XWindow::setState(int state) {
     //--------------------------------------------------------------------------
 
     // NormalState o IconicState -> WithdrawnState
-    } else if((this->state == NormalState && state == WithdrawnState)
-            || (this->state == IconicState && state == WithdrawnState)) {
+    }
+    else if((this->state == NormalState && state == WithdrawnState) || (this->state == IconicState && state == WithdrawnState))
+    {
         // Si el cliente tiene marco lo desmapeamos
         if(this->haveFrame())
             this->frame->setVisible(false);
@@ -318,7 +319,8 @@ void XWindow::setState(int state) {
     //--------------------------------------------------------------------------
 
     // NormalState -> IconicState
-    } else if(this->state == NormalState && state == IconicState) {
+    } else if(this->state == NormalState && state == IconicState)
+    {
         // Desmapeamos la ventana y su marco si tiene
         this->client->setVisible(false);
         if(this->haveFrame())
@@ -367,6 +369,7 @@ XID XWindow::getWindowGroup() const {
 
 void XWindow::setFocus() const {
     this->client->setFocus();
+    TaskBar::getInstance()->setFocus((XWindow*)this);
 }
 
 //------------------------------------------------------------------------------

@@ -37,9 +37,6 @@ bool CreateNotifyHandler::processEvent(XEvent* event) {
 
         xwindow = this->wl->getXWindowByClientID(windowID);
 
-        //shall we add it to the taskbar
-        xwindow->setTaskBar();
-
         return false;
 
     // Si la ventana es un marco

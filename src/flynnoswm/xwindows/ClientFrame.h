@@ -262,7 +262,7 @@ public:
          * @~english
          * TO TRANSLATE
          */
-        ClientFrame(bool showIcon, bool showMaxButton, QWidget* parent = 0);
+        ClientFrame(bool showIcon, bool showMaxButton, bool showMinButton, QWidget* parent = 0);
 
         /**
          * @~spanish

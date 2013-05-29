@@ -18,7 +18,8 @@
 
 TaskBar* TaskBar::instance = NULL;
 
-TaskBar* TaskBar::getInstance() {
+TaskBar* TaskBar::getInstance()
+{
     if(TaskBar::instance == NULL)
         TaskBar::instance = new TaskBar();
     return TaskBar::instance;
@@ -82,6 +83,82 @@ TaskBar::TaskBar(QWidget* parent)
     this->update();
 }
 
+bool TaskBar::isTaskWindow(Window w)
+{
+    QMap<XWindow*, QPushButton*>::Iterator i = this->task_bar_list_.begin();
+    while(i != this->task_bar_list_.end())
+    {
+        if (i.value()->winId() == w || this->winId() == w)
+        {
+            return true;
+        }
+        i++;
+    }
+    return false;
+}
+
+void TaskBar::setFocus(XWindow* window)
+{
+    QMap<XWindow*, QPushButton*>::Iterator i = this->task_bar_list_.begin();
+    while(i != this->task_bar_list_.end())
+    {
+        if (i.key() == window)
+        {
+            i.value()->setAutoFillBackground(true);
+            i.value()->setStyleSheet("background-color: rgb(255, 0, 0); color: rgb(76,76,76);");
+        }
+        else
+        {
+            i.value()->setAutoFillBackground(true);
+            i.value()->setStyleSheet("background-color: #DCD9D7; color: rgb(76,76,76);");
+        }
+        i++;
+    }
+}
+
+void TaskBar::clickTaskItem(Window w)
+{
+    QMap<XWindow*, QPushButton*>::Iterator i = this->task_bar_list_.begin();
+    while(i != this->task_bar_list_.end())
+    {
+        if (i.value()->winId() == w)
+        {
+            //we show or iconify the window
+            if (i.key()->getState() == IconicState)
+            {
+                i.key()->setState(NormalState);
+                qDebug() << "\tModificando la lista del EWMH";
+                this->wl->restackManagedWindow(i.key());
+
+                qDebug() << "\tActualizando la ventana activa";
+                this->wl->setActiveWindow(i.key());
+
+                setFocus(i.key());
+            }
+            else
+            {
+                if (wl->getTopWindow() != i.key())
+                {
+                    this->wl->restackManagedWindow(i.key());
+                    qDebug() << "\tModificando la lista del EWMH";
+                    this->wl->restackManagedWindow(i.key());
+
+                    qDebug() << "\tActualizando la ventana activa";
+                    this->wl->setActiveWindow(i.key());
+
+                    setFocus(i.key());
+                }
+                else
+                {
+                    i.key()->setState(IconicState);
+                    setFocus(0);
+                }
+            }
+        }
+        i++;
+    }
+}
+
 void TaskBar::AddTask(XWindow* window_bar_)
 {
     QMap<XWindow*, QPushButton*>::Iterator i = this->task_bar_list_.find(window_bar_);
@@ -95,6 +172,7 @@ void TaskBar::AddTask(XWindow* window_bar_)
         added_->setObjectName("title");
         added_->setText(window_bar_->getTitle());
         added_->show();
+        connect( added_, SIGNAL( clicked() ), this, SLOT(click_item()) );
         this->task_bar_list_.insert(window_bar_, added_);
     }
 
@@ -165,6 +243,11 @@ void TaskBar::update()
     this->clock_text->move(QApplication::desktop()->width()-pixelWidth,this->clock_text->y());
 
 
+}
+
+void TaskBar::click_item()
+{
+    clickTaskItem(((QPushButton*)QObject::sender())->winId());
 }
 
 // ************************************************************************** //

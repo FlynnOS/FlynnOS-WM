@@ -10,6 +10,7 @@
  *
  */
 #include "PropertyNotifyHandler.h"
+#include "src/flynnoswm/xwindows/TaskBar.h"
 
 // ************************************************************************** //
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
@@ -40,6 +41,10 @@ bool PropertyNotifyHandler::processEvent(XEvent* event)
         }
         else if(event->xclient.message_type == al->getAtom("_NET_WM_USER_TIME")) //Como esta definido en el estandard, cuando se hace request con este mensaje es porque quiere focus
         {
+            if (TaskBar::getInstance()->isTaskWindow(windowID)) //don't send focus to task list items
+            {
+                return true;
+            }
             qDebug() << "\tLa ventana es un marco";
             XWindow* xwindow = wl->getXWindowByClientID(windowID);
 
@@ -57,6 +62,7 @@ bool PropertyNotifyHandler::processEvent(XEvent* event)
         {
             XWindow* xwindow = this->wl->getXWindowByClientID(windowID);
             this->wl->restackManagedWindow(xwindow);
+            this->wl->setActiveWindow(xwindow);
         }
         /*else if (event->xclient.message_type == al->getAtom("WM_NORMAL_HINTS")) //we got hints change request
         {

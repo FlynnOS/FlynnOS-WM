@@ -15,6 +15,7 @@
 #include "src/flynnoswm/util/Include.h"
 #include "src/flynnoswm/config/Config.h"
 #include "src/flynnoswm/xwindows/XWindow.h"
+#include "src/flynnoswm/xwindows/XWindowList.h"
 #include <QTimer>
 #include <QTime>
 
@@ -25,7 +26,8 @@
  * @~english
  * Singleton, This is the taskbar that handles windows, the clock and the tray icons
  */
-class TaskBar : public QWidget {
+class TaskBar : public QWidget
+{
 
     Q_OBJECT
 
@@ -78,6 +80,39 @@ class TaskBar : public QWidget {
     protected:
 
     public:
+
+        //Necesario para manejar las ventanas
+        XWindowList* wl;
+
+        /**
+         * @~spanish
+         * Regresa true si la ventana existe en la barra de tareas, false si no existe
+         * @param el id de la vantana
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        bool isTaskWindow(Window w);
+
+        /**
+         * @~spanish
+         * Hace click en la ventana
+         * @param el id de la vantana
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        void clickTaskItem(Window w);
+
+        /**
+         * @~spanish
+         * Le da el foco a la ventana en la barra de tareas (le cambia el color)
+         * @param el id de la vantana
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        void setFocus(XWindow* window);
 
         /**
          * @~spanish
@@ -235,6 +270,15 @@ class TaskBar : public QWidget {
          * TO TRANSLATE
          */
         void update();
+
+        /**
+         * @~spanish
+         * Es llamado cuando se da click a la barra de tareas a un item
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        void click_item();
 
 };
 
