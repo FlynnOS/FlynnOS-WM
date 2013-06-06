@@ -63,10 +63,11 @@ void XWindow::addFrame()
         Config* cfg = Config::getInstance();
 
         //revisamos si ponemos boton de maximizar
-        bool maximize = false;
-        if (client->getMaxWidth() == ICCCM::DEFAULT_MAX_SIZE && client->getMaxHeight() == ICCCM::DEFAULT_MAX_SIZE)
+        bool maximize = true;
+        //si el min width es igual al max width entonces no le podemos cambiar el tamaño y tampoco maximizarlo
+        if (client->getMaxWidth() == client->getMinWidth() && client->getMaxHeight() == client->getMinHeight())
         {
-            maximize = true;
+            maximize = false;
         }
 
         // Creamos el marco con la posición y tamaño necesarios

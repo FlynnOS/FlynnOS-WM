@@ -123,7 +123,15 @@ AtomList::AtomList() {
         "_NET_WM_HANDLED_ICONS",
         "_NET_WM_USER_TIME",
         "_NET_WM_USER_TIME_WINDOW",
-        "_NET_FRAME_EXTENTS"
+        "_NET_FRAME_EXTENTS",
+
+        //TRAY
+        "_NET_SYSTEM_TRAY_S0",
+        "_NET_SYSTEM_TRAY_OPCODE",
+        "_NET_SYSTEM_TRAY_ORIENTATION",
+        "MANAGER",
+        "_XEMBED",
+        "_XEMBED_INFO"
 
     };
     int numAtoms = sizeof(atomsNames)/sizeof(char*);

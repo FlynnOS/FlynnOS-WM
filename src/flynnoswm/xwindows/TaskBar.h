@@ -156,6 +156,8 @@ class TaskBar : public QWidget
          */
         void UpdateTitles();
 
+        void UpdateTitlesSizes();
+
         //----------------------------------------------------------------------
 
         /**

@@ -91,13 +91,13 @@ bool TaskBar::isTaskWindow(Window w)
         if (i.value()->winId() == w || this->winId() == w)
         {
             return true;
+            }
+            i++;
         }
-        i++;
+        return false;
     }
-    return false;
-}
 
-void TaskBar::setFocus(XWindow* window)
+    void TaskBar::setFocus(XWindow* window)
 {
     QMap<XWindow*, QPushButton*>::Iterator i = this->task_bar_list_.begin();
     while(i != this->task_bar_list_.end())
@@ -105,12 +105,14 @@ void TaskBar::setFocus(XWindow* window)
         if (i.key() == window)
         {
             i.value()->setAutoFillBackground(true);
-            i.value()->setStyleSheet("background-color: rgb(255, 0, 0); color: rgb(76,76,76);");
+            i.value()->setObjectName("title_selected");
+            i.value()->setStyleSheet("text-align:left; background-color: rgb(255, 0, 0);");
         }
         else
         {
             i.value()->setAutoFillBackground(true);
-            i.value()->setStyleSheet("background-color: #DCD9D7; color: rgb(76,76,76);");
+            i.value()->setObjectName("title");
+            i.value()->setStyleSheet("text-align:left; background-color: #DCD9D7; color: rgb(76,76,76);");
         }
         i++;
     }
@@ -202,6 +204,30 @@ void TaskBar::UpdateTitles()
         i.value()->resize(pixelWidth,18);
         i.value()->move(x,0);
         x += pixelWidth;
+        i++;
+    }
+    UpdateTitlesSizes();
+}
+
+void TaskBar::UpdateTitlesSizes()
+{
+    QMap<XWindow*, QPushButton*>::Iterator i;
+    i = this->task_bar_list_.begin();
+    float x = 0;
+    int clock_text_width = clock_text->fontMetrics().width(clock_text->text()) + 20;
+    float task_w = 100;
+    //revisamos que el tamaño no sea mayor al de el ancho de la pantalla
+    if ((this->task_bar_list_.size()) * task_w > QApplication::desktop()->width()-clock_text_width)
+    {
+        //Todas mis ventanas sumadas no caben en la parte de abajo, tengo que cambiarles el tamaño
+        float max_size = QApplication::desktop()->width()-clock_text_width;
+        task_w = max_size/(float)this->task_bar_list_.size();
+    }
+    while(i != this->task_bar_list_.end())
+    {
+        i.value()->resize(task_w,18);
+        i.value()->move(x,0);
+        x+=task_w;
         i++;
     }
 }

@@ -30,7 +30,7 @@ bool PropertyNotifyHandler::processEvent(XEvent* event)
 {
     AtomList* al = AtomList::getInstance();
     Window windowID = event->xproperty.window;
-    qDebug() << "[+] Property notify event 0x" << hex << windowID << " Atom name: " << XGetAtomName(QX11Info::display(),event->xproperty.atom);
+    //qDebug() << "[+] Property notify event 0x" << hex << windowID << " Atom name: " << XGetAtomName(QX11Info::display(),event->xproperty.atom);
     // Si la ventana es un cliente
     if(this->wl->existClient(windowID))
     {
