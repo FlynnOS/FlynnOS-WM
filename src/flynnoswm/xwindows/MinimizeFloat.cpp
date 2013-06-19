@@ -60,6 +60,7 @@ void MinimizeFloat::mouseDoubleClickEvent(QMouseEvent *event)
     {
         window->setState(1);
         close();
+        deleteLater();
     }
 }
 
@@ -120,11 +121,13 @@ void MinimizeFloat::menuClick(QAction *act)
         //frm->destroy_it();
         window->closedFrame();
         close();
+        deleteLater();
     }
     else if (act->text() == tr("Open this window"))
     {
         window->setState(1);
         close();
+        deleteLater();
     }
 
 }

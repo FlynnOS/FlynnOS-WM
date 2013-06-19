@@ -72,7 +72,7 @@ TaskBar::TaskBar(QWidget* parent)
     strut[3] = this->getHeight();
     XChangeProperty(QX11Info::display(), winId(), al->getAtom("_NET_WM_STRUT_PARTIAL"), al->getAtom("CARDINAL"), 32, PropModeReplace, (unsigned char *)&strut, 12);
 
-    //mostramos la ventana
+    //mostramos la ventana de tasks
     this->show();
 
     //We connect the signals and start the timer for the clock

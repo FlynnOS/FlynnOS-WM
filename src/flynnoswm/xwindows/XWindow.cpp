@@ -587,6 +587,7 @@ void XWindow::minimizedFrame()
 void XWindow::minimizedVisibleFrame()
 {
     MinimizeFloat *minimizeFloat = new MinimizeFloat(this);
+    TaskBar::getInstance()->RemoveTask(this);
 }
 
 void XWindow::maximizedFrame()
