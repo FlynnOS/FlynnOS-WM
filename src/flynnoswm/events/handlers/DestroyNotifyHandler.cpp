@@ -40,11 +40,6 @@ bool DestroyNotifyHandler::processEvent(XEvent* event)
         qDebug() << "\tEliminando la ventana de la lista del EWMH";
         this->wl->removeFromManagedWindow(xwindow);
 
-        //Queremos borrar un cliente, vemos si es dock para actualizar el NET_WORKAREA de los docks
-        if (xwindow->needFrame())
-        {
-            this->wl->updateWorkarea();
-        }
 
         // Si la ventana no tiene marco la destruimos tal cual
         if(!xwindow->haveFrame())
@@ -58,6 +53,12 @@ bool DestroyNotifyHandler::processEvent(XEvent* event)
         }
         else
         {
+            //Queremos borrar un cliente, vemos si es dock para actualizar el NET_WORKAREA de los docks
+            if (xwindow->needFrame())
+            {
+                this->wl->updateWorkarea();
+            }
+
             qDebug() << "\tLa ventana tiene marco, destruyéndolo";
             xwindow->removeFrame();
 
@@ -73,8 +74,7 @@ bool DestroyNotifyHandler::processEvent(XEvent* event)
     {
         qDebug() << "\tLa ventana es un marco";
         XWindow* xwindow = this->wl->getXWindowByFrameID(windowID);
-
-        if(event->xdestroywindow.event == event->xdestroywindow.window)
+        if(event->xdestroywindow.event == event->xdestroywindow.window || xwindow == 0)
         {
             qDebug() << "\tevent != window";
             return true;
@@ -85,7 +85,6 @@ bool DestroyNotifyHandler::processEvent(XEvent* event)
 
         qDebug() << "\tLiberando memoria";
         delete xwindow;
-
         return true;
 
     // Si no es ni un marco ni un cliente

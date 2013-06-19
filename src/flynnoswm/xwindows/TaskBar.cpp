@@ -97,7 +97,7 @@ bool TaskBar::isTaskWindow(Window w)
         return false;
     }
 
-    void TaskBar::setFocus(XWindow* window)
+void TaskBar::setFocus(XWindow* window)
 {
     QMap<XWindow*, QPushButton*>::Iterator i = this->task_bar_list_.begin();
     while(i != this->task_bar_list_.end())

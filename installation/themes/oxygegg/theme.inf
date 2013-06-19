@@ -6,7 +6,7 @@ copyright=GPL 3.0
 [theme]
 
 ; Set to "true" if the window will display the icon in the title bar, otherwise set to "false".
-show_icon=false
+show_icon=true
 
 ; Size of the window elements in pixels.
 ; Negative values are invalid.

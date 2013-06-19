@@ -6,6 +6,10 @@
     color: rgb(76,76,76);
 }
 
+#title_selected {
+    color: rgb(0,0,0);
+}
+
 #titlebar {
     background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #DCD9D7, stop:0.50 #EBE9E8, stop:1 #DCD9D7);
 }
