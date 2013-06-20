@@ -102,6 +102,18 @@ class EventFactory {
          */
         EventHandler* getEventHandler(int eventType) const;
 
+        /**
+         * @~spanish
+         * Un puntero hacia la lista de ventanas, como esta clase es un singleton
+         * la ponemos aqui para accesarla desde otras clases
+         * TODO: moverla a una clase de recursos globales
+         *
+         * @~english
+         * A pointer to the window list, because this is a singleton class
+         * we put it here so we can access it from other classes
+         */
+        XWindowList* windowList_;
+
 };
 
 #endif // EVENTFACTORY_H

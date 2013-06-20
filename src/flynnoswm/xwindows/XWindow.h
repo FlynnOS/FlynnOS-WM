@@ -35,7 +35,8 @@
  * @~english
  * TO TRANSLATE
  */
-class XWindow : public QObject {
+class XWindow : public QObject
+{
 
     Q_OBJECT
 

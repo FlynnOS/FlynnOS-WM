@@ -40,9 +40,6 @@ class MinimizeFloat : public QLabel
         //The image that we got for the preview
         QPixmap windowPixmap;
 
-        //a pointer to the window
-        XWindow* window;
-
 
     protected:
 
@@ -110,6 +107,9 @@ class MinimizeFloat : public QLabel
 
     public:
 
+        //a pointer to the window
+        XWindow* window;
+
         /**
          * @~spanish
          * Crea una nueva ventana mini
@@ -153,6 +153,17 @@ class MinimizeFloat : public QLabel
          * TO TRANSLATE
          */
         void setX(int x);
+
+        /**
+         * @~spanish
+         * Cerramos la ventana y la liberamos de memoria, no sigfinica que
+         * la ventana vaya a mostrarse o borrarse, solo quiamos el cuadro
+         * de preview
+         *
+         * @~english
+         * TO TRANSLATEw
+         */
+        void closeWindow();
 
         /**
          * @~spanish

@@ -13,6 +13,7 @@
 #include "src/flynnoswm/xwindows/MinimizeFloat.h"
 #include "src/flynnoswm/xwindows/TaskBar.h"
 #include "src/flynnoswm/standards/ICCCM.h"
+#include "src/flynnoswm/events/factory/EventFactory.h"
 
 
 // ************************************************************************** //
@@ -40,6 +41,8 @@ XWindow::~XWindow()
         delete this->frame;
 
     TaskBar::getInstance()->RemoveTask(this);
+
+    EventFactory::getInstance()->windowList_->deleteMinimizedFloatingWindow(this);
 }
 
 

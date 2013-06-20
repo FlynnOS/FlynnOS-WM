@@ -68,6 +68,8 @@ void EventFactory::initialize(XWindowList* windowList) {
     // PropertyNotify
     this->eventHandlerHash.insert(PropertyNotify, new PropertyNotifyHandler(
             windowList));
+
+    windowList_ = windowList;
 }
 
 EventHandler* EventFactory::getEventHandler(int eventType) const {

@@ -110,6 +110,22 @@ void XWindowList::removeFromManagedWindow(const XWindow* xwindow) {
     ewmhRoot.sendStackingClientList(this->stackingList);
 }
 
+void XWindowList::deleteMinimizedFloatingWindow(XWindow* windowID)
+{
+    QList<MinimizeFloat*>::Iterator i;
+    i = floatWindowHash.begin();
+    while(i != floatWindowHash.end())
+    {
+        if ((*i)->window == windowID)
+        {
+            //when the window is closed its removed from the list
+            (*i)->closeWindow();
+            return;
+        }
+        i++;
+    }
+}
+
 void XWindowList::restackManagedWindow(const XWindow* xwindow) {
     this->stackingList->removeOne(xwindow);
     int numWindows = this->stackingList->size();

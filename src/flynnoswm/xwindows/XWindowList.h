@@ -15,7 +15,7 @@
 #include "src/flynnoswm/util/Include.h"
 #include "src/flynnoswm/xwindows/XWindow.h"
 #include "src/flynnoswm/standards/EWMHRoot.h"
-
+#include "src/flynnoswm/xwindows/MinimizeFloat.h"
 
 /**
  * @~spanish
@@ -130,6 +130,15 @@ class XWindowList {
          */
         ~XWindowList();
 
+        /**
+         * @~spanish
+         * Lista que contiene las ventanas que flotan despues de ser minimizadas (cuadro)
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        QList<MinimizeFloat*> floatWindowHash;
+
         //----------------------------------------------------------------------
 
         /**
@@ -141,6 +150,16 @@ class XWindowList {
          * TO TRANSLATE
          */
         void updateWorkarea();
+
+        /**
+         * @~spanish
+         * Borramos una ventana que este minimizada y la quitamos
+         * de la lista de ventanas minimizadas (con cuadro)
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        void deleteMinimizedFloatingWindow(XWindow* windowID); //remove from floatWindowHash
 
         /**
          * @~spanish

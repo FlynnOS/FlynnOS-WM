@@ -11,7 +11,7 @@
  */
 #include "MinimizeFloat.h"
 #include <QMenu>
-
+#include <src/flynnoswm/events/factory/EventFactory.h>
 // ************************************************************************** //
 // **********             STATIC METHODS AND VARIABLES             ********** //
 // ************************************************************************** //
@@ -43,24 +43,41 @@ MinimizeFloat::MinimizeFloat(XWindow* window, QWidget* parent)
 
     //minimizamos la ventana, dejamos este widget visible solamente
     this->window->minimizedFrame();
+    EventFactory::getInstance()->windowList_->floatWindowHash.push_back(this);
 }
 
 MinimizeFloat::~MinimizeFloat()
 {
     //qDebug() << "Memory Freed!";
+    QList<MinimizeFloat*>::Iterator i;
+    i = EventFactory::getInstance()->windowList_->floatWindowHash.begin();
+    while(i != EventFactory::getInstance()->windowList_->floatWindowHash.end())
+    {
+        if ((*i) == this)
+        {
+            break;
+        }
+        i++;
+    }
+    EventFactory::getInstance()->windowList_->floatWindowHash.erase(i);
 }
 
 // ************************************************************************** //
 // **********                  PROTECTED METHODS                   ********** //
 // ************************************************************************** //
 
+void MinimizeFloat::closeWindow()
+{
+    close();
+    deleteLater();
+}
+
 void MinimizeFloat::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
     {
         window->setState(1);
-        close();
-        deleteLater();
+        closeWindow();
     }
 }
 
@@ -120,14 +137,12 @@ void MinimizeFloat::menuClick(QAction *act)
         //emit destroy_deskicon(this);
         //frm->destroy_it();
         window->closedFrame();
-        close();
-        deleteLater();
+        closeWindow();
     }
     else if (act->text() == tr("Open this window"))
     {
         window->setState(1);
-        close();
-        deleteLater();
+        closeWindow();
     }
 
 }
