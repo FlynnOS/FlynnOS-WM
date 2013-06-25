@@ -44,6 +44,11 @@ bool DestroyNotifyHandler::processEvent(XEvent* event)
         // Si la ventana no tiene marco la destruimos tal cual
         if(!xwindow->haveFrame())
         {
+            //Queremos borrar un cliente, vemos si es dock para actualizar el NET_WORKAREA de los docks
+            if (xwindow->needFrame())
+            {
+                this->wl->updateWorkarea();
+            }
             qDebug() << "\tLa ventana no tiene marco";
 
             qDebug() << "\tLiberando memoria";
