@@ -22,6 +22,8 @@
 #include "src/flynnoswm/events/handlers/ButtonPressHandler.h"
 #include "src/flynnoswm/events/handlers/ClientMessageHandler.h"
 #include "src/flynnoswm/events/handlers/PropertyNotifyHandler.h"
+#include "src/flynnoswm/events/handlers/EnterNotifyRequestHandler.h"
+#include "src/flynnoswm/events/handlers/KeyPressHandler.h"
 
 /**
  * @~spanish

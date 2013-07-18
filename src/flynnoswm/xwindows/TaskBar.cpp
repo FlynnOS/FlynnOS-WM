@@ -85,7 +85,7 @@ TaskBar::TaskBar(QWidget* parent)
 
 bool TaskBar::isTaskWindow(Window w)
 {
-    QMap<XWindow*, QPushButton*>::Iterator i = this->task_bar_list_.begin();
+    QHash<XWindow*, QPushButton*>::Iterator i = this->task_bar_list_.begin();
     while(i != this->task_bar_list_.end())
     {
         if (i.value()->winId() == w || this->winId() == w)
@@ -99,7 +99,7 @@ bool TaskBar::isTaskWindow(Window w)
 
 void TaskBar::setFocus(XWindow* window)
 {
-    QMap<XWindow*, QPushButton*>::Iterator i = this->task_bar_list_.begin();
+    QHash<XWindow*, QPushButton*>::Iterator i = this->task_bar_list_.begin();
     while(i != this->task_bar_list_.end())
     {
         if (i.key() == window)
@@ -120,7 +120,7 @@ void TaskBar::setFocus(XWindow* window)
 
 void TaskBar::clickTaskItem(Window w)
 {
-    QMap<XWindow*, QPushButton*>::Iterator i = this->task_bar_list_.begin();
+    QHash<XWindow*, QPushButton*>::Iterator i = this->task_bar_list_.begin();
     while(i != this->task_bar_list_.end())
     {
         if (i.value()->winId() == w)
@@ -163,7 +163,7 @@ void TaskBar::clickTaskItem(Window w)
 
 void TaskBar::AddTask(XWindow* window_bar_)
 {
-    QMap<XWindow*, QPushButton*>::Iterator i = this->task_bar_list_.find(window_bar_);
+    QHash<XWindow*, QPushButton*>::Iterator i = this->task_bar_list_.find(window_bar_);
     if (i != this->task_bar_list_.end())
     {
         i.value()->setText(i.key()->getTitle());
@@ -183,7 +183,7 @@ void TaskBar::AddTask(XWindow* window_bar_)
 
 void TaskBar::RemoveTask(XWindow* window_bar_)
 {
-    QMap<XWindow*, QPushButton*>::Iterator i = this->task_bar_list_.find(window_bar_);
+    QHash<XWindow*, QPushButton*>::Iterator i = this->task_bar_list_.find(window_bar_);
     if (i == this->task_bar_list_.end())
     {
         return;
@@ -195,7 +195,7 @@ void TaskBar::RemoveTask(XWindow* window_bar_)
 
 void TaskBar::UpdateTitles()
 {
-    QMap<XWindow*, QPushButton*>::Iterator i;
+    QHash<XWindow*, QPushButton*>::Iterator i;
     i = this->task_bar_list_.begin();
     int x = 0;
     while(i != this->task_bar_list_.end())
@@ -211,7 +211,7 @@ void TaskBar::UpdateTitles()
 
 void TaskBar::UpdateTitlesSizes()
 {
-    QMap<XWindow*, QPushButton*>::Iterator i;
+    QHash<XWindow*, QPushButton*>::Iterator i;
     i = this->task_bar_list_.begin();
     float x = 0;
     int clock_text_width = clock_text->fontMetrics().width(clock_text->text()) + 20;
@@ -235,7 +235,7 @@ void TaskBar::UpdateTitlesSizes()
 
 TaskBar::~TaskBar()
 {
-    QMap<XWindow*, QPushButton*>::Iterator i;
+    QHash<XWindow*, QPushButton*>::Iterator i;
     i = this->task_bar_list_.begin();
     while(i != this->task_bar_list_.end())
     {

@@ -69,12 +69,23 @@ void EventFactory::initialize(XWindowList* windowList) {
     this->eventHandlerHash.insert(PropertyNotify, new PropertyNotifyHandler(
             windowList));
 
+    // EnterNotify
+    this->eventHandlerHash.insert(EnterNotify, new EnterNotifyRequestHandler(
+            windowList));
+
+    // KeyPress
+    this->eventHandlerHash.insert(KeyPress, new KeyPressHandler(
+            windowList));
+
     windowList_ = windowList;
 }
 
-EventHandler* EventFactory::getEventHandler(int eventType) const {
+EventHandler* EventFactory::getEventHandler(int eventType) const
+{
     if(this->eventHandlerHash.contains(eventType))
+    {
         return this->eventHandlerHash.value(eventType);
+    }
     else
     {
         return NULL;

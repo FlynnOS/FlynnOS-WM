@@ -44,7 +44,7 @@ class TaskBar : public QWidget
         //This timer sets the loop to update the clock text
         QTimer *timer;
 
-        QMap<XWindow*, QPushButton*> task_bar_list_;
+        QHash<XWindow*, QPushButton*> task_bar_list_;
 
         /**
          * @~spanish

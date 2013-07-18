@@ -10,6 +10,7 @@
  *
  */
 #include "FlynnOSwm.h"
+#include "config/SystemKeys.h"
 
 // ************************************************************************** //
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
@@ -60,7 +61,8 @@ FlynnOSwm::FlynnOSwm(int argc, char** argv) : QApplication(argc, argv)
                                           MapNotify, UnmapNotify,
                                           ReparentNotify, GravityNotify,
                                           ConfigureNotify, CirculateNotify */
-            | ButtonPressMask);        /* ButtonPress */
+            | ButtonPressMask
+            );        /* ButtonPress */
     XFlush(QX11Info::display());
 
     //Adding a button test by Zaxuhe
@@ -78,6 +80,7 @@ FlynnOSwm::FlynnOSwm(int argc, char** argv) : QApplication(argc, argv)
     TaskBar::getInstance()->wl = this->windowList;
 
 
+    SystemKeys::getInstance()->configureSystemKeys();
 }
 
 FlynnOSwm::~FlynnOSwm()

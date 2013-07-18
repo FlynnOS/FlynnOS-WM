@@ -153,6 +153,7 @@ bool XWindow::needFrame() const
 {
     AtomList* al = AtomList::getInstance();
     Atom clientType = this->client->getWindowType();
+    //qDebug() << XGetAtomName(QX11Info::display(),clientType);
     return !(clientType == al->getAtom("_NET_WM_WINDOW_TYPE_DESKTOP")
           || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_DOCK")
           || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_SPLASH"));
