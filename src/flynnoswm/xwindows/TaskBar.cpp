@@ -85,34 +85,34 @@ TaskBar::TaskBar(QWidget* parent)
 
 bool TaskBar::isTaskWindow(Window w)
 {
-    QHash<XWindow*, QPushButton*>::Iterator i = this->task_bar_list_.begin();
+    QList<bar_item>::Iterator i = this->task_bar_list_.begin();
     while(i != this->task_bar_list_.end())
     {
-        if (i.value()->winId() == w || this->winId() == w)
+        if ((*i).btn_->winId() == w || this->winId() == w)
         {
             return true;
-            }
-            i++;
         }
-        return false;
+        i++;
     }
+    return false;
+}
 
 void TaskBar::setFocus(XWindow* window)
 {
-    QHash<XWindow*, QPushButton*>::Iterator i = this->task_bar_list_.begin();
+    QList<bar_item>::Iterator i = this->task_bar_list_.begin();
     while(i != this->task_bar_list_.end())
     {
-        if (i.key() == window)
+        if ((*i).win_ == window)
         {
-            i.value()->setAutoFillBackground(true);
-            i.value()->setObjectName("title_selected");
-            i.value()->setStyleSheet("text-align:left; background-color: rgb(255, 0, 0);");
+            (*i).btn_->setAutoFillBackground(true);
+            (*i).btn_->setObjectName("title_selected");
+            (*i).btn_->setStyleSheet("text-align:left; background-color: rgb(255, 0, 0);");
         }
         else
         {
-            i.value()->setAutoFillBackground(true);
-            i.value()->setObjectName("title");
-            i.value()->setStyleSheet("text-align:left; background-color: #DCD9D7; color: rgb(76,76,76);");
+            (*i).btn_->setAutoFillBackground(true);
+            (*i).btn_->setObjectName("title");
+            (*i).btn_->setStyleSheet("text-align:left; background-color: #DCD9D7; color: rgb(76,76,76);");
         }
         i++;
     }
@@ -120,39 +120,39 @@ void TaskBar::setFocus(XWindow* window)
 
 void TaskBar::clickTaskItem(Window w)
 {
-    QHash<XWindow*, QPushButton*>::Iterator i = this->task_bar_list_.begin();
+    QList<bar_item>::Iterator i = this->task_bar_list_.begin();
     while(i != this->task_bar_list_.end())
     {
-        if (i.value()->winId() == w)
+        if ((*i).btn_->winId() == w)
         {
             //we show or iconify the window
-            if (i.key()->getState() == IconicState)
+            if ((*i).win_->getState() == IconicState)
             {
-                i.key()->setState(NormalState);
+                (*i).win_->setState(NormalState);
                 qDebug() << "\tModificando la lista del EWMH";
-                this->wl->restackManagedWindow(i.key());
+                this->wl->restackManagedWindow((*i).win_);
 
                 qDebug() << "\tActualizando la ventana activa";
-                this->wl->setActiveWindow(i.key());
+                this->wl->setActiveWindow((*i).win_);
 
-                setFocus(i.key());
+                setFocus((*i).win_);
             }
             else
             {
-                if (wl->getTopWindow() != i.key())
+                if (wl->getTopWindow() != (*i).win_)
                 {
-                    this->wl->restackManagedWindow(i.key());
+                    this->wl->restackManagedWindow((*i).win_);
                     qDebug() << "\tModificando la lista del EWMH";
-                    this->wl->restackManagedWindow(i.key());
+                    this->wl->restackManagedWindow((*i).win_);
 
                     qDebug() << "\tActualizando la ventana activa";
-                    this->wl->setActiveWindow(i.key());
+                    this->wl->setActiveWindow((*i).win_);
 
-                    setFocus(i.key());
+                    setFocus((*i).win_);
                 }
                 else
                 {
-                    i.key()->setState(IconicState);
+                    (*i).win_->setState(IconicState);
                     setFocus(0);
                 }
             }
@@ -163,46 +163,53 @@ void TaskBar::clickTaskItem(Window w)
 
 void TaskBar::AddTask(XWindow* window_bar_)
 {
-    QHash<XWindow*, QPushButton*>::Iterator i = this->task_bar_list_.find(window_bar_);
-    if (i != this->task_bar_list_.end())
+    QList<bar_item>::Iterator i = this->task_bar_list_.begin();
+    while(i != this->task_bar_list_.end())
     {
-        i.value()->setText(i.key()->getTitle());
-    }
-    else
-    {
-        QPushButton* added_ = new QPushButton(this);
-        added_->setObjectName("title");
-        added_->setText(window_bar_->getTitle());
-        added_->show();
-        connect( added_, SIGNAL( clicked() ), this, SLOT(click_item()) );
-        this->task_bar_list_.insert(window_bar_, added_);
+        if ((*i).win_ == window_bar_)
+        {
+            (*i).btn_->setText((*i).win_->getTitle());
+            UpdateTitles();
+            return;
+        }
+        i++;
     }
 
+    QPushButton* added_ = new QPushButton(this);
+    added_->setObjectName("title");
+    added_->setText(window_bar_->getTitle());
+    added_->show();
+    connect( added_, SIGNAL( clicked() ), this, SLOT(click_item()) );
+    this->task_bar_list_.push_back(bar_item(window_bar_, added_));
     UpdateTitles();
 }
 
 void TaskBar::RemoveTask(XWindow* window_bar_)
 {
-    QHash<XWindow*, QPushButton*>::Iterator i = this->task_bar_list_.find(window_bar_);
-    if (i == this->task_bar_list_.end())
+
+    QList<bar_item>::Iterator i = this->task_bar_list_.begin();
+    while(i != this->task_bar_list_.end())
     {
-        return;
+        if ((*i).win_ == window_bar_)
+        {
+            (*i).btn_->deleteLater();
+            this->task_bar_list_.erase(i);
+            UpdateTitles();
+            return;
+        }
+        i++;
     }
-    i.value()->deleteLater();
-    this->task_bar_list_.remove(window_bar_);
-    UpdateTitles();
 }
 
 void TaskBar::UpdateTitles()
 {
-    QHash<XWindow*, QPushButton*>::Iterator i;
-    i = this->task_bar_list_.begin();
+    QList<bar_item>::Iterator i = this->task_bar_list_.begin();
     int x = 0;
     while(i != this->task_bar_list_.end())
     {
-        int pixelWidth = i.value()->fontMetrics().width(i.value()->text()) + 10;
-        i.value()->resize(pixelWidth,18);
-        i.value()->move(x,0);
+        int pixelWidth = (*i).btn_->fontMetrics().width((*i).btn_->text()) + 10;
+        (*i).btn_->resize(pixelWidth,18);
+        (*i).btn_->move(x,0);
         x += pixelWidth;
         i++;
     }
@@ -211,8 +218,7 @@ void TaskBar::UpdateTitles()
 
 void TaskBar::UpdateTitlesSizes()
 {
-    QHash<XWindow*, QPushButton*>::Iterator i;
-    i = this->task_bar_list_.begin();
+    QList<bar_item>::Iterator i = this->task_bar_list_.begin();
     float x = 0;
     int clock_text_width = clock_text->fontMetrics().width(clock_text->text()) + 20;
     float task_w = 100;
@@ -225,8 +231,8 @@ void TaskBar::UpdateTitlesSizes()
     }
     while(i != this->task_bar_list_.end())
     {
-        i.value()->resize(task_w,18);
-        i.value()->move(x,0);
+        (*i).btn_->resize(task_w,18);
+        (*i).btn_->move(x,0);
         x+=task_w;
         i++;
     }
@@ -235,11 +241,10 @@ void TaskBar::UpdateTitlesSizes()
 
 TaskBar::~TaskBar()
 {
-    QHash<XWindow*, QPushButton*>::Iterator i;
-    i = this->task_bar_list_.begin();
+    QList<bar_item>::Iterator i = this->task_bar_list_.begin();
     while(i != this->task_bar_list_.end())
     {
-        delete i.value();
+        delete (*i).btn_;
         i++;
     }
     this->task_bar_list_.clear();

@@ -33,6 +33,20 @@ class TaskBar : public QWidget
 
     private:
 
+
+        struct bar_item
+        {
+            bar_item(XWindow *_win, QPushButton* _btn)
+            {
+                win_ = _win;
+                btn_ = _btn;
+            }
+
+            XWindow* win_;
+            QPushButton* btn_;
+        };
+
+
         //----------------------------------------------------------------------
 
         // Label con la imagen de fondo de la barra de tareas
@@ -44,7 +58,7 @@ class TaskBar : public QWidget
         //This timer sets the loop to update the clock text
         QTimer *timer;
 
-        QHash<XWindow*, QPushButton*> task_bar_list_;
+        QList<bar_item> task_bar_list_;
 
         /**
          * @~spanish
