@@ -10,7 +10,7 @@
  *
  */
 #include "XWindowList.h"
-
+#include "TaskBar.h"
 // ************************************************************************** //
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
@@ -20,6 +20,7 @@ XWindowList::XWindowList() {
     this->frameHash    = new QHash<Window, const XWindow*>;
     this->mappingList  = new QList<const XWindow*>;
     this->stackingList = new QList<const XWindow*>;
+    this->activeStackList = new QList<const XWindow*>;
     this->activeWindow = NULL;
 }
 
@@ -28,12 +29,13 @@ XWindowList::~XWindowList() {
     delete this->frameHash;
     delete this->mappingList;
     delete this->stackingList;
+    delete this->activeStackList;
 }
 
 
 // ************************************************************************** //
 // **********                    PRIVATE METHODS                   ********** //
-// ************************************************************************** //
+// *****************************************************************    ********* //
 
 void XWindowList::restackWindows() const {
     int numWindows = this->stackingList->size();
@@ -63,7 +65,17 @@ void XWindowList::addClient(Window clientID, const XWindow* xwindow) {
 }
 
 void XWindowList::removeClient(Window clientID) {
+
+    //vemos si ya existe en el stack de alt-tab, si existe lo borramos
+    int idx = activeStackList->indexOf(getXWindowByClientID(clientID));
+    if (idx != -1)
+    {
+            activeStackList->erase(activeStackList->begin() + idx);
+    }
+
     this->clientHash->remove(clientID);
+
+
 }
 
 XWindow* XWindowList::getXWindowByClientID(Window clientID) const {
@@ -265,7 +277,47 @@ void XWindowList::setActiveWindow(const XWindow* activeWindow)
     {
         ewmhRoot.sendActiveWindow(this->activeWindow->getClientID());
         this->activeWindow->setFocus();
+        this->addActiveStack((XWindow*)activeWindow);
     }
+}
+
+void XWindowList::addActiveStack(XWindow* windowID)
+{
+    //we don't add the first one
+    static bool first = false;
+    if (first == false)
+    {
+        first = true;
+        return;
+    }
+    //vemos si ya existe en el stack, si existe lo borramos
+    int idx = activeStackList->indexOf(windowID);
+    if (idx != -1)
+    {
+            activeStackList->erase(activeStackList->begin() + idx);
+    }
+
+    if (this->existClient(windowID->getClientID()))
+    {
+        activeStackList->push_front(windowID);
+    }
+}
+
+
+void XWindowList::changeActiveStack()
+{
+    XWindow* w = (XWindow* )activeStackList->back();
+
+    w->setState(NormalState);
+    qDebug() << "\tModificando la lista del EWMH";
+    this->restackManagedWindow(w);
+
+    qDebug() << "\tActualizando la ventana activa";
+    this->setActiveWindow(w);
+
+    qDebug() << "Switch to: " << w->getTitle();
+
+    //setFocus(w);
 }
 
 const XWindow* XWindowList::getTopWindow() const {

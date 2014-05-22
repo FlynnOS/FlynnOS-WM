@@ -77,6 +77,17 @@ class XWindowList {
          * @~spanish
          * @~spanish
          * Lista que guarda las ventanas gestioadas por el WM en el orden en el
+         * que se usaron, para poder hacer ALT-TAB.
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        QList<const XWindow*>* activeStackList;
+
+        /**
+         * @~spanish
+         * @~spanish
+         * Lista que guarda las ventanas gestioadas por el WM en el orden en el
          * que se encuentran en la pila (la primera es la que se encuentra más
          * abajo). Requerido por el EWMH.
          *
@@ -150,6 +161,26 @@ class XWindowList {
          * TO TRANSLATE
          */
         void updateWorkarea();
+
+
+        /**
+         * @~spanish
+         * Agregamos una ventana al stack de ventanas activas para ALT-TAB, si esa ventana ya existe
+         * la borramos de la lista y la agregamos hasta arriba del stack
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        void addActiveStack(XWindow* windowID);
+
+        /**
+         * @~spanish
+         * Movemos la ventana usando alt-tab, la del fondo del stack se llama al frente
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        void changeActiveStack();
 
         /**
          * @~spanish

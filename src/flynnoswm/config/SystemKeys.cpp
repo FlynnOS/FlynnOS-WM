@@ -95,6 +95,7 @@ void SystemKeys::ProcessKey(unsigned int keycode, unsigned int mask)
                 case KEY_ALT_TAB:
                     //std::system("terminator &");
                     //EventFactory::getInstance()->windowList_->setActiveWindow();
+                    EventFactory::getInstance()->windowList_->changeActiveStack();
                     break;
                 default:
                     break;

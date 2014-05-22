@@ -9,3 +9,6 @@ $ flynnoswm -display :1
 
 To launch xterm:
 $ xterm -display :1
+
+To install into sessions (Incomplete):
+$/usr/share/xsessions/
