@@ -155,6 +155,7 @@ void Config::loadConfig() {
     qss.open(QFile::ReadOnly);
     style = qss.readAll();
     style.replace("%theme_path%", QDir::homePath()+THEMES_PATH+folderThemeName);
+    qDebug() << style;
     qss.close();
 }
 

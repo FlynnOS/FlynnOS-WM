@@ -284,10 +284,8 @@ void XWindowList::setActiveWindow(const XWindow* activeWindow)
 void XWindowList::addActiveStack(XWindow* windowID)
 {
     //we don't add the first one
-    static bool first = false;
-    if (first == false)
+    if (TaskBar::ready_to_add == false)
     {
-        first = true;
         return;
     }
     //vemos si ya existe en el stack, si existe lo borramos
@@ -306,6 +304,11 @@ void XWindowList::addActiveStack(XWindow* windowID)
 
 void XWindowList::changeActiveStack()
 {
+
+    if (activeStackList->size() == 0)
+    {
+        return;
+    }
     XWindow* w = (XWindow* )activeStackList->back();
 
     w->setState(NormalState);

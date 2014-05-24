@@ -144,9 +144,6 @@ class FlynnOSwm : public QApplication {
         virtual ~FlynnOSwm();
 
     public slots:
-
-        void closeWindowManager();
-        void launchTerminal();
 };
 
 #endif // FLYNNOSWM_H

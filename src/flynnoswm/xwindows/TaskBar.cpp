@@ -18,6 +18,8 @@
 
 TaskBar* TaskBar::instance = NULL;
 
+bool TaskBar::ready_to_add = false;
+
 TaskBar* TaskBar::getInstance()
 {
     if(TaskBar::instance == NULL)
@@ -37,8 +39,8 @@ TaskBar::TaskBar(QWidget* parent)
     AtomList* al = AtomList::getInstance();
 
     // Inicializamos los atributos
-    this->titlebar          = new QLabel(this);
-    this->clock_text             = new QLabel(this);
+    this->titlebar = new QLabel(this);
+    this->clock_text = new QLabel(this);
     this->timer = new QTimer(this);
 
     // Hacemos que las imágenes se ajusten a sus contenedores
@@ -182,6 +184,7 @@ void TaskBar::AddTask(XWindow* window_bar_)
     connect( added_, SIGNAL( clicked() ), this, SLOT(click_item()) );
     this->task_bar_list_.push_back(bar_item(window_bar_, added_));
     UpdateTitles();
+    TaskBar::ready_to_add = true;
 }
 
 void TaskBar::RemoveTask(XWindow* window_bar_)

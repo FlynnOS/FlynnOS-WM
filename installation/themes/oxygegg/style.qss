@@ -14,7 +14,12 @@
     background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #DCD9D7, stop:0.50 #EBE9E8, stop:1 #DCD9D7);
 }
 
-
+#Background
+{
+    border-image: url(%theme_path%/images/bg.jpg)0 0 0 0 stretch stretch;
+    border-width: 0px;
+    
+}
 
 #topBorder {
     background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #DCD9D7, stop:0.50 #EBE9E8, stop:1 #DCD9D7);
@@ -79,12 +84,12 @@
 
 #minimizeVisibleButton {
     border: none;
-    image: url(%theme_path%/images/minimize_button.png);
+    image: url(%theme_path%/images/minimize_visible.png);
 }
 
 #minimizeVisibleButton:hover {
     border: none;
-    image: url(%theme_path%/images/minimize_button_over.png);
+    image: url(%theme_path%/images/minimize_visible_over.png);
 }
 
 #maximizeButton {

@@ -3,7 +3,7 @@ TARGET       = bin/flynnoswm
 QT          += core gui
 OBJECTS_DIR += build
 MOC_DIR     += build
-LIBS        += -lX11
+LIBS        += -lX11 -lXtst
 //DEFINES      = QT_NO_DEBUG_OUTPUT
 
 

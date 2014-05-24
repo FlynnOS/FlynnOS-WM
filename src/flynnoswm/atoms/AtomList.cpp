@@ -125,6 +125,8 @@ AtomList::AtomList() {
         "_NET_WM_USER_TIME_WINDOW",
         "_NET_FRAME_EXTENTS",
 
+        "_MOTIF_WM_INFO", //http://tonyobryan.com/index.php?article=9
+
         //TRAY
         "_NET_SYSTEM_TRAY_S0",
         "_NET_SYSTEM_TRAY_OPCODE",

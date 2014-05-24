@@ -11,6 +11,7 @@
  */
 #include "FlynnOSwm.h"
 #include "config/SystemKeys.h"
+#include "xwindows/Background.h"
 
 // ************************************************************************** //
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
@@ -32,6 +33,8 @@ int error_handler(Display *dpy, XErrorEvent *ee)
 
 FlynnOSwm::FlynnOSwm(int argc, char** argv) : QApplication(argc, argv)
 {
+    TaskBar::setRaw(0);
+    TaskBar::ready_to_add = false;
     // Inicializamos los atributos
     this->wmCheckWindow = new WMCheckWindow;
     this->windowList    = new XWindowList;
@@ -68,17 +71,7 @@ FlynnOSwm::FlynnOSwm(int argc, char** argv) : QApplication(argc, argv)
             );        /* ButtonPress */
     XFlush(QX11Info::display());
 
-    //Adding a button test by Zaxuhe
-    QWidget *window = new QWidget;
-    QPushButton *button1 = new QPushButton("Close Window Manager");
-    button1->show();
-    connect(button1, SIGNAL(clicked()),this, SLOT(closeWindowManager()));
-
-    QPushButton *button2 = new QPushButton("Launch terminator");
-    QRect rect = button2->geometry();
-    button2->move(QApplication::desktop()->width()-110, 0);
-    button2->show();
-    connect(button2, SIGNAL(clicked()),this, SLOT(launchTerminal()));
+    Background::getInstance();
 
     TaskBar::getInstance()->wl = this->windowList;
 
@@ -92,17 +85,6 @@ FlynnOSwm::~FlynnOSwm()
     delete this->wmCheckWindow;
     delete this->windowList;
     //delete this->taskBar;
-}
-
-void FlynnOSwm::closeWindowManager()
-{
-    qDebug() << "We are closing the window manager" ;
-    exit(0);
-}
-
-void FlynnOSwm::launchTerminal()
-{
-    std::system("terminator &");
 }
 
 // ************************************************************************** //

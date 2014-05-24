@@ -11,4 +11,7 @@ To launch xterm:
 $ xterm -display :1
 
 To install into sessions (Incomplete):
-$/usr/share/xsessions/
+$ /usr/share/xsessions/
+
+Requirted: (Incomplete)
+$ libxtst-dev

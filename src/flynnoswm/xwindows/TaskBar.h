@@ -89,11 +89,15 @@ class TaskBar : public QWidget
          */
         virtual ~TaskBar();
 
+
+
         const TaskBar& operator = (const TaskBar& al){return al;}
 
     protected:
 
     public:
+
+        static bool ready_to_add;
 
         //Necesario para manejar las ventanas
         XWindowList* wl;
@@ -138,6 +142,9 @@ class TaskBar : public QWidget
          * @return The single instance of the class.
          */
         static TaskBar* getInstance();
+
+        static TaskBar* getRaw(){return instance;};
+        static void setRaw(TaskBar* t){instance = t;};
 
         /**
          * @~spanish
