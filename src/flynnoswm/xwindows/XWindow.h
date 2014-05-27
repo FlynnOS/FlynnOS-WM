@@ -448,6 +448,15 @@ class XWindow : public QObject
          */
         QString getTitle();
 
+        /**
+         * @~spanish
+         * Ver client.h, funccion con el mismo nombre
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        MWMHints* getMotifWm();
+
     public slots:
 
         /**

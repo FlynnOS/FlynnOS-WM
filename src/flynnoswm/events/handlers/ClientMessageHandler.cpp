@@ -31,6 +31,17 @@ bool ClientMessageHandler::processEvent(XEvent* event)
 
     qDebug() << "\tPropiedad a cambiar: " << XGetAtomName(
             QX11Info::display(), event->xclient.message_type);
+    //Move Resize, puede ser cualquier ventana
+    if(event->xclient.message_type == al->getAtom("_NET_WM_MOVERESIZE"))
+    {
+
+        qDebug() << event->xclient.data.l[0];
+        qDebug() << event->xclient.data.l[1];
+        qDebug() << event->xclient.data.l[2];
+        qDebug() << event->xclient.data.l[3];
+        qDebug() << event->xclient.data.l[4];
+    }
+
 
     // Si la ventana es un cliente
     if(this->wl->existClient(windowID))
@@ -58,7 +69,6 @@ bool ClientMessageHandler::processEvent(XEvent* event)
         {
             EWMHRoot ewmh;
             ewmh.receivedActiveWindow(this->wl, xwindow);
-
         }
         else if(event->xclient.message_type == al->getAtom("_NET_CLOSE_WINDOW"))
         {

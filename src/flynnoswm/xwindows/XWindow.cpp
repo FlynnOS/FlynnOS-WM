@@ -153,6 +153,18 @@ bool XWindow::needFrame() const
 {
     AtomList* al = AtomList::getInstance();
     Atom clientType = this->client->getWindowType();
+
+    //we chceck if the MWMHints wants to have no decoration! (ex: steam)
+    MWMHints* h = client->getMotifWm();
+    if (h != 0)
+    {
+        if (h->flags == 2 && h->decorations == 0) //change decoration
+        {
+            return false;
+        }
+        delete h;
+    }
+
     //qDebug() << XGetAtomName(QX11Info::display(),clientType);
     return !(clientType == al->getAtom("_NET_WM_WINDOW_TYPE_DESKTOP")
           || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_DOCK")
@@ -182,7 +194,10 @@ QList<Atom> XWindow::getClientState()
     return client->getWindowState();
 }
 
-
+MWMHints* XWindow::getMotifWm()
+{
+    return client->getMotifWm();
+}
 
 void XWindow::setTaskBar()
 {
@@ -622,6 +637,9 @@ void XWindow::closedFrame()
 
 void XWindow::updateTitle()
 {
+    if (this->haveFrame() == false)
+        return;
+    qDebug() << "WE ARE GOING TO CRASH" << this->frame;
     this->frame->setTitle(this->client->getTitle());
     this->setTaskBar();
 }

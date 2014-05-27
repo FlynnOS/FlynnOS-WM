@@ -100,6 +100,26 @@ void Client::setBorderWidth(int borderWitdh) {
     XSetWindowBorderWidth(QX11Info::display(), this->clientID, borderWitdh);
 }
 
+MWMHints* Client::getMotifWm()
+{
+    Display *display = QX11Info::display();
+    Atom wm_hints_atom = XInternAtom(display , "_MOTIF_WM_HINTS", False);
+    unsigned char *wm_data;
+    Atom wm_type;
+    int wm_format;
+    unsigned long wm_nitems, wm_bytes_after;
+
+    XGetWindowProperty(display, this->clientID, wm_hints_atom, 0, sizeof (MWMHints) / sizeof (long), false, AnyPropertyType, &wm_type, &wm_format, &wm_nitems, &wm_bytes_after, &wm_data);
+    MWMHints           *mwmhints;
+    mwmhints = (MWMHints *) wm_data;
+
+    /*if (mwmhints != 0)
+    {
+        qDebug() << mwmhints->flags;
+    }*/
+    return mwmhints;
+}
+
 //------------------------------------------------------------------------------
 
 QString Client::getTitle() const {

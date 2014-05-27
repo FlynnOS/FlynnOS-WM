@@ -8,7 +8,8 @@ HEADERS += src/flynnoswm/events/handlers/EventHandler.h \
     src/flynnoswm/events/handlers/PropertyNotifyHandler.h \
     src/flynnoswm/events/handlers/ClientMessageHandler.h \
     src/flynnoswm/events/handlers/KeyPressHandler.h \
-    src/flynnoswm/events/handlers/EnterNotifyRequestHandler.h
+    src/flynnoswm/events/handlers/EnterNotifyRequestHandler.h \
+    src/flynnoswm/events/handlers/MotionNotifyHandler.h
 SOURCES += src/flynnoswm/events/handlers/CreateNotifyHandler.cpp \
     src/flynnoswm/events/handlers/DestroyNotifyHandler.cpp \
     src/flynnoswm/events/handlers/UnmapNotifyHandler.cpp \
@@ -18,4 +19,5 @@ SOURCES += src/flynnoswm/events/handlers/CreateNotifyHandler.cpp \
     src/flynnoswm/events/handlers/PropertyNotifyHandler.cpp \
     src/flynnoswm/events/handlers/ClientMessageHandler.cpp \
     src/flynnoswm/events/handlers/KeyPressHandler.cpp \
-    src/flynnoswm/events/handlers/EnterNotifyRequestHandler.cpp
+    src/flynnoswm/events/handlers/EnterNotifyRequestHandler.cpp \
+    src/flynnoswm/events/handlers/MotionNotifyHandler.cpp

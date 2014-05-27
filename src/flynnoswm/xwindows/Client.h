@@ -18,6 +18,24 @@
 
 /**
  * @~spanish
+ * Una estructura para los _MOTIF_WM_HINTS, ¿porque estan aqui y no
+ * en los estandares? porque no es parte de ningun estandar, asi que se puso aqui
+ * TODO: quiza cambiar de lugar luego
+ *
+ * @~english
+ * TO TRANSLATE
+ */
+typedef struct
+{
+    long flags;
+    long functions;
+    long decorations;
+    long inputMode;
+    long status;
+}MWMHints;
+
+/**
+ * @~spanish
  * Clase que encapsula una ventana de Xlib (Window) y facilita el trabajo con la
  * misma.
  *
@@ -295,6 +313,16 @@ class Client {
          * TO TRANSLATE
          */
         int getInitialPosition() const;
+
+        /**
+         * @~spanish
+         * Devuelve una estructura que representa el atom _MOTIF_WM_HINTS.
+         * @return La estructura
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        MWMHints* getMotifWm();
 
         //----------------------------------------------------------------------
 
