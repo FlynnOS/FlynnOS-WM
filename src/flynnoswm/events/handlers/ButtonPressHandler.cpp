@@ -6,7 +6,7 @@
  * and/or modify it under the terms of the GNU GPL v3.
  *
  * @class ButtonPressHandler
- * @authors José Expósito, Vicente Benavent
+ * @authors Vicente Benavent
  *
  */
 #include "ButtonPressHandler.h"
@@ -28,6 +28,7 @@ ButtonPressHandler::ButtonPressHandler(XWindowList* wl)
 
 bool ButtonPressHandler::processEvent(XEvent* event)
 {
+
     Window windowID = event->xbutton.window;
     qDebug() << "[+] ButtonPress event 0x" << hex << windowID;
 

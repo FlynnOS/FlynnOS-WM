@@ -9,13 +9,13 @@
  * @authors José Expósito, Vicente Benavent
  *
  */
-#include "MotionNotifyHandler.h"
+#include "ButtonReleaseHandler.h"
 
 // ************************************************************************** //
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
 
-MotionNotifyHandler::MotionNotifyHandler(XWindowList* wl)
+ButtonReleaseHandler::ButtonReleaseHandler(XWindowList* wl)
         : EventHandler(wl) {}
 
 
@@ -23,16 +23,11 @@ MotionNotifyHandler::MotionNotifyHandler(XWindowList* wl)
 // **********                    PUBLIC METHODS                    ********** //
 // ************************************************************************** //
 
-bool MotionNotifyHandler::processEvent(XEvent* event)
+bool ButtonReleaseHandler::processEvent(XEvent* event)
 {
-    if (this->wl->moveResizeWindow != 0 && this->wl->moveResizeAction == 8) //move window
+    if (this->wl->moveResizeWindow != 0 && event->xbutton.button == this->wl->moveResizeButton) //we release the button
     {
-        int diffx = this->wl->moveResizeStartX-this->wl->moveResizeWindow->getX();
-        int diffy = this->wl->moveResizeStartY-this->wl->moveResizeWindow->getY();
-        this->wl->moveResizeWindow->setX(event->xmotion.x_root-diffx);
-        this->wl->moveResizeWindow->setY(event->xmotion.y_root-diffy);
-        this->wl->moveResizeStartX = event->xmotion.x_root;
-        this->wl->moveResizeStartY = event->xmotion.y_root;
+        this->wl->moveResizeWindow = 0;
     }
 
     return false;

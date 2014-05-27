@@ -29,17 +29,13 @@ bool ClientMessageHandler::processEvent(XEvent* event)
     qDebug() << "[+] ClientMessage event 0x" << hex << windowID;
     AtomList* al = AtomList::getInstance();
 
-    qDebug() << "\tPropiedad a cambiar: " << XGetAtomName(
-            QX11Info::display(), event->xclient.message_type);
-    //Move Resize, puede ser cualquier ventana
+    qDebug() << "\tPropiedad a cambiar: " << XGetAtomName(QX11Info::display(), event->xclient.message_type);
+
+    //Move Resize, puede ser cualquier ventana, no solo con frame o sin frame
     if(event->xclient.message_type == al->getAtom("_NET_WM_MOVERESIZE"))
     {
-
-        qDebug() << event->xclient.data.l[0];
-        qDebug() << event->xclient.data.l[1];
-        qDebug() << event->xclient.data.l[2];
-        qDebug() << event->xclient.data.l[3];
-        qDebug() << event->xclient.data.l[4];
+        XWindow* xwindow = this->wl->getXWindowByClientID(windowID);
+        this->wl->setMoveResizeWindow(xwindow,event->xclient.data.l[2],event->xclient.data.l[0],event->xclient.data.l[1],event->xclient.data.l[3]);
     }
 
 

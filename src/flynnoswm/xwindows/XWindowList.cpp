@@ -22,6 +22,7 @@ XWindowList::XWindowList() {
     this->stackingList = new QList<const XWindow*>;
     this->activeStackList = new QList<const XWindow*>;
     this->activeWindow = NULL;
+    this->moveResizeWindow = NULL;
 }
 
 XWindowList::~XWindowList() {
@@ -337,4 +338,13 @@ const XWindow* XWindowList::getTopWindow() const {
     }
 
     return ret;
+}
+
+void XWindowList::setMoveResizeWindow(XWindow* w, int action, int start_x, int start_y, int button)
+{
+    this->moveResizeWindow = w;
+    this->moveResizeAction = action;
+    this->moveResizeStartX = start_x;
+    this->moveResizeStartY = start_y;
+    this->moveResizeButton = button;
 }

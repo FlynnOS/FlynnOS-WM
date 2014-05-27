@@ -5,25 +5,25 @@
  * This file is part of the FlynnOSwm project, you can redistribute it
  * and/or modify it under the terms of the GNU GPL v3.
  *
- * @class  MotionNotifyHandler
+ * @class  ButtonReleaseHandler
  * @authors José Expósito, Vicente Benavent
  *
  */
-#ifndef MOTIONNOTIFYHANDLER_H
-#define MOTIONNOTIFYHANDLER_H
+#ifndef BUTTONRELEASEHANDLER_H
+#define BUTTONRELEASEHANDLER_H
 
 #include "src/flynnoswm/events/handlers/EventHandler.h"
 
 
 /**
  * @~spanihs
- * Evento que se llamará cuando el mouse se mueve. El WM se encargará de
+ * Evento que se llamará cuando el mouse deja de dar click. El WM se encargará de
  * procesar esto en caso de que la ventana se lo pida por ejemplo NET_WM_MOVERESIZE
  *
  * @~english
  * TODO
  */
-class MotionNotifyHandler : public EventHandler {
+class ButtonReleaseHandler : public EventHandler {
 
     public:
 
@@ -36,7 +36,7 @@ class MotionNotifyHandler : public EventHandler {
          * Default constructor.
          * @param wl The window list.
          */
-        MotionNotifyHandler(XWindowList* wl);
+        ButtonReleaseHandler(XWindowList* wl);
 
         /**
          * @~spanish
@@ -55,4 +55,4 @@ class MotionNotifyHandler : public EventHandler {
         virtual bool processEvent(XEvent* event);
 };
 
-#endif // MOTIONNOTIFYHANDLER_H
+#endif // BUTTONRELEASEHANDLER_H

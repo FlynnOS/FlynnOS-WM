@@ -64,7 +64,6 @@ class XWindowList {
 
         /**
          * @~spanish
-         * @~spanish
          * Lista que guarda las ventanas gestioadas por el WM en el orden en el
          * que se van mapeando. Requerido por el EWMH.
          *
@@ -75,7 +74,6 @@ class XWindowList {
 
         /**
          * @~spanish
-         * @~spanish
          * Lista que guarda las ventanas gestioadas por el WM en el orden en el
          * que se usaron, para poder hacer ALT-TAB.
          *
@@ -85,7 +83,6 @@ class XWindowList {
         QList<const XWindow*>* activeStackList;
 
         /**
-         * @~spanish
          * @~spanish
          * Lista que guarda las ventanas gestioadas por el WM en el orden en el
          * que se encuentran en la pila (la primera es la que se encuentra más
@@ -98,11 +95,8 @@ class XWindowList {
 
         /**
          * @~spanish
-         * @~spanish
          * Ventana activa, debe ser una ventana gestionada por el WM.
          * Requerido por el EWMH.
-         *
-         * @~english
          *
          * @~english
          * TO TRANSLATE
@@ -149,6 +143,48 @@ class XWindowList {
          * TO TRANSLATE
          */
         QList<MinimizeFloat*> floatWindowHash;
+
+        /**
+         * @~spanish
+         * La ventana que se quiere mover o cambiar el tamaño, si es 0 significa que
+         * no se quiere mover o cambiar el tamaño
+         * http://standards.freedesktop.org/wm-spec/wm-spec-latest.html#idm140146176808576
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        XWindow* moveResizeWindow;
+
+        /**
+         * @~spanish
+         * Como se quiere mover la ventana ver valores en el link:
+         * http://standards.freedesktop.org/wm-spec/wm-spec-latest.html#idm140146176808576
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        int moveResizeAction;
+
+        /**
+         * @~spanish
+         * La posicion inicial del movimiento o resize
+         * http://standards.freedesktop.org/wm-spec/wm-spec-latest.html#idm140146176808576
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        int moveResizeStartX;
+        int moveResizeStartY;
+
+        /**
+         * @~spanish
+         * El boton que se usa para el movimiento o resize
+         * http://standards.freedesktop.org/wm-spec/wm-spec-latest.html#idm140146176808576
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        int moveResizeButton;
 
         //----------------------------------------------------------------------
 
@@ -286,7 +322,6 @@ class XWindowList {
 
         /**
          * @~spanish
-         * @~spanish
          * Añade la ventana a la lista de mapeadas y de la de apiladas,
          * actualiza las listas de la ventana raíz y coloca la ventana en la
          * posición de la pila que le corresponde.
@@ -299,7 +334,6 @@ class XWindowList {
 
         /**
          * @~spanish
-         * @~spanish
          * Borra la ventana de la lista de mapeadas y de la de apiladas y
          * actualiza las listas de la ventana raíz.
          * @param xwindow La ventana a eliminar.
@@ -310,7 +344,6 @@ class XWindowList {
         void removeFromManagedWindow(const XWindow* xwindow);
 
         /**
-         * @~spanish
          * @~spanish
          * Coloca la ventana en la parte más alta de la pila en la que puede
          * estar (vease debajo de los docks, si es el escritorio en el fondo...)
@@ -324,7 +357,6 @@ class XWindowList {
 
         /**
          * @~spanish
-         * @~spanish
          * Establece la ventana activa y le asigna el foco.
          * @param activeWindow La que será la nueva ventana activa, NULL si no
          *        se quiere establecer ninguna.
@@ -336,6 +368,20 @@ class XWindowList {
 
         /**
          * @~spanish
+         * Establece la ventana que se mueve o cambia tamaño, su accion, posicion en x y en y
+         * http://standards.freedesktop.org/wm-spec/wm-spec-latest.html#idm140146176808576
+         * @param w la ventana a mover o cambiar de tamaño
+         * @param action la accion (ver link)
+         * @param start_x la posicion inicial X
+         * @param start_y la posicion inicial Y
+         * @param button el boton que se esta usando para la accion
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        void setMoveResizeWindow(XWindow* w, int action, int start_x, int start_y, int button);
+
+        /**
          * @~spanish
          * Indica cual es la ventana que se encuentra en a cima de la pila,
          * siempre que no sea una ventana que siempre deba estar en la cima o en

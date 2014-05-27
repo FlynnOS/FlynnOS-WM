@@ -5,6 +5,7 @@ HEADERS += src/flynnoswm/events/handlers/EventHandler.h \
     src/flynnoswm/events/handlers/MapRequestHandler.h \
     src/flynnoswm/events/handlers/ConfigureRequestHandler.h \
     src/flynnoswm/events/handlers/ButtonPressHandler.h \
+    src/flynnoswm/events/handlers/ButtonReleaseHandler.h \
     src/flynnoswm/events/handlers/PropertyNotifyHandler.h \
     src/flynnoswm/events/handlers/ClientMessageHandler.h \
     src/flynnoswm/events/handlers/KeyPressHandler.h \
@@ -16,6 +17,7 @@ SOURCES += src/flynnoswm/events/handlers/CreateNotifyHandler.cpp \
     src/flynnoswm/events/handlers/MapRequestHandler.cpp \
     src/flynnoswm/events/handlers/ConfigureRequestHandler.cpp \
     src/flynnoswm/events/handlers/ButtonPressHandler.cpp \
+    src/flynnoswm/events/handlers/ButtonReleaseHandler.cpp \
     src/flynnoswm/events/handlers/PropertyNotifyHandler.cpp \
     src/flynnoswm/events/handlers/ClientMessageHandler.cpp \
     src/flynnoswm/events/handlers/KeyPressHandler.cpp \

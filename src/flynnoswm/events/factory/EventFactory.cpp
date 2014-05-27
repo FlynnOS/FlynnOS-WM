@@ -81,6 +81,10 @@ void EventFactory::initialize(XWindowList* windowList) {
     this->eventHandlerHash.insert(MotionNotify, new MotionNotifyHandler(
             windowList));
 
+    // Button Release
+    this->eventHandlerHash.insert(ButtonRelease, new ButtonReleaseHandler(
+            windowList));
+
 
     windowList_ = windowList;
 }

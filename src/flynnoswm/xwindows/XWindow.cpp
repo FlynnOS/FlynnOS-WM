@@ -30,6 +30,7 @@ XWindow::XWindow(const Window& clientID)
     this->client->setBorderWidth(0);
     maximized_ = false;
     in_taskbar_ = true;
+
 }
 
 XWindow::~XWindow()
@@ -108,7 +109,7 @@ void XWindow::addFrame()
 
 
         //XGrabButton(QX11Info::display(), AnyButton, AnyModifier,  this->clientID, False, ButtonPressMask|ButtonReleaseMask, GrabModeAsync, GrabModeSync, None, None);
-        XSelectInput(QX11Info::display(), this->clientID, EnterWindowMask|FocusChangeMask|PropertyChangeMask|StructureNotifyMask);
+        XSelectInput(QX11Info::display(), this->clientID, EnterWindowMask|FocusChangeMask|PropertyChangeMask|StructureNotifyMask|ButtonMotionMask|ButtonReleaseMask);
 
 
         // Conectamos signals y slots
@@ -130,7 +131,7 @@ void XWindow::addDock()
     //for windows that don't have frame, we need this to recieve their events!
     if ((this->needFrame()) == false)
     {
-        XSelectInput(QX11Info::display(), getClientID(), EnterWindowMask|FocusChangeMask|PropertyChangeMask|StructureNotifyMask);
+        XSelectInput(QX11Info::display(), getClientID(), EnterWindowMask|FocusChangeMask|PropertyChangeMask|StructureNotifyMask|ButtonMotionMask|ButtonReleaseMask);
 
     }
 }
