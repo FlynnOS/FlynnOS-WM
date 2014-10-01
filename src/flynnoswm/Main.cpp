@@ -21,9 +21,11 @@
  * @param argc Number of arguments received by console.
  * @param argv Argument list.
  */
-int main(int argc, char** argv)
+int main(int argc, char *argv[])
 {
-    FlynnOSwm flynnOSwm(argc, argv);
+
+
+    FlynnOSwm flynnOSwm(argc, &argv);
     return flynnOSwm.exec();
 }
 

@@ -132,7 +132,7 @@ class FlynnOSwm : public QApplication {
          * @param argc Number of arguments received by console.
          * @param argv Argument list.
          */
-        FlynnOSwm(int argc, char** argv);
+        FlynnOSwm(int& argc, char **argv[]);
 
         /**
          * @~spanish

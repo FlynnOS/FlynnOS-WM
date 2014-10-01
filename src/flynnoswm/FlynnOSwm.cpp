@@ -27,11 +27,22 @@ int xerror_at_start(Display *dpy, XErrorEvent *ee)
 //General error handler
 int error_handler(Display *dpy, XErrorEvent *ee)
 {
-    //qDebug()  << "Error handled!";
+
+     char err[64], req[64], min[64];;
+
+       XGetErrorText( dpy, ee->error_code, err, 64 );
+       XGetErrorText( dpy, ee->request_code, req, 64 );
+       XGetErrorText( dpy, ee->minor_code, min, 64 );
+
+       qDebug() << err;
+       qDebug() << req;
+       qDebug() << min;
+       return 0;
+    qDebug()  << "Error handled!" << ee->error_code;
     return 0;
 }
 
-FlynnOSwm::FlynnOSwm(int argc, char** argv) : QApplication(argc, argv)
+FlynnOSwm::FlynnOSwm(int& argc, char **argv[]) : QApplication(argc, *argv)
 {
     TaskBar::setRaw(0);
     TaskBar::ready_to_add = false;

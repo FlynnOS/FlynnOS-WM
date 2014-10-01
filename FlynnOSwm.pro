@@ -5,7 +5,8 @@ OBJECTS_DIR += build
 MOC_DIR     += build
 LIBS        += -lX11 -lXtst
 //DEFINES      = QT_NO_DEBUG_OUTPUT
-
+QMAKE_CXXFLAGS_RELEASE += -g
+QMAKE_CFLAGS_RELEASE += -g
 
 target.path  = /usr/bin
 target.files = bin/flynnoswm
