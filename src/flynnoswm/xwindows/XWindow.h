@@ -235,6 +235,16 @@ class XWindow : public QObject
          */
         int getState() const;
 
+        /**
+         * @~spanish
+         * Devuelve el cliente
+         * @return Un aputador al cliente.
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        Client* getClient();
+
         //----------------------------------------------------------------------
 
         /**

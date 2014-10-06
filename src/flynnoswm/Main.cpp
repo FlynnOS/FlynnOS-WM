@@ -10,6 +10,34 @@
  */
 #include "src/flynnoswm/FlynnOSwm.h"
 
+//Log all qt output to a file,
+void logToFile(QtMsgType type, const char *msg)
+{
+    QString txt;
+    switch (type) {
+    case QtDebugMsg:
+        txt = QString("Debug: %1").arg(msg);
+        break;
+
+    case QtWarningMsg:
+        txt = QString("Warning: %1").arg(msg);
+    break;
+    case QtCriticalMsg:
+        txt = QString("Critical: %1").arg(msg);
+    break;
+    case QtFatalMsg:
+        txt = QString("Fatal: %1").arg(msg);
+        abort();
+    }
+
+
+    QFile outFile(QDir::homePath() + "/.flynnoswm/flynnwm.log");
+    outFile.open(QIODevice::WriteOnly | QIODevice::Append);
+    QTextStream ts(&outFile);
+    ts << txt << endl;
+}
+
+
 /**
  * @~spanish
  * Función de inicio de FlynnOSwm.
@@ -24,7 +52,7 @@
 int main(int argc, char *argv[])
 {
 
-
+    qInstallMsgHandler(logToFile); //install : set the callback
     FlynnOSwm flynnOSwm(argc, &argv);
     return flynnOSwm.exec();
 }

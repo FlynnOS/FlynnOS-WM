@@ -189,6 +189,11 @@ QString XWindow::getTitle()
     }
 }
 
+Client* XWindow::getClient()
+{
+    return client;
+}
+
 // this is for _NET_WM_STATE
 QList<Atom> XWindow::getClientState()
 {

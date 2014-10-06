@@ -33,12 +33,14 @@ bool ConfigureRequestHandler::processEvent(XEvent* event) {
         XWindow* xwindow = this->wl->getXWindowByClientID(windowID);
 
         // Si el cliente bypassea el WM
-        if(xwindow->bypassWM()) {
+        if(xwindow->bypassWM())
+        {
             qDebug() << "\tEl cliente bypassea el WM";
             return false;
 
         // Si no lo bypassea
-        } else {
+        } else
+        {
             if(event->xconfigurerequest.value_mask & CWX)
                 xwindow->setX(event->xconfigurerequest.x);
 
@@ -51,7 +53,8 @@ bool ConfigureRequestHandler::processEvent(XEvent* event) {
 
             Config* cfg = Config::getInstance();
 
-            if(event->xconfigurerequest.value_mask & CWWidth) {
+            if(event->xconfigurerequest.value_mask & CWWidth)
+            {
                 if(xwindow->haveFrame())
                     xwindow->setWidth(event->xconfigurerequest.width
                             + cfg->getLeftBorderWidth()
@@ -60,7 +63,8 @@ bool ConfigureRequestHandler::processEvent(XEvent* event) {
                     xwindow->setWidth(event->xconfigurerequest.width);
             }
 
-            if(event->xconfigurerequest.value_mask & CWHeight) {
+            if(event->xconfigurerequest.value_mask & CWHeight)
+            {
                 if(xwindow->haveFrame())
                     xwindow->setHeight(event->xconfigurerequest.height
                             + cfg->getTitlebarWidth() + cfg->getTopBorderWidth()
@@ -73,7 +77,9 @@ bool ConfigureRequestHandler::processEvent(XEvent* event) {
         }
 
     // Si no es un cliente
-    } else {
+    }
+    else
+    {
         qDebug() << "\tLa ventana no es un cliente";
         return false;
     }

@@ -42,10 +42,12 @@ bool MapRequestHandler::processEvent(XEvent* event) {
         } else {
 
             // Si la ventana se mapea por primera vez
-            if(xwindow->getState() == WithdrawnState) {
+            if(xwindow->getState() == WithdrawnState)
+            {
                 qDebug() << "\tEl cliente se mapea por primera vez";
 
-                if(xwindow->needFrame()) {
+                if(xwindow->needFrame())
+                {
                     qDebug() << "\tAñadiendo un marco al cliente";
                     xwindow->addFrame();
 
