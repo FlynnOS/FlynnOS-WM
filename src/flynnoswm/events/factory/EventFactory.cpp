@@ -77,11 +77,15 @@ void EventFactory::initialize(XWindowList* windowList) {
     this->eventHandlerHash.insert(KeyPress, new KeyPressHandler(
             windowList));
 
-    // Motion Notify
+    // KeyRelease
+    this->eventHandlerHash.insert(KeyRelease, new KeyReleaseHandler(
+            windowList));
+
+    // MotionNotify
     this->eventHandlerHash.insert(MotionNotify, new MotionNotifyHandler(
             windowList));
 
-    // Button Release
+    // ButtonRelease
     this->eventHandlerHash.insert(ButtonRelease, new ButtonReleaseHandler(
             windowList));
 

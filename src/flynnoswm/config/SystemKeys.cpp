@@ -40,7 +40,7 @@ void SystemKeys::configureSystemKeys()
     createModifiers(QX11Info::display());
     //List of keys to add
     insertKey(XK_c,Mod1Mask|ControlMask,KEY_CLOSE_WINDOW);
-    insertKey(XK_t,ControlMask,KEY_ALT_TAB);
+    insertKey(XK_Tab,Mod1Mask,KEY_ALT_TAB);
     insertKey(XK_Return,Mod1Mask|ControlMask,KEY_OPEN_TERMINAL);
 
 
@@ -162,29 +162,7 @@ void SystemKeys::addKey(int keycode, unsigned int mask)
     //unsigned int mask = Mod1Mask;
     KeyCode key = keycode;
 
-    //ShiftMask
-    XGrabKey(QX11Info::display(), key, mask, QX11Info::appRootWindow(QX11Info::appScreen()), false, GrabModeAsync, GrabModeAsync);
-
-    //NumberLockMask
-    XGrabKey(QX11Info::display(), key, mask | NumberLockMask, QX11Info::appRootWindow(QX11Info::appScreen()), false, GrabModeAsync, GrabModeAsync);
-
-    //ScrollLockMask
-    XGrabKey(QX11Info::display(), key, mask | ScrollLockMask, QX11Info::appRootWindow(QX11Info::appScreen()), false, GrabModeAsync, GrabModeAsync);
-
-    //CapsLockMask
-    XGrabKey(QX11Info::display(), key, mask | CapsLockMask, QX11Info::appRootWindow(QX11Info::appScreen()), false, GrabModeAsync, GrabModeAsync);
-
-    //NumberLockMask | ScrollLockMask
-    XGrabKey(QX11Info::display(), key, mask | NumberLockMask | ScrollLockMask, QX11Info::appRootWindow(QX11Info::appScreen()), false, GrabModeAsync, GrabModeAsync);
-
-    //NumberLockMask | CapsLockMask
-    XGrabKey(QX11Info::display(), key, mask | NumberLockMask | CapsLockMask, QX11Info::appRootWindow(QX11Info::appScreen()), false, GrabModeAsync, GrabModeAsync);
-
-    //ScrollLockMask | CapsLockMask
-    XGrabKey(QX11Info::display(), key, mask | ScrollLockMask | CapsLockMask, QX11Info::appRootWindow(QX11Info::appScreen()), false, GrabModeAsync, GrabModeAsync);
-
-    //NumberLockMask | ScrollLockMask | CapsLockMask
-    XGrabKey(QX11Info::display(), key, mask | NumberLockMask | ScrollLockMask | CapsLockMask, QX11Info::appRootWindow(QX11Info::appScreen()), false, GrabModeAsync, GrabModeAsync);
+    XGrabKey(QX11Info::display(), keycode, mask, QX11Info::appRootWindow(QX11Info::appScreen()), false, GrabModeAsync, GrabModeAsync);
 }
 
 // ************************************************************************** //

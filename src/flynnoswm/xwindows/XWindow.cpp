@@ -647,7 +647,7 @@ void XWindow::updateTitle()
 {
     if (this->haveFrame() == false)
         return;
-    qDebug() << "WE ARE GOING TO CRASH" << this->frame;
+
     this->frame->setTitle(this->client->getTitle());
     this->setTaskBar();
 }

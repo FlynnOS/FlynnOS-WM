@@ -52,15 +52,11 @@ FlynnOSwm::FlynnOSwm(int& argc, char **argv[]) : QApplication(argc, *argv)
     this->eventFactory->initialize(this->windowList);
 
     // cargamos la configuración
-     qDebug() << "pre1" ;
     Config* cfg = Config::getInstance();
     cfg->loadConfig();
-    qDebug() << "pre2" ;
-    // TODO Añadir a la lista de ventanas las ventanas que ya existan
 
     // Establecemos diversas propiedades requeridas por el estándar EWMH
     this->sendHints();
-    qDebug() << "pre3" ;
 
     //we check that another window manager is not running
     XSetErrorHandler(xerror_at_start);
@@ -82,12 +78,9 @@ FlynnOSwm::FlynnOSwm(int& argc, char **argv[]) : QApplication(argc, *argv)
     XFlush(QX11Info::display());
 
     Background::getInstance();
-
     TaskBar::getInstance()->wl = this->windowList;
 
-    qDebug() << "pre5" ;
     SystemKeys::getInstance()->configureSystemKeys();
-    qDebug() << "pre4" ;
 }
 
 FlynnOSwm::~FlynnOSwm()
