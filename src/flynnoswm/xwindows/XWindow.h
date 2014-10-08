@@ -52,10 +52,6 @@ class XWindow : public QObject
 
         bool maximized_; //if we have maximized atleast once this is set to true, it can happen that a window start maximized, this could be a huge problem
 
-        bool in_taskbar_; //if true this window has to be added to the taskbar, if false not
-
-
-
         /**
          * @~spanish
          * El cliente.
@@ -107,6 +103,8 @@ class XWindow : public QObject
         int state;
 
     public:
+
+        bool in_taskbar_; //if true this window has to be added to the taskbar, if false not
 
         /**
          * @~spanish

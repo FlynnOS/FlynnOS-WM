@@ -44,6 +44,7 @@ bool MapRequestHandler::processEvent(XEvent* event) {
             // Si la ventana se mapea por primera vez
             if(xwindow->getState() == WithdrawnState)
             {
+                xwindow->in_taskbar_ = true;
                 qDebug() << "\tEl cliente se mapea por primera vez";
 
                 if(xwindow->needFrame())

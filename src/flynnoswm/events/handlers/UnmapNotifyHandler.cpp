@@ -42,6 +42,8 @@ bool UnmapNotifyHandler::processEvent(XEvent* event)
         }
         else
         {
+            xwindow->in_taskbar_ = false;
+            xwindow->setTaskBar();
             qDebug() << "\tEl cliente pasa de NormalState a WithdrawnState";
             xwindow->setState(WithdrawnState);
 

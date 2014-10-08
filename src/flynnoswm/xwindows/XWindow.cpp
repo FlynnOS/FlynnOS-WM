@@ -185,7 +185,7 @@ QString XWindow::getTitle()
     }
     else
     {
-        return QString("");
+        return client->getTitle();
     }
 }
 
@@ -215,14 +215,17 @@ void XWindow::setTaskBar()
             || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_SPLASH")
             || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_TOOLBAR")
             || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_MENU")
-            || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_DIALOG"))
+            || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_DIALOG")
+            || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_POPUP_MENU")
+            || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_TOOLTIP")
+            || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_UTILITY"))
         {
             in_taskbar_ = false;
         }
 
     }
 
-    if (in_taskbar_ && getTitle() != "")
+    if (in_taskbar_ && getClient()->getTitle() != "" && getClient()->getTitle().toLower().trimmed() != QString("Untitled").toLower().trimmed())
     {
         TaskBar::getInstance()->AddTask(this);
     }

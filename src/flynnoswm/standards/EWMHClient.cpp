@@ -63,7 +63,14 @@ QString EWMHClient::getTitle() const {
         QString title = QString::fromUtf8((char*) propRet);
         XFree(propRet);
         return title;
-    } else
+    } else if(this->getProperty(al->getAtom("WM_NAME"),
+                                al->getAtom("UTF8_STRING"), &propRet))
+    {
+        QString title = QString::fromUtf8((char*) propRet);
+        XFree(propRet);
+        return title;
+    }
+    else
         return "";
 }
 
