@@ -103,7 +103,6 @@ Atom EWMHClient::getWindowType() const {
 
 QList<Atom> EWMHClient::getWindowState() const {
     unsigned char* propRet;
-    unsigned long num_items = 0;
     QList<Atom> atom_list;
 
     if(this->getProperty(al->getAtom("_NET_WM_STATE"), XA_ATOM, &propRet))

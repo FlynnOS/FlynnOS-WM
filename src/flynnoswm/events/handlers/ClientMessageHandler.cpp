@@ -74,6 +74,14 @@ bool ClientMessageHandler::processEvent(XEvent* event)
         else if (event->xclient.message_type == al->getAtom("_NET_WM_STATE"))
         {
             XWindow* xwindow = this->wl->getXWindowByClientID(windowID);
+            //Maximizamos una ventana
+            if (event->xclient.data.l[0] == 1
+                && (event->xclient.data.l[1] == al->getAtom("_NET_WM_STATE_MAXIMIZED_HORZ") || event->xclient.data.l[2] == al->getAtom("_NET_WM_STATE_MAXIMIZED_HORZ"))
+                && (event->xclient.data.l[1] == al->getAtom("_NET_WM_STATE_MAXIMIZED_VERT") || event->xclient.data.l[2] == al->getAtom("_NET_WM_STATE_MAXIMIZED_VERT")))
+            {
+                //Maximizamos la ventana
+                xwindow->maximizedFrame();
+            }
             xwindow->setClientState();
         }
         return false;

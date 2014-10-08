@@ -51,6 +51,11 @@ void logToFile(QtMsgType type, const char *msg)
  */
 int main(int argc, char *argv[])
 {
+    //we delete the previous log file
+    if (QFile::exists(QDir::homePath() + "/.flynnoswm/flynnwm.log"))
+    {
+        QFile::remove(QDir::homePath() + "/.flynnoswm/flynnwm.log");
+    }
 
     qInstallMsgHandler(logToFile); //install : set the callback
     FlynnOSwm flynnOSwm(argc, &argv);

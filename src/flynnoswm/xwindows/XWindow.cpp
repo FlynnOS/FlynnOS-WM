@@ -238,6 +238,7 @@ void XWindow::setTaskBar()
 
 void XWindow::setClientState()
 {
+
     AtomList* al = AtomList::getInstance();
     //we get the states and then process them
     QList<Atom> states = getClientState();
@@ -249,15 +250,10 @@ void XWindow::setClientState()
         if (states.at(i)== al->getAtom("_NET_WM_STATE_SKIP_TASKBAR"))
         {
             in_taskbar_ = false;
-            setTaskBar();
-        }
-        else
-        {
-            in_taskbar_ = true;
-            setTaskBar();
         }
 
     }
+    setTaskBar();
 }
 
 //this is for _NET_WM_WINDOW_TYPE
@@ -548,7 +544,10 @@ void XWindow::maximizeFrame()
     }
 
     maximized_ = true;
-    frame->setMaximized(true);
+
+    if (haveFrame() == true)
+        frame->setMaximized(true);
+
     this->setX(0+X);
     this->setY(0+Y);
     this->setWidth(W);
@@ -623,7 +622,6 @@ void XWindow::maximizedFrame()
     //Tolerance for maximize on width and height, since a window sometimes can be not perfectly maximized, eg terminal (line sizes)
     if(this->client->getMaxWidth() >= QApplication::desktop()->width() && this->client->getMaxHeight()>=QApplication::desktop()->height() && maximized_ == false)
     {
-
         this->maximizeFrame();
     }
     else if (maximized_ == true) //Ya esta maximizado, eso significa que tenemos que regresar al tamaño anterior
@@ -633,8 +631,9 @@ void XWindow::maximizedFrame()
         //the minus values are the borders added
         this->setWidth(this->old_width_);
         this->setHeight(this->old_height_);
-        //qDebug() << "Size: " << this->getX() << " " <<  this->getY() << " " << this->getWidth() << " " << this->getHeight();
-        frame->setMaximized(false);
+        if (haveFrame() == true)
+            frame->setMaximized(false);
+
         maximized_ = false;
     }
 }
