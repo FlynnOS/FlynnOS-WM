@@ -76,6 +76,7 @@ void MinimizeFloat::mouseDoubleClickEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)
     {
+        window->setMinimizedFloat(0);
         window->setState(1);
         closeWindow();
     }
@@ -141,6 +142,7 @@ void MinimizeFloat::menuClick(QAction *act)
     }
     else if (act->text() == tr("Open this window"))
     {
+        window->setMinimizedFloat(0);
         window->setState(1);
         closeWindow();
     }

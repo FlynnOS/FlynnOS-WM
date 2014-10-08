@@ -10,11 +10,10 @@
  *
  */
 #include "XWindow.h"
-#include "src/flynnoswm/xwindows/MinimizeFloat.h"
 #include "src/flynnoswm/xwindows/TaskBar.h"
 #include "src/flynnoswm/standards/ICCCM.h"
 #include "src/flynnoswm/events/factory/EventFactory.h"
-
+#include "src/flynnoswm/xwindows/MinimizeFloat.h"
 
 // ************************************************************************** //
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
@@ -30,6 +29,7 @@ XWindow::XWindow(const Window& clientID)
     this->client->setBorderWidth(0);
     maximized_ = false;
     in_taskbar_ = true;
+    minimizeFloat = 0;
 
 }
 
@@ -562,6 +562,16 @@ void XWindow::updateMaximizedWindow()
     }
 }
 
+MinimizeFloat* XWindow::getMinimizedFloat()
+{
+    return minimizeFloat;
+}
+
+void XWindow::setMinimizedFloat(MinimizeFloat* m)
+{
+    minimizeFloat = m;
+}
+
 
 // ************************************************************************** //
 // **********                     PUBLIC SLOTS                     ********** //
@@ -613,7 +623,7 @@ void XWindow::minimizedFrame()
 
 void XWindow::minimizedVisibleFrame()
 {
-    MinimizeFloat *minimizeFloat = new MinimizeFloat(this);
+    minimizeFloat = new MinimizeFloat(this);
     TaskBar::getInstance()->RemoveTask(this);
 }
 

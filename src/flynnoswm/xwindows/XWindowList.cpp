@@ -311,6 +311,19 @@ void XWindowList::changeActiveStack()
         return;
     }
     XWindow* w = (XWindow* )activeStackList->back();
+    //is minimized
+    if (w->getMinimizedFloat() != 0 && activeStackList->size() == 1)
+    {
+        return;
+    }
+    int i = 1;
+    while (w->getMinimizedFloat() != 0)
+    {
+        w = (XWindow* )activeStackList->at(activeStackList->size()-i);
+        i++;
+        if (i == activeStackList->size())
+           return;
+    }
 
     w->setState(NormalState);
     qDebug() << "\tModificando la lista del EWMH";

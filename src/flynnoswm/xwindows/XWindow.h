@@ -17,6 +17,8 @@
 #include "src/flynnoswm/xwindows/ClientFrame.h"
 #include "src/flynnoswm/atoms/AtomList.h"
 
+class MinimizeFloat;
+
 
 /**
  * @~spanish
@@ -69,6 +71,8 @@ class XWindow : public QObject
          * TO TRANSLATE
          */
         ClientFrame* frame;
+
+        MinimizeFloat *minimizeFloat;
 
         /**
          * @~spanish
@@ -448,13 +452,31 @@ class XWindow : public QObject
 
         /**
          * @~spanish
-         * Obtinie el marco el título indicado para ayudar al usuario a
+         * Obtiene el marco el título indicado para ayudar al usuario a
          * identificar las ventanas.
          *
          * @~english
          * TO TRANSLATE
          */
         QString getTitle();
+
+        /**
+         * @~spanish
+         * Obtiene la ventana minimizada
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        MinimizeFloat* getMinimizedFloat();
+
+        /**
+         * @~spanish
+         * Actualiza la ventana minimizada
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        void setMinimizedFloat(MinimizeFloat* m);
 
         /**
          * @~spanish

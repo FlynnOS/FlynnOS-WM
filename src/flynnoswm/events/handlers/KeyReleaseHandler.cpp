@@ -5,7 +5,7 @@
  * This file is part of the FlynnOSwm project, you can redistribute it
  * and/or modify it under the terms of the GNU GPL v3.
  *
- * @class KeyPressHandler
+ * @class KeyReleaseHandler
  * @authors José Expósito, Vicente Benavent
  *
  */
