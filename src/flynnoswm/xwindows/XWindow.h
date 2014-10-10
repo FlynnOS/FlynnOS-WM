@@ -107,7 +107,7 @@ class XWindow : public QObject
         int state;
 
     public:
-
+        bool full_screen_;
         bool in_taskbar_; //if true this window has to be added to the taskbar, if false not
 
         /**
@@ -192,7 +192,7 @@ class XWindow : public QObject
          * @~english
          * TO TRANSLATE
          */
-        bool needFrame() const;
+        bool needFrame();
 
         /**
          * @~spanish
@@ -540,6 +540,8 @@ class XWindow : public QObject
          * TO TRANSLATE
          */
         void closedFrame();
+
+        void fullScreenBorder();
 
         /**
          * @~spanish

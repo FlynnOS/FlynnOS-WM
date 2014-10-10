@@ -30,7 +30,7 @@ XWindow::XWindow(const Window& clientID)
     maximized_ = false;
     in_taskbar_ = true;
     minimizeFloat = 0;
-
+    full_screen_ = false;
 }
 
 XWindow::~XWindow()
@@ -140,7 +140,7 @@ void XWindow::removeFrame()
 {
     if(this->haveFrame())
     {
-        delete this->frame;
+        this->frame->deleteLater();
         this->frame = NULL;
     }
 }
@@ -150,7 +150,7 @@ bool XWindow::haveFrame() const
     return (this->frame != NULL);
 }
 
-bool XWindow::needFrame() const
+bool XWindow::needFrame()
 {
     AtomList* al = AtomList::getInstance();
     Atom clientType = this->client->getWindowType();
@@ -164,6 +164,17 @@ bool XWindow::needFrame() const
             return false;
         }
         delete h;
+    }
+
+    //we get the states and then process them
+    QList<Atom> states = getClientState();
+    for (int i = 0; i < states.size(); i++)
+    {
+        if (states.at(i)== al->getAtom("_NET_WM_STATE_FULLSCREEN"))
+        {
+            return false;
+        }
+
     }
 
     //qDebug() << XGetAtomName(QX11Info::display(),clientType);
@@ -254,6 +265,7 @@ void XWindow::setClientState()
 
     }
     setTaskBar();
+
 }
 
 //this is for _NET_WM_WINDOW_TYPE
@@ -406,7 +418,11 @@ Atom XWindow::getWindowType() const {
 bool XWindow::isTopWindow() const
 {
     AtomList* al = AtomList::getInstance();
+
     Atom type = this->client->getWindowType();
+    if (full_screen_)
+        return true;
+
     return type == al->getAtom("_NET_WM_WINDOW_TYPE_DOCK")
         || type == al->getAtom("_NET_WM_WINDOW_TYPE_SPLASH");
 }
@@ -500,6 +516,50 @@ unsigned int XWindow::getHeight() const
     return this->haveFrame()?this->frame->getHeight():this->client->getHeight();
 }
 
+void XWindow::fullScreenBorder()
+{
+    full_screen_ = true;
+    Config* cfg = Config::getInstance();
+    int X, Y, W, H;
+
+    //we start the sizes in case we fail to get the workarea
+    X = 0;
+    Y = 0;
+    W = QApplication::desktop()->width();
+    H = QApplication::desktop()->height();
+
+    AtomList* al = AtomList::getInstance();
+
+    //We get te workarea, for the dock borders
+
+    Atom actual;
+    int format = 32;
+    int request_size = 2 * sizeof(long);
+    unsigned long count, remaining;
+    unsigned char *xywh;
+
+    if (XGetWindowProperty(QX11Info::display(), QX11Info::appRootWindow(QX11Info::appScreen()), al->getAtom("_NET_DESKTOP_GEOMETRY"), 0, request_size, False, XA_CARDINAL, &actual, &format, &count, &remaining, &xywh) || !xywh)
+    {
+        qDebug() << "Get workarea failed";
+    }
+    else
+    {
+        W = *(int*)&xywh[0];
+        H = *(int*)&xywh[sizeof(long)];
+        //release memory
+        XFree(xywh);
+    }
+
+    if (haveFrame() == true)
+        frame->setMaximized(true);
+    //cfg->getLeftBorderWidth(),
+    //cfg->getTitlebarWidth() + cfg->getTopBorderWidth()
+    this->setX(-cfg->getLeftBorderWidth());
+    this->setY((cfg->getTitlebarWidth() + cfg->getTopBorderWidth())*-1);
+    this->setWidth(W+cfg->getLeftBorderWidth()+cfg->getRightBorderWidth());
+    this->setHeight(H+(cfg->getTitlebarWidth() + cfg->getTopBorderWidth())+cfg->getBottomBorderWidth());
+}
+
 void XWindow::maximizeFrame()
 {
 
@@ -516,8 +576,10 @@ void XWindow::maximizeFrame()
     unsigned long count, remaining;
     unsigned char *xywh;
 
-    //We get te workarea, for the dock borders
     AtomList* al = AtomList::getInstance();
+
+    //We get te workarea, for the dock borders
+
     if (XGetWindowProperty(QX11Info::display(), QX11Info::appRootWindow(QX11Info::appScreen()), al->getAtom("_NET_WORKAREA"), 0, request_size, False, XA_CARDINAL, &actual, &format, &count, &remaining, &xywh) || !xywh)
     {
         qDebug() << "Get workarea failed";

@@ -73,6 +73,7 @@ bool ClientMessageHandler::processEvent(XEvent* event)
         }
         else if (event->xclient.message_type == al->getAtom("_NET_WM_STATE"))
         {
+            //qDebug() << XGetAtomName(QX11Info::display(), event->xclient.data.l[1]);
             XWindow* xwindow = this->wl->getXWindowByClientID(windowID);
             //Maximizamos una ventana
             if (event->xclient.data.l[0] == 1
@@ -81,6 +82,12 @@ bool ClientMessageHandler::processEvent(XEvent* event)
             {
                 //Maximizamos la ventana
                 xwindow->maximizedFrame();
+            }
+            else if (event->xclient.data.l[0] == 1 && event->xclient.data.l[1] == al->getAtom("_NET_WM_STATE_FULLSCREEN"))
+            {
+                xwindow->fullScreenBorder();
+                wl->restackManagedWindow(xwindow);
+
             }
             xwindow->setClientState();
         }

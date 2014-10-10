@@ -67,6 +67,10 @@ void XWindowList::addClient(Window clientID, const XWindow* xwindow) {
 
 void XWindowList::removeClient(Window clientID) {
 
+    XWindow* w = getXWindowByClientID(clientID);
+    if (w == moveResizeWindow)
+        moveResizeWindow = 0;
+
     //vemos si ya existe en el stack de alt-tab, si existe lo borramos
     int idx = activeStackList->indexOf(getXWindowByClientID(clientID));
     if (idx != -1)
@@ -143,8 +147,27 @@ void XWindowList::restackManagedWindow(const XWindow* xwindow) {
     this->stackingList->removeOne(xwindow);
     int numWindows = this->stackingList->size();
 
+
+    //we get the states and then process them
+    AtomList* al = AtomList::getInstance();
+    QList<Atom> states = ((XWindow*)xwindow)->getClientState();
+    bool is_full_screen = false;
+    for (int i = 0; i < states.size(); i++)
+    {
+        if (states.at(i)== al->getAtom("_NET_WM_STATE_FULLSCREEN"))
+        {
+            is_full_screen = true;
+            break;
+        }
+
+    }
+
     // Ventanas que siempre están arriba
-    if(xwindow->isTopWindow()) {
+    if (is_full_screen == true)
+    {
+        this->stackingList->append(xwindow);
+    }
+    else if(xwindow->isTopWindow()) {
         this->stackingList->append(xwindow);
 
     // Ventanas que siempre están abajo

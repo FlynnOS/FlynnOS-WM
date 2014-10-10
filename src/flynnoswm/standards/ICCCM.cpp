@@ -146,6 +146,9 @@ int ICCCM::roundWidth(int width, bool roundingUp) const {
     if(!(sizeHints.flags & PResizeInc))
         return width;
 
+    if (sizeHints.width_inc == 0)//avoid divide zero
+        return width;
+
     int baseSize = (sizeHints.flags & PBaseSize)
             ? sizeHints.base_width
             : this->getMinWidth();
@@ -159,9 +162,14 @@ int ICCCM::roundHeight(int height, bool roundingUp) const {
     if(!(sizeHints.flags & PResizeInc))
         return height;
 
+    if (sizeHints.height_inc == 0)//avoid divide zero
+        return height;
+
     int baseSize = (sizeHints.flags & PBaseSize)
             ? sizeHints.base_height
             : this->getMinHeight();
+
+
     int aux = (height - baseSize) / sizeHints.height_inc;
     return roundingUp ? baseSize + sizeHints.height_inc * (aux+1)
                       : baseSize + sizeHints.height_inc * aux;

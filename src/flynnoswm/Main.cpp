@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
         QFile::remove(QDir::homePath() + "/.flynnoswm/flynnwm.log");
     }
 
-    qInstallMsgHandler(logToFile); //install : set the callback
+    //qInstallMsgHandler(logToFile); //install : set the callback
     FlynnOSwm flynnOSwm(argc, &argv);
     return flynnOSwm.exec();
 }
