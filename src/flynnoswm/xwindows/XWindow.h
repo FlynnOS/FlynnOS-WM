@@ -110,6 +110,9 @@ class XWindow : public QObject
         bool full_screen_;
         bool in_taskbar_; //if true this window has to be added to the taskbar, if false not
 
+        //if true we will not delete the window if the frame is removed
+        bool dontRemoveAfterFrame;
+
         /**
          * @~spanish
          * Crea una ventana.

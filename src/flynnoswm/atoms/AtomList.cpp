@@ -135,7 +135,10 @@ AtomList::AtomList() {
         "_NET_SYSTEM_TRAY_ORIENTATION",
         "MANAGER",
         "_XEMBED",
-        "_XEMBED_INFO"
+        "_XEMBED_INFO",
+
+        //FLYNNOS SPECIFIC HINTS
+        "_FLYNNOSWM_WIDGET"
 
     };
     int numAtoms = sizeof(atomsNames)/sizeof(char*);

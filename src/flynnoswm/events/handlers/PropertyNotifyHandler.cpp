@@ -64,12 +64,34 @@ bool PropertyNotifyHandler::processEvent(XEvent* event)
             this->wl->restackManagedWindow(xwindow);
             this->wl->setActiveWindow(xwindow);
         }
-        /*else if (event->xclient.message_type == al->getAtom("WM_NORMAL_HINTS")) //we got hints change request
+        else if (event->xclient.message_type == al->getAtom("_FLYNNOSWM_WIDGET")) //we got hints change request
         {
-        }*/
+            XWindow* xwindow = this->wl->getXWindowByClientID(windowID);
+
+            Atom type;
+            int format;
+            unsigned long nitems=0;
+            unsigned long extra=0;
+            unsigned char *data=NULL;
+            XGetWindowProperty(QX11Info::display(), windowID, al->getAtom("_FLYNNOSWM_WIDGET"), 0, 32, false, AnyPropertyType, &type, &format, &nitems, &extra, &data);
+            if(data != NULL)
+            {
+                //quitamos el marco
+                if ((int)*data > 0)
+                    xwindow->removeFrame();
+                xwindow->dontRemoveAfterFrame = true;
+                XReparentWindow(QX11Info::display(), windowID,
+                        QX11Info::appRootWindow(),
+                        0,
+                        0);
+
+                xwindow->setX(100);
+                xwindow->setY(100);
+                delete data;
+            }
+        }
         else
         {
-            //qDebug() << "Atom name: " << XGetAtomName(QX11Info::display(),event->xproperty.atom);
         }
         return false;
     }

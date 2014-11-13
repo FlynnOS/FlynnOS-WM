@@ -31,6 +31,7 @@ XWindow::XWindow(const Window& clientID)
     in_taskbar_ = true;
     minimizeFloat = 0;
     full_screen_ = false;
+    dontRemoveAfterFrame = true;
 }
 
 XWindow::~XWindow()
@@ -142,6 +143,7 @@ void XWindow::removeFrame()
     {
         this->frame->deleteLater();
         this->frame = NULL;
+
     }
 }
 

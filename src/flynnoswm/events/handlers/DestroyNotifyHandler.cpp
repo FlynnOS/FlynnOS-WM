@@ -89,7 +89,8 @@ bool DestroyNotifyHandler::processEvent(XEvent* event)
         this->wl->removeFrame(xwindow->getFrameID());
 
         qDebug() << "\tLiberando memoria";
-        delete xwindow;
+        if (xwindow->dontRemoveAfterFrame == false)
+            delete xwindow;
         return true;
 
     // Si no es ni un marco ni un cliente
