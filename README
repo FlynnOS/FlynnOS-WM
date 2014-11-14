@@ -15,3 +15,5 @@ $ /usr/share/xsessions/
 
 Requirted: (Incomplete)
 $ libxtst-dev
+
+This project uses DeathHandler, Copyright 2012 Samsung R&D Institute Russia. (BSD license)

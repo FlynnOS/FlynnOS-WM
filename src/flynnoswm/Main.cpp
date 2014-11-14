@@ -9,6 +9,7 @@
  *
  */
 #include "src/flynnoswm/FlynnOSwm.h"
+#include "src/DeathHandler/death_handler.h"
 
 //Log all qt output to a file,
 void logToFile(QtMsgType type, const char *msg)
@@ -51,6 +52,9 @@ void logToFile(QtMsgType type, const char *msg)
  */
 int main(int argc, char *argv[])
 {
+
+    Debug::DeathHandler dh;
+
     //we delete the previous log file
     if (QFile::exists(QDir::homePath() + "/.flynnoswm/flynnwm.log"))
     {

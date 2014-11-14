@@ -1,5 +1,6 @@
 SOURCES += src/flynnoswm/Main.cpp \
-    src/flynnoswm/FlynnOSwm.cpp
+    src/flynnoswm/FlynnOSwm.cpp \
+    src/DeathHandler/death_handler.cc
 HEADERS += src/flynnoswm/FlynnOSwm.h
 
 include(util/util.pri)
