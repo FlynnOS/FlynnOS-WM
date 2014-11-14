@@ -211,6 +211,7 @@ QPixmap ICCCM::getIconPixmap() const {
 }
 
 void ICCCM::setFocus() const {
+
     // Modelos Passive o Locally Active
     XWMHints* wmHints = XGetWMHints(QX11Info::display(), this->clientID);
     bool needWMToGetFocus = (wmHints && (wmHints->flags & InputHint))
@@ -220,7 +221,10 @@ void ICCCM::setFocus() const {
     if(needWMToGetFocus) {
         XSetInputFocus(QX11Info::display(), this->clientID, RevertToParent,
                 CurrentTime);
+
     }
+
+    XSetInputFocus(QX11Info::display(), this->clientID, RevertToPointerRoot, CurrentTime);
 
     // Modelos Locally Active o Globally Active
     if(this->supportProtocol("WM_TAKE_FOCUS")) {
