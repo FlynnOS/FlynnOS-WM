@@ -55,6 +55,9 @@ class TaskBar : public QWidget
         // Label con la hora del reloj
         QLabel* clock_text;
 
+        //Boton con el icono de la aplicacion que corre dmenu_run
+        QPushButton* launcher;
+
         //This timer sets the loop to update the clock text
         QTimer *timer;
 
@@ -302,6 +305,15 @@ class TaskBar : public QWidget
          * TO TRANSLATE
          */
         void click_item();
+
+        /**
+         * @~spanish
+         * Es llamado cuando se da click al launcher para correr dmenu
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        void clickLauncher();
 
 };
 

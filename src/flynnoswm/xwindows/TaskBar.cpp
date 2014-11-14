@@ -42,6 +42,8 @@ TaskBar::TaskBar(QWidget* parent)
     this->titlebar = new QLabel(this);
     this->clock_text = new QLabel(this);
     this->timer = new QTimer(this);
+    this->launcher = new QPushButton(this);
+    this->launcher->setFlat(true);
 
     // Hacemos que las imágenes se ajusten a sus contenedores
     this->titlebar->setScaledContents(true);
@@ -50,6 +52,7 @@ TaskBar::TaskBar(QWidget* parent)
     // archivo de configuración "style.qss"
     this->titlebar->setObjectName("titlebar");
     this->clock_text->setObjectName("title");
+    this->launcher->setObjectName("launcherIcon");
 
     // Aplicamos el estilo a la ventana
     this->setStyleSheet(cfg->getStyle());
@@ -57,6 +60,10 @@ TaskBar::TaskBar(QWidget* parent)
     // Ajustamos el tamaño de los distintos elementos
     this->clock_text->resize(this->clock_text->width(), cfg->getTitlebarWidth()
             + cfg->getTopBorderWidth());
+
+    this->launcher->resize(18,18);
+
+
     //this->setVerticalAling(this->title, Config::TOP);
 
     //We setup the frame
@@ -80,6 +87,8 @@ TaskBar::TaskBar(QWidget* parent)
     //We connect the signals and start the timer for the clock
     connect(this->timer, SIGNAL(timeout()), this, SLOT(update()));
     this->timer->start(1000);
+
+    connect( launcher, SIGNAL( clicked() ), this, SLOT(clickLauncher()) );
 
     //We call the timer once, so the time is updated at start
     this->update();
@@ -207,10 +216,10 @@ void TaskBar::RemoveTask(XWindow* window_bar_)
 void TaskBar::UpdateTitles()
 {
     QList<bar_item>::Iterator i = this->task_bar_list_.begin();
-    int x = 0;
+    int x = this->launcher->width();
     while(i != this->task_bar_list_.end())
     {
-        int pixelWidth = (*i).btn_->fontMetrics().width((*i).btn_->text()) + 10;
+        int pixelWidth = (*i).btn_->fontMetrics().width((*i).btn_->text()) + 15;
         (*i).btn_->resize(pixelWidth,18);
         (*i).btn_->move(x,0);
         x += pixelWidth;
@@ -222,8 +231,8 @@ void TaskBar::UpdateTitles()
 void TaskBar::UpdateTitlesSizes()
 {
     QList<bar_item>::Iterator i = this->task_bar_list_.begin();
-    float x = 0;
-    int clock_text_width = clock_text->fontMetrics().width(clock_text->text()) + 20;
+    float x = this->launcher->width();
+    int clock_text_width = clock_text->fontMetrics().width(clock_text->text()) + 15 + x;
     float task_w = 100;
     //revisamos que el tamaño no sea mayor al de el ancho de la pantalla
     if ((this->task_bar_list_.size()) * task_w > QApplication::desktop()->width()-clock_text_width)
@@ -282,6 +291,11 @@ void TaskBar::update()
 void TaskBar::click_item()
 {
     clickTaskItem(((QPushButton*)QObject::sender())->winId());
+}
+
+void TaskBar::clickLauncher()
+{
+    system("dmenu_run &");
 }
 
 // ************************************************************************** //
