@@ -295,7 +295,7 @@ void TaskBar::click_item()
 
 void TaskBar::clickLauncher()
 {
-    system("dmenu_run &");
+    system("dmenu_run -b &");
 }
 
 // ************************************************************************** //

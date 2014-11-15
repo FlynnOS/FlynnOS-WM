@@ -36,13 +36,12 @@ XWindow::XWindow(const Window& clientID)
 
 XWindow::~XWindow()
 {
+    TaskBar::getInstance()->RemoveTask(this);
 
     delete this->client;
 
     if(this->haveFrame())
         delete this->frame;
-
-    TaskBar::getInstance()->RemoveTask(this);
 
     EventFactory::getInstance()->windowList_->deleteMinimizedFloatingWindow(this);
 }
@@ -221,6 +220,7 @@ MWMHints* XWindow::getMotifWm()
 void XWindow::setTaskBar()
 {
     AtomList* al = AtomList::getInstance();
+
     Atom clientType = this->client->getWindowType();
     {
         if (clientType == al->getAtom("_NET_WM_WINDOW_TYPE_DESKTOP")
@@ -231,11 +231,17 @@ void XWindow::setTaskBar()
             || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_DIALOG")
             || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_POPUP_MENU")
             || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_TOOLTIP")
+            || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_DND")
             || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_UTILITY"))
         {
             in_taskbar_ = false;
         }
 
+    }
+
+    if (this->getWidth() <= 2 && this->getHeight() <= 2)
+    {
+        in_taskbar_ = false;
     }
 
     if (in_taskbar_ && getClient()->getTitle() != "" && getClient()->getTitle().toLower().trimmed() != QString("Untitled").toLower().trimmed())
@@ -265,6 +271,10 @@ void XWindow::setClientState()
             in_taskbar_ = false;
         }
 
+        if (states.at(i)== al->getAtom("_NET_WM_STATE_HIDDEN"))
+        {
+            in_taskbar_ = false;
+        }
     }
     setTaskBar();
 
