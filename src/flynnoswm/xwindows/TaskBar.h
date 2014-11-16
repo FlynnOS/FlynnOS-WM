@@ -46,6 +46,8 @@ class TaskBar : public QWidget
             QPushButton* btn_;
         };
 
+        QList<XWindow*> systrayWindows;
+
 
         //----------------------------------------------------------------------
 
@@ -151,18 +153,60 @@ class TaskBar : public QWidget
 
         /**
          * @~spanish
-         * Agregamos una vetana a la barra de tareas
+         * Agregamos un icono al tray
          * @param La ventana para agregar
          *
          * @~english
-         * We adda  window to the bar
+         * We add an icon to the tray
+         * @param The window to add to the tray
+         */
+        void addSystray(XWindow* win);
+
+        /**
+         * @~spanish
+         * Quitamos un icono del tray
+         * @param La ventana a quitar
+         *
+         * @~english
+         * We remove an icon from the tray
+         * @param The window to remove from the tray
+         */
+        void removeSystray(XWindow* win);
+
+        /**
+         * @~spanish
+         * Regresa true si la ventana existe en el tray, false si no existe
+         * @param el id de la vantana
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        bool isSystrayWindow(XWindow *w);
+
+        /**
+         * @~spanish
+         * Actualizamos las posiciones de todos los iconos del tray
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        void updateSystrayWindows();
+
+        /**
+         * @~spanish
+         * Agregamos una ventana a la barra de tareas
+         * @param La ventana para agregar
+         *
+         * @~english
+         * We add a window to the bar
          * @param The window to add to the bar
          */
         void AddTask(XWindow* window_bar_);
 
+
         /**
          * @~spanish
-         * Quitamos una vetana a la barra de tareas
+         * Quitamos una ventana a la barra de tareas
          * @param La ventana para agregar
          *
          * @~english

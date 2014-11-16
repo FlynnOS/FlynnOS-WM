@@ -81,6 +81,18 @@ FlynnOSwm::FlynnOSwm(int& argc, char **argv[]) : QApplication(argc, *argv)
     TaskBar::getInstance()->wl = this->windowList;
 
     SystemKeys::getInstance()->configureSystemKeys();
+
+
+    //System tray settings
+    AtomList* al = AtomList::getInstance();
+    if(XGetSelectionOwner(QX11Info::display(), al->getAtom("_NET_SYSTEM_TRAY_S0")) != None) {
+        qDebug() << "Error setting up system tray, there is already one?";
+        exit(1);
+    }
+
+    //we set the system tray
+    XSetSelectionOwner(QX11Info::display(), al->getAtom("_NET_SYSTEM_TRAY_S0"), TaskBar::getInstance()->winId(), CurrentTime);
+
 }
 
 FlynnOSwm::~FlynnOSwm()

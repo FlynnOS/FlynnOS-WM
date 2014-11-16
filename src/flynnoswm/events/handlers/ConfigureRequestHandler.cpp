@@ -10,6 +10,7 @@
  *
  */
 #include "ConfigureRequestHandler.h"
+#include "src/flynnoswm/xwindows/TaskBar.h"
 
 // ************************************************************************** //
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
@@ -39,7 +40,13 @@ bool ConfigureRequestHandler::processEvent(XEvent* event) {
             return false;
 
         // Si no lo bypassea
-        } else
+        }
+        else if (TaskBar::getInstance()->isSystrayWindow(xwindow))
+        {
+            //no permitimos cambios de tamaño, mantenemos el tamaño del icono en el tray
+            return false;
+        }
+        else
         {
             if(event->xconfigurerequest.value_mask & CWX)
                 xwindow->setX(event->xconfigurerequest.x);

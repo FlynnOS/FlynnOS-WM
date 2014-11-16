@@ -36,6 +36,7 @@ XWindow::XWindow(const Window& clientID)
 
 XWindow::~XWindow()
 {
+    TaskBar::getInstance()->removeSystray(this);
     TaskBar::getInstance()->RemoveTask(this);
 
     delete this->client;

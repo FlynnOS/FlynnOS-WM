@@ -10,7 +10,7 @@
  *
  */
 #include "ClientMessageHandler.h"
-
+#include "src/flynnoswm/xwindows/TaskBar.h"
 // ************************************************************************** //
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
 // ************************************************************************** //
@@ -39,6 +39,7 @@ bool ClientMessageHandler::processEvent(XEvent* event)
     }
 
 
+
     // Si la ventana es un cliente
     if(this->wl->existClient(windowID))
     {
@@ -59,6 +60,27 @@ bool ClientMessageHandler::processEvent(XEvent* event)
         //----------------------------------------------------------------------
 
         // EWMH
+
+        }
+        else if(event->xclient.message_type == al->getAtom("_NET_SYSTEM_TRAY_OPCODE"))
+        {
+            //http://standards.freedesktop.org/systemtray-spec/systemtray-spec-0.2.html#locating
+            //#define SYSTEM_TRAY_REQUEST_DOCK 0
+            if(event->xclient.data.l[1] == 0)
+            {
+                XWindow* xwindow = this->wl->getXWindowByClientID(event->xclient.data.l[2]);
+
+                //setup the system tray
+                XSelectInput(QX11Info::display(), xwindow->getClientID(), StructureNotifyMask | PropertyChangeMask| EnterWindowMask | FocusChangeMask);
+                XReparentWindow(QX11Info::display(), xwindow->getClientID(), TaskBar::getInstance()->winId(), 0, 0);
+                XMapWindow(QX11Info::display(), xwindow->getClientID());
+
+                //system tray icons size
+                xwindow->setWidth(18);
+                xwindow->setHeight(18);
+
+                TaskBar::getInstance()->addSystray(xwindow);
+            }
 
         }
         else if(event->xclient.message_type == al->getAtom("_NET_ACTIVE_WINDOW"))

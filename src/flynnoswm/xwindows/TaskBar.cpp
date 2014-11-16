@@ -94,6 +94,20 @@ TaskBar::TaskBar(QWidget* parent)
     this->update();
 }
 
+bool TaskBar::isSystrayWindow(XWindow *win)
+{
+    QList<XWindow *>::Iterator i = this->systrayWindows.begin();
+    while(i != this->systrayWindows.end())
+    {
+        if ((*i) == win)
+        {
+            return true;
+        }
+        i++;
+    }
+    return false;
+}
+
 bool TaskBar::isTaskWindow(Window w)
 {
     QList<bar_item>::Iterator i = this->task_bar_list_.begin();
@@ -172,6 +186,28 @@ void TaskBar::clickTaskItem(Window w)
     }
 }
 
+void TaskBar::addSystray(XWindow* win)
+{
+    this->systrayWindows.push_back(win);
+    updateSystrayWindows();
+}
+
+void TaskBar::removeSystray(XWindow* win)
+{
+    QList<XWindow*>::Iterator i = this->systrayWindows.begin();
+    while(i != this->systrayWindows.end())
+    {
+        if ((*i) == win)
+        {
+            this->systrayWindows.erase(i);
+            updateSystrayWindows();
+            return;
+        }
+        i++;
+    }
+
+}
+
 void TaskBar::AddTask(XWindow* window_bar_)
 {
     QList<bar_item>::Iterator i = this->task_bar_list_.begin();
@@ -228,11 +264,24 @@ void TaskBar::UpdateTitles()
     UpdateTitlesSizes();
 }
 
+void TaskBar::updateSystrayWindows()
+{
+    int n = 0;
+    QList<XWindow *>::Iterator i = this->systrayWindows.begin();
+    while(i != this->systrayWindows.end())
+    {
+        (*i)->setX(QApplication::desktop()->width()-83-(20*n));
+        n++;
+        i++;
+    }
+    UpdateTitles();
+}
+
 void TaskBar::UpdateTitlesSizes()
 {
     QList<bar_item>::Iterator i = this->task_bar_list_.begin();
     float x = this->launcher->width();
-    int clock_text_width = clock_text->fontMetrics().width(clock_text->text()) + 15 + x;
+    int clock_text_width = 90 + (systrayWindows.count()*20);
     float task_w = 100;
     //revisamos que el tamaño no sea mayor al de el ancho de la pantalla
     if ((this->task_bar_list_.size()) * task_w > QApplication::desktop()->width()-clock_text_width)
