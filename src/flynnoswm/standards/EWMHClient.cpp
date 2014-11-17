@@ -104,11 +104,11 @@ Atom EWMHClient::getWindowType() const {
 QList<Atom> EWMHClient::getWindowState() const {
     unsigned char* propRet;
     QList<Atom> atom_list;
-
-    if(this->getProperty(al->getAtom("_NET_WM_STATE"), XA_ATOM, &propRet))
+    unsigned long numItems;
+    if(this->getProperty(al->getAtom("_NET_WM_STATE"), XA_ATOM, &propRet,&numItems))
     {
         Atom* types = (Atom*)propRet;
-        for (int i = 0; i < sizeof(types)/sizeof(Atom); i++)
+        for (int i = 0; i < numItems; i++)
         {
             atom_list.append(types[i]);
         }

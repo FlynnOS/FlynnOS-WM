@@ -340,12 +340,13 @@ void XWindowList::changeActiveStack()
         return;
     }
     int i = 0;
-    while (w->getMinimizedFloat() != 0 && TaskBar::getInstance()->isSystrayWindow(w) == false)
+    while (w->getMinimizedFloat() != 0 || TaskBar::getInstance()->isSystrayWindow(w) == true)
     {
+        w = (XWindow* )activeStackList->at(i);
         i++;
         if (i == activeStackList->size())
            return;
-        w = (XWindow* )activeStackList->at(i);
+
     }
 
     w->setState(NormalState);
