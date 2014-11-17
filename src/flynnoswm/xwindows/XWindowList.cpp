@@ -325,7 +325,7 @@ void XWindowList::addActiveStack(XWindow* windowID)
     }
 }
 
-
+//this only gets called on alt-tab
 void XWindowList::changeActiveStack()
 {
 
@@ -335,17 +335,17 @@ void XWindowList::changeActiveStack()
     }
     XWindow* w = (XWindow* )activeStackList->back();
     //is minimized
-    if (w->getMinimizedFloat() != 0 && activeStackList->size() == 1)
+    if ((w->getMinimizedFloat() != 0 || TaskBar::getInstance()->isSystrayWindow(w) == true) && activeStackList->size() == 1)
     {
         return;
     }
-    int i = 1;
-    while (w->getMinimizedFloat() != 0)
+    int i = 0;
+    while (w->getMinimizedFloat() != 0 && TaskBar::getInstance()->isSystrayWindow(w) == false)
     {
-        w = (XWindow* )activeStackList->at(activeStackList->size()-i);
         i++;
         if (i == activeStackList->size())
            return;
+        w = (XWindow* )activeStackList->at(i);
     }
 
     w->setState(NormalState);
