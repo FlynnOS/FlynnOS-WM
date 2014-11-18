@@ -271,8 +271,7 @@ void XWindow::setClientState()
         {
             in_taskbar_ = false;
         }
-
-        if (states.at(i)== al->getAtom("_NET_WM_STATE_HIDDEN"))
+        else if (states.at(i)== al->getAtom("_NET_WM_STATE_HIDDEN"))
         {
             in_taskbar_ = false;
         }

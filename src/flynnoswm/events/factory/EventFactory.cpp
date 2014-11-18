@@ -89,6 +89,10 @@ void EventFactory::initialize(XWindowList* windowList) {
     this->eventHandlerHash.insert(ButtonRelease, new ButtonReleaseHandler(
             windowList));
 
+    // ResizeRequest
+    this->eventHandlerHash.insert(ResizeRequest, new ResizeRequestHandler(
+            windowList));
+
 
     windowList_ = windowList;
 }

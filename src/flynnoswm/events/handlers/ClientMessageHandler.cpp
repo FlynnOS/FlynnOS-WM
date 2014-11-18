@@ -71,7 +71,7 @@ bool ClientMessageHandler::processEvent(XEvent* event)
                 XWindow* xwindow = this->wl->getXWindowByClientID(event->xclient.data.l[2]);
 
                 //setup the system tray
-                XSelectInput(QX11Info::display(), xwindow->getClientID(), StructureNotifyMask | PropertyChangeMask| EnterWindowMask | FocusChangeMask);
+                XSelectInput(QX11Info::display(), xwindow->getClientID(), StructureNotifyMask | PropertyChangeMask | ResizeRedirectMask | EnterWindowMask | FocusChangeMask);
                 XReparentWindow(QX11Info::display(), xwindow->getClientID(), TaskBar::getInstance()->winId(), 0, 0);
                 XMapWindow(QX11Info::display(), xwindow->getClientID());
 
