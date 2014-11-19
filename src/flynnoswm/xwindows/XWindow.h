@@ -546,6 +546,16 @@ class XWindow : public QObject
 
         void fullScreenBorder();
 
+
+        /**
+         * @~spanish
+         * Regresa true si puedes hacerle alt-tab, false si no puedes
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        bool canAltTab();
+
         /**
          * @~spanish
          * Señal que se lanza cuando el usuario hace click en el botón de

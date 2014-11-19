@@ -28,6 +28,7 @@
 #include "src/flynnoswm/events/handlers/MotionNotifyHandler.h"
 #include "src/flynnoswm/events/handlers/ButtonReleaseHandler.h"
 #include "src/flynnoswm/events/handlers/ResizeRequestHandler.h"
+#include "src/flynnoswm/events/handlers/MappingNotifyHandler.h"
 
 /**
  * @~spanish

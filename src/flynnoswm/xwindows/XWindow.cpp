@@ -218,6 +218,35 @@ MWMHints* XWindow::getMotifWm()
     return client->getMotifWm();
 }
 
+bool XWindow::canAltTab()
+{
+    AtomList* al = AtomList::getInstance();
+
+    Atom clientType = this->client->getWindowType();
+    {
+        if (clientType == al->getAtom("_NET_WM_WINDOW_TYPE_DESKTOP")
+            || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_DOCK")
+            //|| clientType == al->getAtom("_NET_WM_WINDOW_TYPE_SPLASH")
+            || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_TOOLBAR")
+            || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_MENU")
+            //|| clientType == al->getAtom("_NET_WM_WINDOW_TYPE_DIALOG")
+            || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_POPUP_MENU")
+            || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_TOOLTIP")
+            || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_NOTIFICATION")
+            || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_DROPDOWN_MENU")
+            || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_DND")
+            || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_COMBO")
+            || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_UTILITY"))
+        {
+            return false;
+        }
+
+    }
+
+    return true;
+}
+
+
 void XWindow::setTaskBar()
 {
     AtomList* al = AtomList::getInstance();
@@ -226,13 +255,16 @@ void XWindow::setTaskBar()
     {
         if (clientType == al->getAtom("_NET_WM_WINDOW_TYPE_DESKTOP")
             || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_DOCK")
-            || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_SPLASH")
+            //|| clientType == al->getAtom("_NET_WM_WINDOW_TYPE_SPLASH")
             || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_TOOLBAR")
             || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_MENU")
-            || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_DIALOG")
+            //|| clientType == al->getAtom("_NET_WM_WINDOW_TYPE_DIALOG")
             || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_POPUP_MENU")
             || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_TOOLTIP")
+            || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_NOTIFICATION")
+            || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_DROPDOWN_MENU")
             || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_DND")
+            || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_COMBO")
             || clientType == al->getAtom("_NET_WM_WINDOW_TYPE_UTILITY"))
         {
             in_taskbar_ = false;

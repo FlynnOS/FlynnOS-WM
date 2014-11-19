@@ -12,6 +12,7 @@ HEADERS += src/flynnoswm/events/handlers/EventHandler.h \
     src/flynnoswm/events/handlers/KeyReleaseHandler.h \
     src/flynnoswm/events/handlers/EnterNotifyRequestHandler.h \
     src/flynnoswm/events/handlers/ResizeRequestHandler.h \
+    src/flynnoswm/events/handlers/MappingNotifyHandler.h \
     src/flynnoswm/events/handlers/MotionNotifyHandler.h
 SOURCES += src/flynnoswm/events/handlers/CreateNotifyHandler.cpp \
     src/flynnoswm/events/handlers/DestroyNotifyHandler.cpp \
@@ -26,4 +27,5 @@ SOURCES += src/flynnoswm/events/handlers/CreateNotifyHandler.cpp \
     src/flynnoswm/events/handlers/KeyReleaseHandler.cpp \
     src/flynnoswm/events/handlers/EnterNotifyRequestHandler.cpp \
     src/flynnoswm/events/handlers/ResizeRequestHandler.cpp \
+    src/flynnoswm/events/handlers/MappingNotifyHandler.cpp \
     src/flynnoswm/events/handlers/MotionNotifyHandler.cpp

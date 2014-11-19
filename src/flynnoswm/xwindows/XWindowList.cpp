@@ -335,16 +335,16 @@ void XWindowList::changeActiveStack()
     }
     XWindow* w = (XWindow* )activeStackList->back();
     //is minimized
-    if ((w->getMinimizedFloat() != 0 || TaskBar::getInstance()->isSystrayWindow(w) == true) && activeStackList->size() == 1)
+    if ((w->getMinimizedFloat() != 0 || TaskBar::getInstance()->isSystrayWindow(w) == true || w->canAltTab() == false) && activeStackList->size() == 1)
     {
         return;
     }
-    int i = 0;
-    while (w->getMinimizedFloat() != 0 || TaskBar::getInstance()->isSystrayWindow(w) == true)
+    int i = activeStackList->size()-1;
+    while (w->getMinimizedFloat() != 0 || TaskBar::getInstance()->isSystrayWindow(w) == true || w->canAltTab() == false)
     {
         w = (XWindow* )activeStackList->at(i);
-        i++;
-        if (i == activeStackList->size())
+        i--;
+        if (i < 0)
            return;
 
     }
@@ -356,7 +356,7 @@ void XWindowList::changeActiveStack()
     qDebug() << "\tActualizando la ventana activa";
     this->setActiveWindow(w);
 
-    qDebug() << "Switch to: " << w->getTitle();
+    //qDebug() << "Switch to: " << w->getTitle();
 
     //setFocus(w);
 }
