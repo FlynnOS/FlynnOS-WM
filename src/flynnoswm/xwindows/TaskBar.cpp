@@ -61,6 +61,8 @@ TaskBar::TaskBar(QWidget* parent)
     this->clock_text->resize(this->clock_text->width(), cfg->getTitlebarWidth()
             + cfg->getTopBorderWidth());
 
+    this->clockTextWidth = this->clock_text->fontMetrics().width("00 : 00 : 00");
+    qDebug() << this->clockTextWidth;
     this->launcher->resize(18,18);
 
 
@@ -266,11 +268,11 @@ void TaskBar::UpdateTitles()
 
 void TaskBar::updateSystrayWindows()
 {
-    int n = 0;
+    int n = 1;
     QList<XWindow *>::Iterator i = this->systrayWindows.begin();
     while(i != this->systrayWindows.end())
     {
-        (*i)->setX(QApplication::desktop()->width()-83-(20*n));
+        (*i)->setX(QApplication::desktop()->width()-this->clockTextWidth-10-(20*n));
         n++;
         i++;
     }
@@ -281,7 +283,7 @@ void TaskBar::UpdateTitlesSizes()
 {
     QList<bar_item>::Iterator i = this->task_bar_list_.begin();
     float x = this->launcher->width();
-    int clock_text_width = 90 + (systrayWindows.count()*20);
+    int clock_text_width = this->clockTextWidth + 10 + (systrayWindows.count()*20);
     float task_w = 100;
     //revisamos que el tamaño no sea mayor al de el ancho de la pantalla
     if ((this->task_bar_list_.size()) * task_w > QApplication::desktop()->width()-clock_text_width)
@@ -333,7 +335,6 @@ void TaskBar::update()
     this->setClockText(stime);
     int pixelWidth = clock_text->fontMetrics().width(clock_text->text()) + 10;
     this->clock_text->move(QApplication::desktop()->width()-pixelWidth,this->clock_text->y());
-
 
 }
 

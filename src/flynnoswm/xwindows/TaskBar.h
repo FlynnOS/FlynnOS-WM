@@ -57,6 +57,8 @@ class TaskBar : public QWidget
         // Label con la hora del reloj
         QLabel* clock_text;
 
+        int clockTextWidth;
+
         //Boton con el icono de la aplicacion que corre dmenu_run
         QPushButton* launcher;
 
