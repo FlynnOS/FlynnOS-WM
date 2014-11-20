@@ -163,6 +163,12 @@ void SystemKeys::addKey(int keycode, unsigned int mask)
     KeyCode key = keycode;
 
     XGrabKey(QX11Info::display(), keycode, mask, QX11Info::appRootWindow(QX11Info::appScreen()), false, GrabModeAsync, GrabModeAsync);
+    XGrabKey(QX11Info::display(), keycode, mask | CapsLockMask, QX11Info::appRootWindow(QX11Info::appScreen()), false, GrabModeAsync, GrabModeAsync);
+    XGrabKey(QX11Info::display(), keycode, mask | CapsLockMask | ScrollLockMask, QX11Info::appRootWindow(QX11Info::appScreen()), false, GrabModeAsync, GrabModeAsync);
+    XGrabKey(QX11Info::display(), keycode, mask | CapsLockMask | NumberLockMask, QX11Info::appRootWindow(QX11Info::appScreen()), false, GrabModeAsync, GrabModeAsync);
+    XGrabKey(QX11Info::display(), keycode, mask | CapsLockMask | NumberLockMask | ScrollLockMask, QX11Info::appRootWindow(QX11Info::appScreen()), false, GrabModeAsync, GrabModeAsync);
+    XGrabKey(QX11Info::display(), keycode, mask | NumberLockMask | ScrollLockMask, QX11Info::appRootWindow(QX11Info::appScreen()), false, GrabModeAsync, GrabModeAsync);
+    XGrabKey(QX11Info::display(), keycode, mask | ScrollLockMask, QX11Info::appRootWindow(QX11Info::appScreen()), false, GrabModeAsync, GrabModeAsync);
 }
 
 // ************************************************************************** //
