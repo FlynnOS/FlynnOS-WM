@@ -72,6 +72,15 @@ class FlynnOSwm : public QApplication {
          */
         TaskBar *taskBar;
 
+        /**
+         * @~spanish
+         * El cursor predeterminado del window manager
+         *
+         * @~english
+         * The default window manager cursor
+         */
+        Cursor defaultCursor;
+
         //----------------------------------------------------------------------
 
         /**

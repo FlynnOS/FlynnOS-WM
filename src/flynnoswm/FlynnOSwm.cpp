@@ -12,6 +12,7 @@
 #include "FlynnOSwm.h"
 #include "config/SystemKeys.h"
 #include "xwindows/Background.h"
+#include <X11/cursorfont.h>
 
 // ************************************************************************** //
 // **********              CONSTRUCTORS AND DESTRUCTOR             ********** //
@@ -75,6 +76,13 @@ FlynnOSwm::FlynnOSwm(int& argc, char **argv[]) : QApplication(argc, *argv)
                                           ConfigureNotify, CirculateNotify */
             | ButtonPressMask
             );        /* ButtonPress */
+
+    XSetWindowAttributes wa;
+    defaultCursor = XCreateFontCursor(QX11Info::display(), XC_left_ptr);
+    wa.cursor = defaultCursor;
+    wa.event_mask = SubstructureRedirectMask|SubstructureNotifyMask|ButtonPressMask;
+    XChangeWindowAttributes(QX11Info::display(), QX11Info::appRootWindow(QX11Info::appScreen()), CWEventMask|CWCursor, &wa);
+
     XFlush(QX11Info::display());
 
     Background::getInstance();
@@ -99,6 +107,7 @@ FlynnOSwm::~FlynnOSwm()
 {
     delete this->wmCheckWindow;
     delete this->windowList;
+    XFreeCursor(QX11Info::display(),defaultCursor);
     //delete this->taskBar;
 }
 
