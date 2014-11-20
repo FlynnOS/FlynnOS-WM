@@ -34,7 +34,7 @@ bool MappingNotifyHandler::processEvent(XEvent* event)
     XMappingEvent *ev = &event->xmapping;
 
     XRefreshKeyboardMapping(ev);
-    XUngrabKey(QX11Info::display(), AnyKey, AnyModifier, QX11Info::appRootWindow(QX11Info::appScreen()));
+
     if(ev->request == MappingKeyboard)
         SystemKeys::getInstance()->configureSystemKeys();
 

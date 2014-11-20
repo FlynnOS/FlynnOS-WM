@@ -198,7 +198,7 @@ Atom Client::getWindowType() const {
     return this->ewmh->getWindowType();
 }
 
-QList<Atom> Client::getWindowState() const
+QVector<Atom> Client::getWindowState() const
 {
     return this->ewmh->getWindowState();
 }

@@ -29,12 +29,10 @@ KeyReleaseHandler::KeyReleaseHandler(XWindowList* wl)
 
 bool KeyReleaseHandler::processEvent(XEvent* event)
 {
-    unsigned int key_pressed = event->xkey.keycode;
-    unsigned int mask = event->xkey.state;
-    qDebug() << "[+] KeyyRelease event Key: " << key_pressed << " Mask: " << mask;
-    qDebug() << XKeysymToString(XKeycodeToKeysym(QX11Info::display(), event->xkey.keycode, 0));
-    //SystemKeys::getInstance()->ProcessKey(key_pressed,mask);
-    //qDebug() << "Bit is set? " << (mask & (Mod1Mask));
+    //unsigned int key_pressed = event->xkey.keycode;
+    //unsigned int mask = event->xkey.state;
+    //qDebug() << "[+] KeyyRelease event Key: " << key_pressed << " Mask: " << mask;
+    //qDebug() << XKeysymToString(XKeycodeToKeysym(QX11Info::display(), event->xkey.keycode, 0));
 
     return true;
 }

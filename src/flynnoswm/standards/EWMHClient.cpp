@@ -101,16 +101,16 @@ Atom EWMHClient::getWindowType() const {
         return al->getAtom("_NET_WM_WINDOW_TYPE_NORMAL");
 }
 
-QList<Atom> EWMHClient::getWindowState() const {
+QVector<Atom> EWMHClient::getWindowState() const {
     unsigned char* propRet;
-    QList<Atom> atom_list;
+    QVector<Atom> atom_list;
     unsigned long numItems;
     if(this->getProperty(al->getAtom("_NET_WM_STATE"), XA_ATOM, &propRet,&numItems))
     {
         Atom* types = (Atom*)propRet;
         for (int i = 0; i < numItems; i++)
         {
-            atom_list.append(types[i]);
+            atom_list.push_back(types[i]);
         }
         XFree(propRet);
         return atom_list;

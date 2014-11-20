@@ -306,7 +306,7 @@ class XWindow : public QObject
          * Returns a list with windows state
          * @return The window type list
          */
-        QList<Atom> getClientState();
+        QVector<Atom> getClientState();
 
         /**
          * @~spanish

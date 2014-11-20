@@ -43,8 +43,6 @@ bool EnterNotifyRequestHandler::processEvent(XEvent* event) {
         }
         else
         {
-            //XDefineCursor(QX11Info::display(), windowID, QCursor(Qt::ClosedHandCursor).handle());
-
             return true;
         }
 

@@ -169,7 +169,7 @@ bool XWindow::needFrame()
     }
 
     //we get the states and then process them
-    QList<Atom> states = getClientState();
+    QVector<Atom> states = getClientState();
     for (int i = 0; i < states.size(); i++)
     {
         if (states.at(i)== al->getAtom("_NET_WM_STATE_FULLSCREEN"))
@@ -208,7 +208,7 @@ Client* XWindow::getClient()
 }
 
 // this is for _NET_WM_STATE
-QList<Atom> XWindow::getClientState()
+QVector<Atom> XWindow::getClientState()
 {
     return client->getWindowState();
 }
@@ -293,7 +293,7 @@ void XWindow::setClientState()
 
     AtomList* al = AtomList::getInstance();
     //we get the states and then process them
-    QList<Atom> states = getClientState();
+    QVector<Atom> states = getClientState();
 
     //we set the states to normal mode
     in_taskbar_ = true;
@@ -302,6 +302,10 @@ void XWindow::setClientState()
         if (states.at(i)== al->getAtom("_NET_WM_STATE_SKIP_TASKBAR"))
         {
             in_taskbar_ = false;
+        }
+        else if (states.at(i)== al->getAtom("_NET_WM_STATE_MAXIMIZED_VERT") || states.at(i)== al->getAtom("_NET_WM_STATE_MAXIMIZED_HORZ"))
+        {
+            this->maximizedFrame();
         }
         else if (states.at(i)== al->getAtom("_NET_WM_STATE_HIDDEN"))
         {
@@ -658,6 +662,11 @@ void XWindow::maximizeFrame()
     this->setY(0+Y);
     this->setWidth(W);
     this->setHeight(H);
+
+    Atom state[2];
+    state[0] = al->getAtom("_NET_WM_STATE_MAXIMIZED_VERT");
+    state[1] = al->getAtom("_NET_WM_STATE_MAXIMIZED_HORZ");
+    XChangeProperty(QX11Info::display(), this->clientID, al->getAtom("_NET_WM_STATE"),XA_ATOM, 32, PropModeAppend,(unsigned char *)&state, 2);
 }
 
 void XWindow::updateMaximizedWindow()
@@ -738,6 +747,7 @@ void XWindow::maximizedFrame()
     //Tolerance for maximize on width and height, since a window sometimes can be not perfectly maximized, eg terminal (line sizes)
     if(this->client->getMaxWidth() >= QApplication::desktop()->width() && this->client->getMaxHeight()>=QApplication::desktop()->height() && maximized_ == false)
     {
+
         this->maximizeFrame();
     }
     else if (maximized_ == true) //Ya esta maximizado, eso significa que tenemos que regresar al tamaño anterior
@@ -751,6 +761,27 @@ void XWindow::maximizedFrame()
             frame->setMaximized(false);
 
         maximized_ = false;
+
+        AtomList* al = AtomList::getInstance();
+        QVector<Atom> states = getClientState();
+
+        //we remove the maximized properties
+        for (int i = 0; i < states.size(); i++)
+        {
+            if (states.at(i) == al->getAtom("_NET_WM_STATE_MAXIMIZED_VERT"))
+            {
+                states.erase(states.begin()+i);
+                i--;
+            }
+            else if (states.at(i) == al->getAtom("_NET_WM_STATE_MAXIMIZED_HORZ"))
+            {
+                states.erase(states.begin()+i);
+                i--;
+            }
+        }
+        //we replace current properties, with all the properties except maximized
+
+        XChangeProperty(QX11Info::display(), this->clientID, al->getAtom("_NET_WM_STATE"),XA_ATOM, 32, PropModeReplace,(unsigned char *)&states, states.size());
     }
 }
 

@@ -156,10 +156,6 @@ void SystemKeys::createModifiers(Display * display)
 
 void SystemKeys::addKey(int keycode, unsigned int mask)
 {
-    //Find the X11 KeyCode we are listening for.
-    //KeyCode key = XKeysymToKeycode(QX11Info::display(), XK_p);
-
-    //unsigned int mask = Mod1Mask;
     KeyCode key = keycode;
 
     XGrabKey(QX11Info::display(), keycode, mask, QX11Info::appRootWindow(QX11Info::appScreen()), false, GrabModeAsync, GrabModeAsync);

@@ -36,9 +36,8 @@ bool ClientMessageHandler::processEvent(XEvent* event)
     {
         XWindow* xwindow = this->wl->getXWindowByClientID(windowID);
         this->wl->setMoveResizeWindow(xwindow,event->xclient.data.l[2],event->xclient.data.l[0],event->xclient.data.l[1],event->xclient.data.l[3]);
+        return false;
     }
-
-
 
     // Si la ventana es un cliente
     if(this->wl->existClient(windowID))

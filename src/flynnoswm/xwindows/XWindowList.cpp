@@ -150,7 +150,7 @@ void XWindowList::restackManagedWindow(const XWindow* xwindow) {
 
     //we get the states and then process them
     AtomList* al = AtomList::getInstance();
-    QList<Atom> states = ((XWindow*)xwindow)->getClientState();
+    QVector<Atom> states = ((XWindow*)xwindow)->getClientState();
     bool is_full_screen = false;
     for (int i = 0; i < states.size(); i++)
     {

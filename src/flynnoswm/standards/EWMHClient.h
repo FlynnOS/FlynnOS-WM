@@ -195,7 +195,7 @@ class EWMHClient {
          * Returns a list with windows state
          * @return The window type list
          */
-        QList<Atom> getWindowState() const;
+        QVector<Atom> getWindowState() const;
 
         //----------------------------------------------------------------------
 
