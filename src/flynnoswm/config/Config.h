@@ -47,6 +47,7 @@ class Config {
 
         static const char* CONFIG_FILE_PATH;
         static const char* USED_THEME;
+        static const char* STARTUP_PROGRAMS;
 
         // Carpetas usadas por el WM
         static const char* THEMES_PATH;
@@ -414,6 +415,15 @@ class Config {
          * @return The style
          */
         QString getStyle() const;
+
+        /**
+         * @~spanish
+         * Ejecuta los programas que se ejecutan al inicio, se modifican en el .conf
+         * @return void.
+         *
+         */
+
+        void executeStartupPrograms();
 
 };
 

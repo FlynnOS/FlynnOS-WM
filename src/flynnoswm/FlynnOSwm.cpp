@@ -101,6 +101,8 @@ FlynnOSwm::FlynnOSwm(int& argc, char **argv[]) : QApplication(argc, *argv)
     //we set the system tray
     XSetSelectionOwner(QX11Info::display(), al->getAtom("_NET_SYSTEM_TRAY_S0"), TaskBar::getInstance()->winId(), CurrentTime);
 
+    cfg->executeStartupPrograms();
+
 }
 
 FlynnOSwm::~FlynnOSwm()

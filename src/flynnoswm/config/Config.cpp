@@ -11,6 +11,7 @@
  */
 #include "Config.h"
 #include <cstdlib>
+#include <QProcess>
 
 // ************************************************************************** //
 // **********             STATIC METHODS AND VARIABLES             ********** //
@@ -24,6 +25,7 @@ const char* Config::USR_CONFIG_DIR       = "/usr/share/flynnoswm";
 const char* Config::HOME_CONFIG_DIR      = ".flynnoswm";
 const char* Config::CONFIG_FILE_PATH     = "/.flynnoswm/flynnoswm.conf";
 const char* Config::USED_THEME           = "theme/name";
+const char* Config::STARTUP_PROGRAMS     = "startup/";
 
 //------------------------------------------------------------------------------
 
@@ -155,8 +157,9 @@ void Config::loadConfig() {
     qss.open(QFile::ReadOnly);
     style = qss.readAll();
     style.replace("%theme_path%", QDir::homePath()+THEMES_PATH+folderThemeName);
-    qDebug() << style;
+    //qDebug() << style;
     qss.close();
+
 }
 
 
@@ -297,4 +300,23 @@ Config::Aling Config::getExitButtonAling() const {
 
 QString Config::getStyle() const {
     return this->style;
+}
+
+void Config::executeStartupPrograms()
+{
+    //we read the configuration again to get the list of programs we want to exec at startup
+    QSettings flynnoswmSettings(QDir::homePath() + CONFIG_FILE_PATH,
+            QSettings::NativeFormat);
+
+    QStringList keys = flynnoswmSettings.allKeys();
+    foreach (const QString &childKey, keys)
+    {
+        if (childKey.left(8) == "startup/")
+        {
+            QString execute = flynnoswmSettings.value(childKey, "").toString();
+            qDebug() << execute;
+            //system(execute.toStdString().c_str());
+            QProcess::startDetached(execute);
+        }
+    }
 }

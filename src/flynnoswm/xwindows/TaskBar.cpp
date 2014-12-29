@@ -11,6 +11,7 @@
  */
 #include "TaskBar.h"
 #include "src/flynnoswm/atoms/AtomList.h"
+#include <QProcess>
 
 // ************************************************************************** //
 // **********             STATIC METHODS AND VARIABLES             ********** //
@@ -345,7 +346,7 @@ void TaskBar::click_item()
 
 void TaskBar::clickLauncher()
 {
-    system("dmenu_run -b &");
+    QProcess::startDetached("dmenu_run -b");
 }
 
 // ************************************************************************** //

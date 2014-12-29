@@ -12,7 +12,7 @@
 #include "SystemKeys.h"
 #include <cstdlib>
 #include "src/flynnoswm/events/factory/EventFactory.h"
-
+#include <QProcess>
 // ************************************************************************** //
 // **********             STATIC METHODS AND VARIABLES             ********** //
 // ************************************************************************** //
@@ -90,11 +90,9 @@ void SystemKeys::ProcessKey(unsigned int keycode, unsigned int mask)
                     }
                     break;
                 case KEY_OPEN_TERMINAL:
-                    std::system("terminator &");
+                    QProcess::startDetached("terminator");
                     break;
                 case KEY_ALT_TAB:
-                    //std::system("terminator &");
-                    //EventFactory::getInstance()->windowList_->setActiveWindow();
                     EventFactory::getInstance()->windowList_->changeActiveStack();
                     break;
                 default:
