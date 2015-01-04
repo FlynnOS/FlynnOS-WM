@@ -34,6 +34,8 @@ bool DestroyNotifyHandler::processEvent(XEvent* event)
         qDebug() << "\tLa ventana es un cliente";
         XWindow* xwindow = this->wl->getXWindowByClientID(windowID);
 
+        xwindow->in_taskbar_ = false;
+        xwindow->setTaskBar();
         qDebug() << "\tEliminando la ventana de la lista";
         wl->removeClient(xwindow->getClientID());
 
