@@ -420,9 +420,7 @@ class Config {
          * @~spanish
          * Ejecuta los programas que se ejecutan al inicio, se modifican en el .conf
          * @return void.
-         *
          */
-
         void executeStartupPrograms();
 
 };

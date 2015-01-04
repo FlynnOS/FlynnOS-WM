@@ -32,6 +32,7 @@ XWindow::XWindow(const Window& clientID)
     minimizeFloat = 0;
     full_screen_ = false;
     dontRemoveAfterFrame = true;
+    layout = false;
 }
 
 XWindow::~XWindow()
@@ -481,6 +482,11 @@ bool XWindow::isBottomWindow() const
     AtomList* al = AtomList::getInstance();
     Atom type = this->client->getWindowType();
     return type == al->getAtom("_NET_WM_WINDOW_TYPE_DESKTOP");
+}
+
+bool XWindow::isLayoutWindow() const
+{
+    return layout;
 }
 
 //------------------------------------------------------------------------------

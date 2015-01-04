@@ -66,6 +66,7 @@ bool PropertyNotifyHandler::processEvent(XEvent* event)
         }
         else if (event->xclient.message_type == al->getAtom("_FLYNNOSWM_WIDGET")) //we got hints change request
         {
+
             XWindow* xwindow = this->wl->getXWindowByClientID(windowID);
 
             Atom type;
@@ -77,9 +78,10 @@ bool PropertyNotifyHandler::processEvent(XEvent* event)
             if(data != NULL)
             {
                 //quitamos el marco
+                xwindow->dontRemoveAfterFrame = true;
                 if ((int)*data > 0)
                     xwindow->removeFrame();
-                xwindow->dontRemoveAfterFrame = true;
+
                 XReparentWindow(QX11Info::display(), windowID,
                         QX11Info::appRootWindow(),
                         0,
@@ -87,6 +89,11 @@ bool PropertyNotifyHandler::processEvent(XEvent* event)
 
                 xwindow->setX(100);
                 xwindow->setY(100);
+                xwindow->setWidth(400);
+                xwindow->setHeight(400);
+                xwindow->layout = true;
+                this->wl->restackManagedWindow(xwindow);
+
                 delete data;
             }
         }

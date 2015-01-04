@@ -109,6 +109,7 @@ class XWindow : public QObject
     public:
         bool full_screen_;
         bool in_taskbar_; //if true this window has to be added to the taskbar, if false not
+        bool layout;
 
         //if true we will not delete the window if the frame is removed
         bool dontRemoveAfterFrame;
@@ -348,6 +349,16 @@ class XWindow : public QObject
          * TO TRANSLATE
          */
         bool isBottomWindow() const;
+
+        /**
+         * @~spanish
+         * Indica si esta ventana es parte del layout (no esta flotando)
+         * @return Si esta o no en el layout
+         *
+         * @~english
+         * TO TRANSLATE
+         */
+        bool isLayoutWindow() const;
 
         /**
          * @~spanish

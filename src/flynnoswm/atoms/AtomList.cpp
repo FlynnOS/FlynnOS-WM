@@ -126,6 +126,7 @@ AtomList::AtomList() {
         "_NET_FRAME_EXTENTS",
 
         "WM_NAME",
+        "WM_STATE",
 
         "_MOTIF_WM_INFO", //http://tonyobryan.com/index.php?article=9
 

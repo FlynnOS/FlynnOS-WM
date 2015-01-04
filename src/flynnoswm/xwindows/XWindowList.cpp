@@ -144,6 +144,8 @@ void XWindowList::deleteMinimizedFloatingWindow(XWindow* windowID)
 }
 
 void XWindowList::restackManagedWindow(const XWindow* xwindow) {
+
+
     this->stackingList->removeOne(xwindow);
     int numWindows = this->stackingList->size();
 
@@ -167,19 +169,44 @@ void XWindowList::restackManagedWindow(const XWindow* xwindow) {
     {
         this->stackingList->append(xwindow);
     }
-    else if(xwindow->isTopWindow()) {
+    else if(xwindow->isTopWindow())
+    {
         this->stackingList->append(xwindow);
 
-    // Ventanas que siempre están abajo
-    } else if(xwindow->isBottomWindow()) {
-        this->stackingList->prepend(xwindow);
 
-    // Resto de ventanas
-    } else {
-        int  pos = numWindows - 1;
+    }
+    // Ventanas que siempre están abajo
+    else if(xwindow->isBottomWindow())
+    {
+        this->stackingList->prepend(xwindow);
+    }
+    // Ventanas que estan acomodadas en el layout (no floating)
+    else if(xwindow->isLayoutWindow())
+    {
+
+        int  pos = 0;
         bool end = false;
 
-        while(pos >= 0 && !end) {
+        while(pos < numWindows && !end)
+        {
+            const XWindow* aux = this->stackingList->at(pos);
+
+            if(aux->isBottomWindow())
+                pos++;
+            else
+                end = true;
+        }
+        this->stackingList->insert(pos, xwindow);
+
+    }
+    // Resto de ventanas, (yes floating)
+    else
+    {
+        int  pos = numWindows-1;
+        bool end = false;
+
+        while(pos >= 0 && !end)
+        {
             const XWindow* aux = this->stackingList->at(pos);
 
             if(aux->isTopWindow())
@@ -187,8 +214,8 @@ void XWindowList::restackManagedWindow(const XWindow* xwindow) {
             else
                 end = true;
         }
-
         this->stackingList->insert(pos+1, xwindow);
+
     }
 
     this->restackWindows();

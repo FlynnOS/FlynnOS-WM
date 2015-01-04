@@ -47,8 +47,8 @@ bool UnmapNotifyHandler::processEvent(XEvent* event)
             qDebug() << "\tEl cliente pasa de NormalState a WithdrawnState";
             xwindow->setState(WithdrawnState);
 
-            qDebug() << "\tEliminando la ventana de la lista del EWMH";
-            this->wl->removeFromManagedWindow(xwindow);
+            //qDebug() << "\tEliminando la ventana de la lista del EWMH";
+            //this->wl->removeFromManagedWindow(xwindow);
         }
 
         // Ponemos como ventana activa la de la parte superior de la pila
